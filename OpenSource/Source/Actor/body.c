@@ -26,18 +26,11 @@
 
 #include "body.h"
 #include "body._h"
-#include "ram.h"
-#include "errorlog.h"
-
-
-#define MAX(aa,bb)   ( (aa)>(bb)?(aa):(bb) )
-#define MIN(aa,bb)   ( (aa)<(bb)?(aa):(bb) )
-
-
-
+#include "RAM.H"
+#include "Errorlog.h"
 
 #if defined(DEBUG) || !defined(NDEBUG)
-static geBoolean GENESISCC geBody_SanityCheck(const geBody *B)
+geBoolean GENESISCC geBody_SanityCheck(const geBody *B)
 {
 	int i,j,k;
 	int Lod,FaceCount,VertexCount,NormalCount,BoneCount;

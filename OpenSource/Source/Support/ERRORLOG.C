@@ -19,14 +19,16 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#if defined( _WIN32 )
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
+#endif
 #include <stdio.h>
 #include <assert.h>		// assert()	
 #include <stdlib.h>
 #include <string.h>		// memmove(), strncpy() strncat()
 
-#include "ErrorLog.h"   
+#include "Errorlog.h"
 
 #define MAX_ERRORS 30  //  ...
 
@@ -182,7 +184,7 @@ GENESISAPI geBoolean geErrorLog_Report(int history, geErrorLog_ErrorClassType *e
 		}
 	
 	
-	*error = geErrorLog_Locals.ErrorList[history].ErrorID;
+	*error = ( geErrorLog_ErrorClassType ) geErrorLog_Locals.ErrorList[history].ErrorID;
 	*UserString = geErrorLog_Locals.ErrorList[history].String;
 	return GE_TRUE;
 }

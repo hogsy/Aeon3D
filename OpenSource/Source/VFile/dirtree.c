@@ -25,8 +25,8 @@
 #include	<stdlib.h>
 #include	<string.h>
 
-#include	"basetype.h"
-#include	"ram.h"
+#include "GENESIS.H"
+#include "RAM.H"
 
 #include	"dirtree.h"
 
@@ -404,7 +404,7 @@ static	const char *GetNextDir(const char *Path, char *Buff)
 
 DirTree *DirTree_FindExact(const DirTree *Tree, const char *Path)
 {
-	static char	Buff[_MAX_PATH];
+	static char	Buff[PATH_MAX];
 	DirTree *	Siblings;
 
 	assert(Tree);
@@ -438,7 +438,7 @@ DirTree *DirTree_FindPartial(
 	const char *	Path,
 	const char **	LeftOvers)
 {
-	static char	Buff[_MAX_PATH];
+	static char	Buff[PATH_MAX];
 	DirTree *	Siblings;
 
 	assert(Tree);
@@ -663,9 +663,9 @@ DirTree_Finder * DirTree_CreateFinder(DirTree *Tree, const char *Path)
 {
 	DirTree_Finder *	Finder;
 	DirTree *			SubTree;
-	char				Directory[_MAX_PATH];
-	char				Name[_MAX_FNAME];
-	char				Ext[_MAX_EXT];
+	char				Directory[PATH_MAX];
+	char				Name[PATH_MAX];
+	char				Ext[PATH_MAX];
 
 	assert(Tree);
 	assert(Path);
@@ -758,8 +758,8 @@ static geBoolean	MatchPattern(const char *Source, const char *Pattern)
 DirTree * DirTree_FinderGetNextFile(DirTree_Finder *Finder)
 {
 	DirTree *	Res;
-	char		Name[_MAX_FNAME];
-	char		Ext[_MAX_EXT];
+	char		Name[PATH_MAX];
+	char		Ext[PATH_MAX];
 
 	assert(Finder);
 

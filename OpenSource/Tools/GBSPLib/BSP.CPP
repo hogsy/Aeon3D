@@ -20,7 +20,7 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <Windows.h>
-#include <Stdio.h>
+#include <stdio.h>
 #include <Math.h>
 
 #include "GBSPPrep.h"

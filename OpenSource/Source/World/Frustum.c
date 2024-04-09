@@ -19,15 +19,19 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Assert.h>
-#include <Windows.h>
-#include <Math.h>
+#include <assert.h>
 
-#include "Camera.h"
-#include "Frustum.h"
-#include "Surface.h"
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
 
-#include "Vec3d.h"
+#include <math.h>
+
+#include "CAMERA.H"
+#include "FRUSTUM.H"
+#include "SURFACE.H"
+
+#include "VEC3D.H"
 
 //#define RIGHT_HANDED
 

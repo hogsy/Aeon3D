@@ -34,14 +34,14 @@
 #include <math.h>	 // fabs()
 #include <stdio.h>	 //sscanf
 
-#include "world.h"	// to expose _Render apis in actor.h
+#include "WORLD.H"	// to expose _Render apis in actor.h
 
-#include "Actor.h"
-#include "Ram.h"
-#include "Puppet.h"
-#include "Body.h"
-#include "Motion.h"
-#include "ErrorLog.h"
+#include "actor.h"
+#include "RAM.H"
+#include "puppet.h"
+#include "body.h"
+#include "motion.h"
+#include "Errorlog.h"
 #include "strblock.h"
 
 

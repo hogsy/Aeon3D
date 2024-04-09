@@ -22,7 +22,7 @@
 #ifndef GE_PTRTYPES_H
 #define GE_PTRTYPES_H
 
-#include "BaseType.h"
+#include "BASETYPE.H"
 
 #ifdef __cplusplus
 extern "C" {

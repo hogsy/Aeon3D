@@ -26,19 +26,19 @@
 #include <math.h>  //fabs()
 #include <assert.h>
 
-#include "light.h"
-#include "world.h"
-#include "trace.h"		//Trace_WorldCollisionExact2()
-#include "surface.h"	// Surf_InSurfBoundingBox()
+#include "LIGHT.H"
+#include "WORLD.H"
+#include "TRACE.H"		//Trace_WorldCollisionExact2()
+#include "SURFACE.H"	// Surf_InSurfBoundingBox()
 
 #include "xfarray.h"
 #include "puppet.h"
 #include "pose.h"
-#include "ErrorLog.h"
-#include "ram.h"
+#include "Errorlog.h"
+#include "RAM.H"
 #include "tclip.h"
 
-#include "Frustum.h"
+#include "FRUSTUM.H"
 #include "ExtBox.h"
 #include "bodyinst.h"
 

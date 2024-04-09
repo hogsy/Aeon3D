@@ -22,14 +22,18 @@
 #ifndef GE_GBSPFILE_H
 #define GE_GBSPFILE_H
 
-#include <Stdio.h>
+#include <stdio.h>
 
-#include "BaseType.h"
-#include "Vec3d.h"
-#include <windows.h>
-#include "DCommon.h"
-#include "VFile.h"
-#include "Motion.h"
+#include "BASETYPE.H"
+#include "VEC3D.H"
+
+#if defined( _WIN32 )
+#	include <windows.h>
+#endif
+
+#include "Dcommon.h"
+#include "vfile.h"
+#include "motion.h"
 
 #ifdef __cplusplus
 extern "C" {

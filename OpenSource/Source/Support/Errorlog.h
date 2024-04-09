@@ -22,7 +22,7 @@
 #ifndef GE_ERRORLOG_H
 #define GE_ERRORLOG_H
 
-#include "basetype.h"
+#include "BASETYPE.H"
 
 #ifndef NDEBUG 
 	#define ERRORLOG_FULL_REPORTING

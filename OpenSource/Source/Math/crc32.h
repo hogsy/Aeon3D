@@ -22,7 +22,7 @@
 #ifndef GE_CRC32_H
 #define GE_CRC32_H
 
-#include "basetype.h"
+#include "BASETYPE.H"
 
 #ifdef __cplusplus
 extern "C" {

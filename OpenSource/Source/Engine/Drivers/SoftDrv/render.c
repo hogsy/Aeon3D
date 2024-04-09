@@ -26,7 +26,7 @@ permission.  http://www.d6.com/users/checker
 */
 
 #include <Windows.h>
-#include <Stdio.h>
+#include <stdio.h>
 #include <Assert.h>
 #include <Math.h>
 

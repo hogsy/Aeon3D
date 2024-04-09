@@ -19,29 +19,29 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Assert.h>
+#include <assert.h>
 
-#include "BaseType.h"
+#include "BASETYPE.H"
 #include "System.h"
-#include "Genesis.h"
-#include "ErrorLog.h"
-#include "Ram.h"
+#include "GENESIS.H"
+#include "Errorlog.h"
+#include "RAM.H"
 #include "engine.h"
 
 #include "list.h"
-#include "Surface.h"
-#include "World.h"
-#include "Plane.h"
-#include "Light.h"
+#include "SURFACE.H"
+#include "WORLD.H"
+#include "PLANE.H"
+#include "LIGHT.H"
 #include "WBitmap.h"
-#include "Camera.h"
-#include "Sound.h"
-#include "Entities.h"
-#include "User.h"
+#include "CAMERA.H"
+#include "SOUND.H"
+#include "ENTITIES.H"
+#include "USER.H"
 
-#include "dcommon.h"
+#include "Dcommon.h"
 
-#include "geassert.h"
+#include "geAssert.h"
 
 #include "BitmapList.h"
 //#define SKY_HACK

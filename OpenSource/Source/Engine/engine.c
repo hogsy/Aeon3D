@@ -23,20 +23,25 @@
 
 //#define DONT_DO_SPLASH // CB hack
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <mmsystem.h> //timeGetTime
+#if defined( _WIN32 )
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
+#	include <mmsystem.h> //timeGetTime
+#	include <direct.h>	// getcwd
+#else
+#	include <unistd.h>
+#endif
+
 #include <stdlib.h> // _MAX_PATH
-#include <direct.h>	// getcwd
 
 #include "engine.h"
 
 #include "Errorlog.h"
-#include "DCommon.h"
+#include "Dcommon.h"
 #include "BitmapList.h"
-#include "Bitmap.h"
-#include "Bitmap._h"
-#include "World.h"
+#include "bitmap.h"
+#include "bitmap._h"
+#include "WORLD.H"
 #include "log.h"
 
 //#define DO_ADDREMOVE_MESSAGES
@@ -1251,7 +1256,7 @@ void geEngine_SetAllWorldChangedFlag(geEngine *Engine, geBoolean Flag)
 //=====================================================================================
 HINSTANCE geEngine_LoadLibrary( const char * lpLibFileName, const char *DriverDirectory)
 {
-	char	Buff[_MAX_PATH];
+	char	Buff[PATH_MAX];
 	char	*StrEnd;
 	HINSTANCE	Library;
 

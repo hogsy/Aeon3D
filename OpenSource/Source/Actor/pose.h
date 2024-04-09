@@ -45,8 +45,8 @@
 */
 
 #include <stdio.h>
-#include "Motion.h"
-#include "XFArray.h"
+#include "motion.h"
+#include "xfarray.h"
 
 #ifdef __cplusplus
 extern "C" {

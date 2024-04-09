@@ -21,7 +21,7 @@
 /****************************************************************************************/
 #include <Windows.h>
 #include <Assert.h>
-#include <Stdio.h>
+#include <stdio.h>
 #include <Dos.h>
 
 #include "System.h"

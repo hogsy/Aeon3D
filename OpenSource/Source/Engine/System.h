@@ -24,12 +24,14 @@
 
 //#define OLD_FONT
 
-#include "ErrorLog.h"
-#include "Genesis.h"
-#include <windows.h>
-#include "dcommon.h"
-#include "Camera.h"
-#include "PtrTypes.h"
+#include "Errorlog.h"
+#include "GENESIS.H"
+#if defined( _WIN32 )
+#	include <windows.h>
+#endif
+#include "Dcommon.h"
+#include "CAMERA.H"
+#include "PTRTYPES.H"
 
 #define		VectorToSUB(a, b) ( *(((float*)&a) + b) )
 

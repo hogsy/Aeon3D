@@ -19,21 +19,24 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Assert.h>
-#include <Windows.h>
-#include <Math.h>
+#include <assert.h>
 
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
 
-#include "BaseType.h"
+#include <math.h>
+
+#include "BASETYPE.H"
 #include "System.h"
-#include "World.h"
-#include "Ram.h"
-#include "Surface.h"
+#include "WORLD.H"
+#include "RAM.H"
+#include "SURFACE.H"
 #include "WBitmap.h"	
-#include "Vec3d.h"
-#include "Vis.h"
+#include "VEC3D.H"
+#include "VIS.H"
 
-#include "Light.h"
+#include "LIGHT.H"
 
 //================================================================================
 //	local static globals
@@ -179,7 +182,7 @@ void Surf_WorldShutdown(geWorld *World)
 //================================================================================
 //	Surf_InSurfBoundingBox
 //================================================================================
-BOOL Surf_InSurfBoundingBox(Surf_SurfInfo *Surf, geVec3d *Pos, float Box)
+geBoolean Surf_InSurfBoundingBox(Surf_SurfInfo *Surf, geVec3d *Pos, float Box)
 {
    assert(Surf != NULL);
    assert(Pos != NULL);

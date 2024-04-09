@@ -22,7 +22,10 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include <Windows.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
+
 #include <stdio.h>
 
 BOOL SysInit(void);

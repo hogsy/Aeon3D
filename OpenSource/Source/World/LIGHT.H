@@ -22,13 +22,13 @@
 #ifndef GE_LIGHT_H
 #define GE_LIGHT_H
 
-#include <Assert.h>
+#include <assert.h>
 //#include <Windows.h>
 
-#include "Genesis.h"
-#include "BaseType.h"
+#include "GENESIS.H"
+#include "BASETYPE.H"
 #include "System.h"
-#include "DCommon.h"
+#include "Dcommon.h"
 
 #ifdef __cplusplus
 extern "C" {

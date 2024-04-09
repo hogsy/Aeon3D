@@ -26,10 +26,10 @@
 // If you include Windows it MUST be before dcommon!
 
 // FIXME:  What should we do with these?
-#include "XForm3d.h"
-#include "Vec3d.h"
-#include "PixelFormat.h"
-#include "geTypes.h"		// This is a no no
+#include "XFORM3D.H"
+#include "VEC3D.H"
+#include "pixelformat.h"
+#include "getypes.h"		// This is a no no
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,9 +67,12 @@ typedef char *PSZ;
 
 typedef unsigned long       DWORD;
 typedef int                 geBoolean;
+typedef int 				BOOL;
 typedef unsigned char       BYTE;
 typedef unsigned short      WORD;
 typedef float               FLOAT;
+
+typedef int64_t LONGLONG;
 
 typedef struct tagRECT
 {
@@ -79,9 +82,39 @@ typedef struct tagRECT
     LONG    bottom;
 } RECT;
 
+typedef struct _SYSTEMTIME
+{
+	WORD wYear;
+	WORD wMonth;
+	WORD wDayOfWeek;
+	WORD wDay;
+	WORD wHour;
+	WORD wMinute;
+	WORD wSecond;
+	WORD wMilliseconds;
+} SYSTEMTIME;
+
+typedef union _LARGE_INTEGER {
+	struct {
+		DWORD LowPart;
+		LONG  HighPart;
+	} DUMMYSTRUCTNAME;
+	struct {
+		DWORD LowPart;
+		LONG  HighPart;
+	} u;
+	LONGLONG QuadPart;
+} LARGE_INTEGER;
+
+typedef void *HINSTANCE;
+
 #endif // WINVER
 
-#define	DRIVERCC _fastcall
+#if defined( _MSC_VER )
+#	define DRIVERCC _fastcall
+#else
+#	define DRIVERCC//__attribute__( ( fastcall ) )
+#endif
 
 #ifndef __cplusplus
 	#define DllImport	__declspec( dllimport )

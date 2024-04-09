@@ -21,14 +21,18 @@
 /****************************************************************************************/
 #ifndef GE_BASETYPE_H
 #define GE_BASETYPE_H
- 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/******** The Genesis Calling Conventions ***********/ 
+/******** The Genesis Calling Conventions ***********/
 
-#define	GENESISCC	_fastcall
+#if defined( _MSC_VER )
+#	define GENESISCC _fastcall
+#else
+#	define GENESISCC//__attribute__( ( fastcall ) )
+#endif
 
 #if	defined(BUILDGENESIS) && defined(GENESISDLLVERSION)
   #define GENESISAPI	_declspec(dllexport)
@@ -42,6 +46,8 @@ extern "C" {
 
 /******** The Basic Types ****************************/
 
+#include <stdint.h>
+
 typedef signed int geBoolean;
 #define GE_FALSE	(0)
 #define GE_TRUE		(1)
@@ -52,12 +58,67 @@ typedef float geFloat;
 #define NULL	((void *)0)
 #endif
 
-typedef signed long     int32;
-typedef signed short    int16;
-typedef signed char     int8 ;
-typedef unsigned long  uint32;
-typedef unsigned short uint16;
-typedef unsigned char  uint8 ;
+typedef int32_t 	int32;
+typedef int16_t 	int16;
+typedef int8_t 		int8;
+typedef uint32_t 	uint32;
+typedef uint16_t 	uint16;
+typedef uint8_t 	uint8;
+
+#ifndef TRUE
+#	define TRUE GE_TRUE
+#endif
+#ifndef FALSE
+#	define FALSE GE_FALSE
+#endif
+
+#ifndef MAX
+#	define MAX( aa, bb ) ( ( aa ) > ( bb ) ? ( aa ) : ( bb ) )
+#endif
+#ifndef MIN
+#	define MIN( aa, bb ) ( ( aa ) < ( bb ) ? ( aa ) : ( bb ) )
+#endif
+
+#if !defined( _WIN32 )
+
+#	include <libgen.h>
+
+#	define strnicmp strncasecmp
+#	define stricmp  strcasecmp
+
+#if 0//TODO
+static inline void _splitpath(
+	    const char *path,
+	    char *drive,
+	    char *dir,
+	    char *fname,
+	    char *ext )
+{
+	if ( drive != NULL )
+	{
+		// uhhhh, this'll do for now...
+		drive = "/";
+	}
+
+	static char fullname[ 256 ];
+	char *c = strrchr( path, '/' );
+	if ( c != NULL )
+	{
+		snprintf( fullname, sizeof( fullname ), "%s", c );
+		if ( ext != NULL )
+		{
+			ext = strrchr( fullname, '.' );
+		}
+	}
+
+	if ( fname != NULL )
+	{
+
+	}
+}
+#endif
+
+#endif
 
 /******** Macros on Genesis basic types *************/
 
@@ -80,4 +141,4 @@ typedef unsigned char  uint8 ;
 #endif
 
 #endif
- 
+

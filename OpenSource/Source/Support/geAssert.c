@@ -67,7 +67,9 @@ void geAssert_SetCriticalShutdownCallback( geAssert_CriticalShutdownCallback CB 
 
 #ifndef NDEBUG
 
-#include <windows.h>
+#if defined( _WIN32 )
+#	include <windows.h>
+#endif
 #include <signal.h>
 
 #define MAX_ASSERT_STRING_LENGTH 4096
@@ -86,6 +88,8 @@ static int in_assert_cnt = 0; // a semaphore
 		sprintf(assertbuf,"assert(%s) \n FILE %s : LINE : %d\n",expr,filename,lineno);
 	else
 		sprintf(assertbuf," assert string longer than %d characters!\n",MAX_ASSERT_STRING_LENGTH);
+
+#if defined( _WIN32 )
 
     nCode = MessageBox(NULL,assertbuf,
         "Genesis3D Exception",
@@ -122,6 +126,13 @@ static int in_assert_cnt = 0; // a semaphore
 
     if (nCode == IDRETRY)
         __asm { int 3 };
+
+#else
+
+	printf( "EXCEPTION: %s", assertbuf );
+	raise( SIGABRT );
+
+#endif
 
 	in_assert_cnt --;
 }

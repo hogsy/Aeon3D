@@ -12,7 +12,7 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Stdio.h>
+#include <stdio.h>
 #include <Dos.h>
 #include <Math.h>
 #include <Windows.H>

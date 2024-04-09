@@ -14,7 +14,7 @@
 /****************************************************************************************/
 #include <Windows.h>
 #include <Assert.h>
-#include <Stdio.h>
+#include <stdio.h>
 
 #include "Console.h"
 

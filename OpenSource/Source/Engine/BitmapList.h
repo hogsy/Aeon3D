@@ -22,9 +22,9 @@
 #ifndef BITMAPLIST_H
 #define BITMAPLIST_H
 
-#include "GeTypes.h"
-#include "DCommon.h"
-#include "Bitmap.h"
+#include "getypes.h"
+#include "Dcommon.h"
+#include "bitmap.h"
 
 typedef struct BitmapList		BitmapList;
 

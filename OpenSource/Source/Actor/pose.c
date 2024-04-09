@@ -24,10 +24,10 @@
 #include <assert.h>
 #include <string.h>
 
-#include "ram.h"
-#include "errorlog.h"
-#include "Pose.h"
-#include "StrBlock.h"
+#include "RAM.H"
+#include "Errorlog.h"
+#include "pose.h"
+#include "strblock.h"
 
 #define GE_POSE_STARTING_JOINT_COUNT (1)
 

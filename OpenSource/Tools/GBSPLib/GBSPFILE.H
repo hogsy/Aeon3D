@@ -23,7 +23,7 @@
 #define GBSPFILE_H
 
 #include <Windows.h>
-#include <Stdio.h>
+#include <stdio.h>
 
 #include "DCommon.h"
 #include "MathLib.h"

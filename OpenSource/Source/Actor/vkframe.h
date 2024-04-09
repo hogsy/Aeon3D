@@ -39,7 +39,7 @@
 #ifndef GE_VKFRAME_H
 #define GE_VKFRAME_H
 
-#include "TKArray.h"
+#include "tkarray.h"
 #include "vfile.h"
 
 #ifdef __cplusplus
@@ -112,10 +112,10 @@ void GENESISCC geVKFrame_HermiteRecompute(
 geBoolean GENESISCC geVKFrame_LinearRead(geVFile* pFile, void* geVKFrame);
 geBoolean GENESISCC geVKFrame_HermiteRead(geVFile* pFile, void* geVKFrame);
 
-geBoolean GENESISCC geVKFrame_WriteToFile(geVFile *pFile, void *geVKFrame, 
+geBoolean GENESISCC geVKFrame_WriteToFile(geVFile *pFile, geTKArray *KeyList,
 								geVKFrame_InterpolationType InterpolationType,int Looping);
 geTKArray *GENESISCC geVKFrame_CreateFromFile(geVFile *pFile, geVKFrame_InterpolationType *InterpolationType, int *Looping);
-geBoolean GENESISCC geVKFrame_WriteToBinaryFile(geVFile *pFile, void *geVKFrame, 
+geBoolean GENESISCC geVKFrame_WriteToBinaryFile(geVFile *pFile, geTKArray *KeyList,
 								geVKFrame_InterpolationType InterpolationType, int Looping);
 geTKArray *GENESISCC geVKFrame_CreateFromBinaryFile(geVFile *pFile, geVKFrame_InterpolationType *InterpolationType, int *Looping);
 

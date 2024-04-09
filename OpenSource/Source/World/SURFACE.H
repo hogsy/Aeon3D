@@ -22,13 +22,16 @@
 #ifndef GE_SURFACE_H
 #define GE_SURFACE_H
 
-#include <Assert.h>
-#include <Windows.h>
+#include <assert.h>
 
-#include "BaseType.h"
-#include "PtrTypes.h"
-#include "Vec3d.h"
-#include "DCommon.h"
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
+
+#include "BASETYPE.H"
+#include "PTRTYPES.H"
+#include "VEC3D.H"
+#include "Dcommon.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -107,7 +110,7 @@ geBoolean Surf_SetGBSP(World_BSP *BSP);
 geBoolean Surf_WorldInit(geWorld *World);
 void Surf_WorldShutdown(geWorld *World);
 
-BOOL Surf_InSurfBoundingBox(Surf_SurfInfo *Surf, geVec3d *Pos, float Box);
+geBoolean Surf_InSurfBoundingBox(Surf_SurfInfo *Surf, geVec3d *Pos, float Box);
 
 #ifdef __cplusplus
 }

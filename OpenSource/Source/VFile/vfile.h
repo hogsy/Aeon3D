@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-#include	"basetype.h"
+#include	"BASETYPE.H"
 
 typedef	struct	geVFile			geVFile;
 

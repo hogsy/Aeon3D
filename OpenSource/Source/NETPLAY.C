@@ -26,7 +26,7 @@
 
 #include <dplay.h>
 #include <dplobby.h>
-#include <Stdio.h>
+#include <stdio.h>
 
 #include "netplay.h"
 #include "ErrorLog.h"

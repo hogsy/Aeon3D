@@ -20,7 +20,7 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <Windows.h>
-#include <Stdio.h>
+#include <stdio.h>
 
 #include "Fill.h"
 #include "Map.h"

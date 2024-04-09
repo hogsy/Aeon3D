@@ -19,9 +19,9 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Math.h>
+#include <math.h>
 #include <assert.h>
-#include "Vec3d.h"
+#include "VEC3D.H"
 
 #define VCOMPARE_EPSILON	(geFloat)0.0005
 

@@ -24,11 +24,13 @@
 #include <assert.h>
 
 #ifndef NDEBUG
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
+#	if defined( _WIN32 )
+#		define _CRTDBG_MAP_ALLOC
+#		include <crtdbg.h>
+#	endif
 #endif
 
-#include "ram.h"
+#include "RAM.H"
 
 /*
   This controls the MINIMAL_CONFIG flag.  Basically, all overflow, underflow,
@@ -493,7 +495,9 @@ GENESISAPI     void * geRam_Realloc (void *ptr, uint32 newsize)
 
 GENESISAPI void geRam_ReportAllocations(void)
 {
+#if defined( _WIN32 )
 	_CrtDumpMemoryLeaks();
+#endif
 }
 
 #endif
@@ -522,7 +526,7 @@ GENESISAPI     void geRam_AddAllocation (int n, uint32 size)
 #ifndef NDEBUG
 geBoolean geRam_IsValidPtr(void *ptr)
 {
-char * p = ptr;
+char * p = ( char * ) ptr;
 uint32 size;
 
 	if (p == NULL) return GE_FALSE;

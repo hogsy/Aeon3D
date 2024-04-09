@@ -23,13 +23,17 @@
 /*                                                                                      */
 /****************************************************************************************/
 
-#include "basetype.h"
+#include "BASETYPE.H"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define LISTCALL	__fastcall
+#if defined( _MSC_VER )
+#	define LISTCALL __fastcall
+#else
+#	define LISTCALL//__attribute__( ( fastcall ) )
+#endif
 
 /*******************************************/
 /** you must wrap any calls to this module with these: **/

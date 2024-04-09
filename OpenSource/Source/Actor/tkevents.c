@@ -30,10 +30,10 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "TKEvents.h"
-#include "TKArray.h"
-#include "ErrorLog.h"
-#include "ram.h"
+#include "tkevents.h"
+#include "tkarray.h"
+#include "Errorlog.h"
+#include "RAM.H"
 #include "string.h"
 
 typedef struct

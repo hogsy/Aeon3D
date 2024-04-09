@@ -65,7 +65,7 @@
 #define	MSG_SELECT_BITMAP	(WM_USER + 1)
 #define	MSG_DELETE_BITMAP	(WM_USER + 2)
 
-#define	MAX_TEXTURE_NAME_LENGTH	_MAX_FNAME
+#define	MAX_TEXTURE_NAME_LENGTH	PATH_MAX
 
 #define	ENTRY_DELETED	0x00000001
 
@@ -216,7 +216,7 @@ static	BOOL	AddTexture(TPack_WindowData *pData, geVFile *BaseFile, const char *P
 	geBitmap *		Bitmap;
 	BitmapEntry *	NewBitmapList;
 	geVFile *		File;
-	char			FileName[_MAX_FNAME];
+	char			FileName[PATH_MAX];
 	char *			Name;
 
 	Bitmap = NULL;

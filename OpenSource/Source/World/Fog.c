@@ -19,8 +19,12 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Assert.h>
+
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
+
+#include <assert.h>
 
 #include "Fog.h"
 

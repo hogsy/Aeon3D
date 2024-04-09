@@ -19,18 +19,20 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Assert.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
+#include <assert.h>
 
-#include "Entities.h"
-#include "BaseType.h"
+#include "ENTITIES.H"
+#include "BASETYPE.H"
 #include "Errorlog.h"
-#include "Vec3d.h"
-#include "Ram.h"
+#include "VEC3D.H"
+#include "RAM.H"
 
 // These are temporary until we find a better way to get models pointers into the entity stuff
-#include "World.h"
-#include "GBSPFile.h"
+#include "WORLD.H"
+#include "GBSPFILE.H"
 
 
 //=====================================================================================

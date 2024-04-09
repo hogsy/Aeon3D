@@ -21,13 +21,18 @@
 #ifndef GENESIS_H
 #define GENESIS_H
 
-#include "BaseType.h"
-#include "Vec3d.h"
-#include "XForm3d.h"
-#include "GETypes.h"
+//TODO: consolidate cstd headers here
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
+
+#include "BASETYPE.H"
+#include "VEC3D.H"
+#include "XFORM3D.H"
+#include "getypes.h"
 #include "ExtBox.h"
 #include "vfile.h"
-#include "Bitmap.h"
+#include "bitmap.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -356,15 +361,15 @@ GENESISAPI	void geSound3D_GetConfigIgnoreObstructions(
 //================================================================================
 //  Path Support
 //================================================================================
-#include "Path.h"
+#include "path.h"
 //================================================================================
 //  Motion Support
 //================================================================================
-#include "Motion.h"
+#include "motion.h"
 //================================================================================
 //  Actor Support
 //================================================================================
-#include "Actor.h"
+#include "actor.h"
 
 
 

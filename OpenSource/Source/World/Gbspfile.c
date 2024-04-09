@@ -19,16 +19,16 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Stdio.h>
+#include <stdio.h>
 #include <assert.h>
 
-#include "GBSPFile.h"
-#include "Vec3d.h"
-#include "Ram.h"
+#include "GBSPFILE.H"
+#include "VEC3D.H"
+#include "RAM.H"
 #include "System.h"
 
-#include "ErrorLog.h"
-#include "VFile.h"
+#include "Errorlog.h"
+#include "vfile.h"
 
 static geBoolean LoadMotions(GBSP_BSPData *BSP, geVFile *f)
 {

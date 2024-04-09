@@ -19,34 +19,34 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Assert.h>
-#include <Math.h>
+#include <assert.h>
+#include <math.h>
 
-#include "World.h"
+#include "WORLD.H"
 #include "System.h"
-#include "Ram.h"
-#include "BaseType.h"
-#include "GBSPFile.h"
-#include "Camera.h"
-#include "Plane.h"
-#include "Surface.h"
-#include "Light.h"
+#include "RAM.H"
+#include "BASETYPE.H"
+#include "GBSPFILE.H"
+#include "CAMERA.H"
+#include "PLANE.H"
+#include "SURFACE.H"
+#include "LIGHT.H"
 #include "WBitmap.h"
-#include "Frustum.h"
+#include "FRUSTUM.H"
 #ifdef	MESHES
 #include "Mesh.h"
 #endif
-#include "Entities.h"
-#include "Vis.h"
-#include "User.h"
-#include "VFile.h"
+#include "ENTITIES.H"
+#include "VIS.H"
+#include "USER.H"
+#include "vfile.h"
 
-#include "Trace.h"
+#include "TRACE.H"
 
 #include "list.h"
 
-#include "Bitmap.h"
-#include "Bitmap._h"
+#include "bitmap.h"
+#include "bitmap._h"
 
 //#define BSP_BACK_TO_FRONT
 

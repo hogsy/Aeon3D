@@ -33,7 +33,7 @@
    ...In the name of optimal access to the array.
 */
 
-#include "xform3d.h"
+#include "XFORM3D.H"
 
 #ifdef __cplusplus
 extern "C" {

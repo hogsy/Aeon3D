@@ -30,8 +30,8 @@
 #include <stdio.h>
 
 #include "strblock.h"
-#include "ram.h"
-#include "errorlog.h"
+#include "RAM.H"
+#include "Errorlog.h"
 
 #define STRBLOCK_MAX_STRINGLEN 255
 

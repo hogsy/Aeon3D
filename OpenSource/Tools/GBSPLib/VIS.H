@@ -23,7 +23,7 @@
 #define VIS_H
 
 #include <Windows.h>
-#include <Stdio.h>
+#include <stdio.h>
 
 #include "BSP.h"
 #include "GBSPFile.h"

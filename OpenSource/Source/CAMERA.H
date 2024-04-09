@@ -22,10 +22,10 @@
 #ifndef GE_CAMERA_H
 #define GE_CAMERA_H
 
-#include "BaseType.h"
-#include "Vec3d.h"
-#include "XForm3d.h"
-#include "GETypes.h"
+#include "BASETYPE.H"
+#include "VEC3D.H"
+#include "XFORM3D.H"
+#include "getypes.h"
 
 #ifdef __cplusplus
 extern "C" {

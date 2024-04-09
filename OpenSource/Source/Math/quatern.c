@@ -21,7 +21,7 @@
 /****************************************************************************************/
 #include <assert.h>
 #include <math.h>
-#include "basetype.h"
+#include "BASETYPE.H"
 #include "quatern.h"
 
 

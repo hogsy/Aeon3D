@@ -25,13 +25,13 @@
 #include <stdio.h>  //sscanf
 
 #include "path.h"
-#include "Quatern.h"
-#include "errorlog.h"
-#include "ram.h"
+#include "quatern.h"
+#include "Errorlog.h"
+#include "RAM.H"
 #include "tkarray.h"
-#include "VKFrame.h"
+#include "vkframe.h"
 #include "QKFrame.h"
-#include "vec3d.h"
+#include "VEC3D.H"
 
 #define min(aa,bb)  (( (aa)>(bb) ) ? (bb) : (aa) )
 #define max(aa,bb)  (( (aa)>(bb) ) ? (aa) : (bb) )

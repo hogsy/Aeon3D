@@ -23,7 +23,7 @@
 /*                                                                                      */
 /****************************************************************************************/
 
-#include "basetype.h"
+#include "BASETYPE.H"
 #include "pixelformat.h"
 #include "vfile.h"
 
