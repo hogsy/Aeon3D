@@ -19,19 +19,21 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Stdio.h>
-#include <Assert.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
+#include <stdio.h>
+#include <assert.h>
 
-#include "Portals.h"
-#include "Poly.h"
-#include "Bsp.h"
-#include "GBSPFile.h"
+#include "PORTALS.H"
+#include "POLY.H"
+#include "BSP.H"
+#include "GBSPFILE.H"
 #include "Leaf.h"
 #include "Utils.h"
-#include "Map.h"
+#include "MAP.H"
 
-#include "Ram.h"
+#include "RAM.H"
 
 GBSP_Node	*OutsideNode;
 geVec3d		NodeMins, NodeMaxs;

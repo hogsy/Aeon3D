@@ -256,7 +256,7 @@ geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDir
 
 	NewEngine->DisplayFrameRateCounter = GE_TRUE;	// Default to showing the FPS counter
 
-	geAssert_SetCriticalShutdownCallback( geEngine_ShutdownDriver , NewEngine );
+	geAssert_SetCriticalShutdownCallback( ( geAssert_CriticalShutdownCallback ) geEngine_ShutdownDriver, NewEngine );
 	
 	NewEngine->CurrentGamma = 1.0f;
 
@@ -322,9 +322,11 @@ void Sys_EngineFree(geEngine *Engine)
 //=====================================================================================
 geBoolean Sys_GetCPUFreq(Sys_CPUInfo *Info)
 {
+	assert(Info != NULL);
+
+#if defined( _WIN32 )
 	LARGE_INTEGER Freq;
 
-	assert(Info != NULL);
 
 	if (!QueryPerformanceFrequency(&Freq))
 	{
@@ -333,6 +335,7 @@ geBoolean Sys_GetCPUFreq(Sys_CPUInfo *Info)
 	}
 
 	Info->Freq = Freq.LowPart;
+#endif
 
 	return GE_TRUE;
 }
