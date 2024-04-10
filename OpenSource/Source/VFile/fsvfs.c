@@ -24,7 +24,7 @@
 #include	<string.h>
 #include	<assert.h>
 
-#include	"ram.h"
+#include	"RAM.H"
 
 #include	"fsvfs.h"
 #include	"dirtree.h"

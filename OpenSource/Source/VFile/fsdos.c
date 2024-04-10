@@ -19,16 +19,18 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#define	WIN32_LEAN_AND_MEAN
-#include	<windows.h>
+#if defined( _WIN32 )
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
+#endif
 
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<string.h>
 #include	<assert.h>
 
-#include	"basetype.h"
-#include	"ram.h"
+#include	"BASETYPE.H"
+#include	"RAM.H"
 
 #include	"vfile.h"
 #include	"vfile._h"

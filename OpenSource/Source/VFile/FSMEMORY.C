@@ -20,21 +20,23 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#define	WIN32_LEAN_AND_MEAN
-#include	<windows.h>
+#if defined( _WIN32 )
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
+#endif
 
 #include	<stdio.h>
 #include	<stdlib.h>
 #include	<string.h>
 #include	<assert.h>
 
-#include	"basetype.h"
-#include	"ram.h"
+#include	"BASETYPE.H"
+#include	"RAM.H"
 
 #include	"vfile.h"
 #include	"vfile._h"
 
-#include	"fsmemory.h"
+#include	"FSMEMORY.H"
 
 //	"MF01"
 #define	MEMORYFILE_SIGNATURE	0x3130464D
@@ -105,7 +107,7 @@ static	void *	GENESISCC FSMemory_OpenNewSystem(
 	if	(FS || Name || !Context)
 		return NULL;
 
-	MemContext = Context;
+	MemContext = ( geVFile_MemoryContext * ) Context;
 
 	// Don't allow the user to pass in memory pointer if we're updating or creating, because
 	// we don't know what allocation functions we should use to resize their block if
@@ -122,7 +124,7 @@ static	void *	GENESISCC FSMemory_OpenNewSystem(
 		return NewFS;
 	memset(NewFS, 0, sizeof(*NewFS));
 
-	NewFS->Memory = MemContext->Data;
+	NewFS->Memory = ( char * ) MemContext->Data;
 	NewFS->Size = MemContext->DataLength;
 	NewFS->AllocatedSize = NewFS->Size;
 
@@ -154,14 +156,14 @@ static	geBoolean	GENESISCC FSMemory_UpdateContext(
 	assert(FS);
 	assert(Context);
 	
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 	
 	CHECK_HANDLE(File);
 
 	if	(ContextSize != sizeof(geVFile_MemoryContext))
 		return GE_FALSE;
 
-	MemoryContext = Context;
+	MemoryContext = ( geVFile_MemoryContext * ) Context;
 	
 	MemoryContext->Data		  = File->Memory;
 	MemoryContext->DataLength = File->Size;
@@ -173,7 +175,7 @@ static	void	GENESISCC FSMemory_Close(void *Handle)
 {
 	MemoryFile *	File;
 	
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 	
 	CHECK_HANDLE(File);
 
@@ -202,7 +204,7 @@ static	geBoolean	GENESISCC FSMemory_GetS(void *Handle, void *Buff, int MaxLen)
 	assert(Buff);
 	assert(MaxLen != 0);
 
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 
 	CHECK_HANDLE(File);
 
@@ -211,7 +213,7 @@ static	geBoolean	GENESISCC FSMemory_GetS(void *Handle, void *Buff, int MaxLen)
 		return GE_FALSE;
 
 	p = DataPtr(File);
-	pBuff = Buff;
+	pBuff = ( char * ) Buff;
 	Start = p;
 
 //---------

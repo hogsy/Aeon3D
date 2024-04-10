@@ -68,14 +68,18 @@ extern int   ProcUtil_ByteCosTable[];
 
 /******* __inline functions ****************/
 
-float __inline ProcUtil_Sqrt(float val)
+float __inline ProcUtil_Sqrt( float val )
 {
+#if defined( _MSC_VER )
 	__asm {
 		FLD val
 		FSQRT
 		FSTP val
 	}
-return val;
+	return val;
+#else
+	return sqrtf( val );
+#endif
 }
 
 #ifdef __cplusplus

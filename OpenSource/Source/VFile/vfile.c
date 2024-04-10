@@ -19,22 +19,24 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#define	WIN32_LEAN_AND_MEAN
-#include	<windows.h>
+#if defined( _WIN32 )
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
+#endif
 
 #include	<stdio.h>
 #include	<assert.h>
 #include	<stdarg.h>
 #include	<string.h>
 
-#include	"basetype.h"
-#include	"ram.h"
+#include	"BASETYPE.H"
+#include	"RAM.H"
 
 #include	"vfile.h"
 #include	"vfile._h"
 
 #include	"fsdos.h"
-#include	"fsmemory.h"
+#include	"FSMEMORY.H"
 #include	"fsvfs.h"
 
 typedef	struct	FSSearchList

@@ -320,7 +320,7 @@ GENESISAPI     void * geRam_Allocate (uint32 size)
             void * ptr
           )
     {
-        char * p = ptr;
+        char * p = ( char * ) ptr;
         uint32 size;
 
         if (p == NULL)

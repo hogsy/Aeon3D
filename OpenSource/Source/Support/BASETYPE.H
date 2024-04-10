@@ -23,10 +23,11 @@
 #define GE_BASETYPE_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-/******** The Genesis Calling Conventions ***********/
+	/******** The Genesis Calling Conventions ***********/
 
 #if defined( _MSC_VER )
 #	define GENESISCC _fastcall
@@ -34,36 +35,37 @@ extern "C" {
 #	define GENESISCC//__attribute__( ( fastcall ) )
 #endif
 
-#if	defined(BUILDGENESIS) && defined(GENESISDLLVERSION)
-  #define GENESISAPI	_declspec(dllexport)
+#if defined( BUILDGENESIS ) && defined( GENESISDLLVERSION )
+#	define GENESISAPI _declspec( dllexport )
 #else
-  #if	defined(GENESISDLLVERSION)
-    #define GENESISAPI	_declspec(dllimport)
-  #else
-    #define GENESISAPI
-  #endif
+#	if defined( GENESISDLLVERSION )
+#		define GENESISAPI _declspec( dllimport )
+#	else
+#		define GENESISAPI
+#	endif
 #endif
 
-/******** The Basic Types ****************************/
+	/******** The Basic Types ****************************/
 
 #include <stdint.h>
+#include <stddef.h>
 
-typedef signed int geBoolean;
-#define GE_FALSE	(0)
-#define GE_TRUE		(1)
+	typedef signed int geBoolean;
+#define GE_FALSE ( 0 )
+#define GE_TRUE  ( 1 )
 
-typedef float geFloat;
+	typedef float geFloat;
 
 #ifndef NULL
-#define NULL	((void *)0)
+#	define NULL ( ( void * ) 0 )
 #endif
 
-typedef int32_t 	int32;
-typedef int16_t 	int16;
-typedef int8_t 		int8;
-typedef uint32_t 	uint32;
-typedef uint16_t 	uint16;
-typedef uint8_t 	uint8;
+	typedef int32_t int32;
+	typedef int16_t int16;
+	typedef int8_t int8;
+	typedef uint32_t uint32;
+	typedef uint16_t uint16;
+	typedef uint8_t uint8;
 
 #ifndef TRUE
 #	define TRUE GE_TRUE
@@ -81,64 +83,96 @@ typedef uint8_t 	uint8;
 
 #if !defined( _WIN32 )
 
+#	include <string.h>
 #	include <libgen.h>
+#	include <ctype.h>
+#	include <stdio.h>
 
 #	define strnicmp strncasecmp
 #	define stricmp  strcasecmp
 
-#if 0//TODO
-static inline void _splitpath(
-	    const char *path,
-	    char *drive,
-	    char *dir,
-	    char *fname,
-	    char *ext )
-{
-	if ( drive != NULL )
+	// A portable implementation of _splitpath (and mildly safer too)
+	static inline void p_splitpath(
+	        const char *path,
+	        char *drive,
+	        size_t driveSize,
+	        char *dir,
+	        size_t dirSize,
+	        char *fname,
+	        size_t fnameSize,
+	        char *ext,
+	        size_t extSize )
 	{
-		// uhhhh, this'll do for now...
-		drive = "/";
-	}
-
-	static char fullname[ 256 ];
-	char *c = strrchr( path, '/' );
-	if ( c != NULL )
-	{
-		snprintf( fullname, sizeof( fullname ), "%s", c );
-		if ( ext != NULL )
+		if ( isalpha( *path ) && *( path + 1 ) == ':' )
 		{
-			ext = strrchr( fullname, '.' );
+			if ( drive != NULL )
+			{
+				snprintf( drive, driveSize, "%c:", *path );
+			}
+			path += 2;
+		}
+		else if ( drive != NULL )
+		{
+			*drive = '\0';
+		}
+
+		char local[ 4096 ];
+
+		// extract the directory
+		strncpy( local, path, sizeof( local ) );
+		local[ sizeof( local ) - 1 ] = '\0';
+		char *a = dirname( local );
+
+		// extract the filename
+		strncpy( local, path, sizeof( local ) );
+		local[ sizeof( local ) - 1 ] = '\0';
+		char *b = basename( local );
+
+		// extension
+		char *c = strrchr( b, '.' );
+		if ( c != NULL )
+		{
+			if ( ext != NULL )
+			{
+				strncpy( ext, c, extSize );
+			}
+			*c = '\0';
+		}
+		else if ( ext != NULL )
+		{
+			*ext = '\0';
+		}
+
+		if ( dir != NULL )
+		{
+			strncpy( dir, a, dirSize );
+		}
+		if ( fname != NULL )
+		{
+			strncpy( fname, b, fnameSize );
 		}
 	}
 
-	if ( fname != NULL )
-	{
-
-	}
-}
 #endif
 
-#endif
+	/******** Macros on Genesis basic types *************/
 
-/******** Macros on Genesis basic types *************/
+#define GE_ABS( x )           ( ( x ) < 0 ? ( -( x ) ) : ( x ) )
+#define GE_CLAMP( x, lo, hi ) ( ( x ) < ( lo ) ? ( lo ) : ( ( x ) > ( hi ) ? ( hi ) : ( x ) ) )
+#define GE_CLAMP8( x )        GE_CLAMP( x, 0, 255 )
+#define GE_CLAMP16( x )       GE_CLAMP( x, 0, 65536 )
+#define GE_BOOLSAME( x, y )   ( ( ( x ) && ( y ) ) || ( !( x ) && !( y ) ) )
 
-#define GE_ABS(x)				( (x) < 0 ? (-(x)) : (x) )
-#define GE_CLAMP(x,lo,hi)		( (x) < (lo) ? (lo) : ( (x) > (hi) ? (hi) : (x) ) )
-#define GE_CLAMP8(x)			GE_CLAMP(x,0,255)
-#define GE_CLAMP16(x)			GE_CLAMP(x,0,65536)
-#define GE_BOOLSAME(x,y)		( ( (x) && (y) ) || ( !(x) && !(y) ) )
+#define GE_EPSILON              ( ( geFloat ) 0.000797f )
+#define GE_FLOATS_EQUAL( x, y ) ( GE_ABS( ( x ) - ( y ) ) < GE_EPSILON )
+#define GE_FLOAT_ISZERO( x )    GE_FLOATS_EQUAL( x, 0.0f )
 
-#define GE_EPSILON				((geFloat)0.000797f)
-#define GE_FLOATS_EQUAL(x,y)	( GE_ABS((x) - (y)) < GE_EPSILON )
-#define GE_FLOAT_ISZERO(x)		GE_FLOATS_EQUAL(x,0.0f)
+#define GE_PI ( ( geFloat ) 3.14159265358979323846f )
 
-#define	GE_PI					((geFloat)3.14159265358979323846f)
-
-/****************************************************/
+	/****************************************************/
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

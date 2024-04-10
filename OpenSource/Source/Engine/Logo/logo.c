@@ -53,6 +53,7 @@ extern	int				A_Streak_bmp_Length;
 
 static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta)
 {
+#if 0
 	_asm {
 		mov ebx,dword ptr [start]
 		mov esi,dword ptr [end]
@@ -67,6 +68,7 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 		mov dword ptr [ebx+0],eax
 		mov dword ptr [ebx+4],edx
 	}
+#endif
 }
 
 static	geBoolean	GetBonePosition(geActor *Actor, const char *BoneName, geVec3d *Pos)
@@ -149,6 +151,7 @@ static	geBitmap *	GetABitmap(void *BmpData, int BmpLength, void *AlphaData, int 
 
 geBoolean DoSplashScreen(geEngine *Engine, geDriver_Mode *DriverMode)
 {
+#if 0 // we don't need any of this any more...
 	geActor_Def *		ActorDef;
 	geCamera *			Camera;
 	geVFile *			MemFile;
@@ -497,5 +500,8 @@ fail:
 	Engine->Changed = GE_TRUE;
 	
 	return GE_FALSE;
+#else
+	return GE_TRUE;
+#endif
 }
 

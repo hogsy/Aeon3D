@@ -21,15 +21,16 @@
 /*                                                                                      */
 /****************************************************************************************/
 
-//#define DONT_DO_SPLASH // CB hack
+#define DONT_DO_SPLASH // CB hack
 
 #if defined( _WIN32 )
 #	define WIN32_LEAN_AND_MEAN
 #	include <windows.h>
-#	include <mmsystem.h> //timeGetTime
-#	include <direct.h>	// getcwd
+#	include <mmsystem.h>//timeGetTime
+#	include <direct.h>  // getcwd
 #else
 #	include <unistd.h>
+#	include <dlfcn.h>
 #endif
 
 #include <stdlib.h> // _MAX_PATH
@@ -1268,7 +1269,11 @@ HINSTANCE geEngine_LoadLibrary( const char * lpLibFileName, const char *DriverDi
 		strcat(Buff,"\\");
 	}
 	strcat(Buff, lpLibFileName);
+#if defined( _WIN32 )
 	Library = LoadLibrary(Buff);
+#else
+	Library = dlopen(Buff, RTLD_LAZY );
+#endif
 	if ( Library )
 		return Library;
 
