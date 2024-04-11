@@ -28,7 +28,7 @@
 //================================================================================
 //	D3DErrorToString
 //================================================================================
-char *D3DErrorToString(HRESULT error)
+const char *D3DErrorToString(HRESULT error)
 {
   switch(error) {
   case DD_OK:

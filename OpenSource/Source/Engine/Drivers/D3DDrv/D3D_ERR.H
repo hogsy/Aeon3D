@@ -29,6 +29,6 @@
 //================================================================================
 //	Global functions
 //================================================================================
-char *D3DErrorToString(HRESULT error);
+const char *D3DErrorToString(HRESULT error);
 
 #endif

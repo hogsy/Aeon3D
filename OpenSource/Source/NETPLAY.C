@@ -119,7 +119,7 @@ BOOL NetPlayEnumSession(LPSTR IPAdress, SESSION_DESC **SessionList, DWORD *Sessi
 {	
 	HRESULT		hr;
 
-#if 1
+#if 0
 	char					tempBuf[1024];
 	DWORD					tempLng = 1024;
 	LPDIRECTPLAYLOBBY2A		lpDPL = NULL;
@@ -366,7 +366,7 @@ geBoolean NetPlayGetNumMessages(int32 *NumMsgSend, int32 *NumBytesSend, int32 *N
 
 	IdFrom = IdTo = 0;
 
-	Hr = IDirectPlayX_GetMessageQueue(g_lpDP, IdFrom, IdTo, DPMESSAGEQUEUE_SEND, NumMsgSend, NumBytesSend);
+	Hr = IDirectPlayX_GetMessageQueue(g_lpDP, IdFrom, IdTo, DPMESSAGEQUEUE_SEND, ( LPDWORD ) NumMsgSend, ( LPDWORD ) NumBytesSend );
 
 	if (Hr != DP_OK)
 	{
@@ -375,7 +375,7 @@ geBoolean NetPlayGetNumMessages(int32 *NumMsgSend, int32 *NumBytesSend, int32 *N
 		return GE_FALSE;
 	}
 
-	Hr = IDirectPlayX_GetMessageQueue(g_lpDP, IdFrom, IdTo, DPMESSAGEQUEUE_RECEIVE, NumMsgRec, NumBytesRec);
+	Hr = IDirectPlayX_GetMessageQueue(g_lpDP, IdFrom, IdTo, DPMESSAGEQUEUE_RECEIVE, ( LPDWORD ) NumMsgRec, ( LPDWORD ) NumBytesRec );
 
 	if (Hr != DP_OK)
 	{

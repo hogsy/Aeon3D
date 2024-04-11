@@ -165,8 +165,6 @@ static BOOL RenderWorldPolys(int32 RenderMode);
 static BOOL ClearWorldCache(void);
 static int32 GetMipLevel(DRV_TLVertex *Verts, int32 NumVerts, float ScaleU, float ScaleV, int32 MaxMipLevel);
 
-#include <Math.h>
-
 //====================================================================================
 //	PCache_InsertWorldPoly
 //====================================================================================

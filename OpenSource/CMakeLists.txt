@@ -7,3 +7,8 @@ project(hg3d
 set(CMAKE_C_STANDARD 11)
 
 add_subdirectory(Source)
+
+# 3D Drivers
+if (WIN32)
+    add_subdirectory(Source/Engine/Drivers/D3DDrv)
+endif ()
