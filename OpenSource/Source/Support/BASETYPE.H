@@ -80,6 +80,12 @@ extern "C"
 #ifndef MIN
 #	define MIN( aa, bb ) ( ( aa ) < ( bb ) ? ( aa ) : ( bb ) )
 #endif
+#ifndef min
+#	define min MIN
+#endif
+#ifndef max
+#	define max MAX
+#endif
 
 #if !defined( _WIN32 )
 

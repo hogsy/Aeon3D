@@ -130,29 +130,14 @@ extern List * RadixList_Add(RadixList *pRadixList,void * Data,int Key);
 	// returns a pointer to the node created
 extern void * RadixList_CutMax(RadixList *pRadixList,int * pMaxKey);
 extern void * RadixList_CutMin(RadixList *pRadixList,int * pMinKey);
-extern void * RadixList_CutKey(RadixList *pRadixList,int Key);
 
 typedef struct RadixLN RadixLN;
 
-extern RadixLN * RadixLN_Create(int RadixLNMax);
-extern void RadixLN_Destroy(RadixLN * pRadixLN);
 extern void RadixLN_AddTail(RadixLN *pRadixLN,LinkNode * LN,int Key);
 extern void RadixLN_AddHead(RadixLN *pRadixLN,LinkNode * LN,int Key);
 extern LinkNode * RadixLN_CutMax(RadixLN *pRadixLN,int * pMaxKey);
 extern LinkNode * RadixLN_CutMin(RadixLN *pRadixLN,int * pMinKey);
 extern LinkNode * RadixLN_CutKey(RadixLN *pRadixLN,int Key);
-extern LinkNode * RadixLN_PeekMax(RadixLN *pRadixLN,int * pMaxKey);
-extern LinkNode * RadixLN_PeekMin(RadixLN *pRadixLN,int * pMinKey);
-
-typedef struct RadixLink RadixLink;
-
-extern			RadixLink * RadixLink_Create(int RadixLinkMax);
-extern void		RadixLink_Destroy(RadixLink * pRadixLink);
-extern void		RadixLink_Add(RadixLink *pRadixLink,void * Data,int Key);
-extern void *	RadixLink_CutMax(RadixLink *pRadixLink,int * pMaxKey);
-extern void *	RadixLink_CutMin(RadixLink *pRadixLink,int * pMinKey);
-extern void *	RadixLink_CutKey(RadixLink *pRadixLink,int Key);
-extern void		RadixLink_Grow(RadixLink *pRadixLink,int NewMax);
 
 /******************************/
 
@@ -174,8 +159,6 @@ void	HashNode_SetData(HashNode *pNode,uint32 Data);
 void	HashNode_GetData(HashNode *pNode,uint32 *pKey,uint32 *pData);
 uint32	HashNode_Key(HashNode *pNode);
 uint32	HashNode_Data(HashNode *pNode);
-
-uint32	Hash_StringToKey(const char * String);
 
 /******************************/
 
@@ -207,9 +190,6 @@ struct LinkNode
 #define LN_Null(node)	LN_InitList(node)
 
 LinkNode *	LISTCALL LN_CutHead(LinkNode *pList);
-LinkNode *	LISTCALL LN_CutTail(LinkNode *pList);
-
-int LN_ListLen(LinkNode *pList);
 
 #define LN_AddHead(list,node)	LN_AddAfter(node,list)
 #define LN_AddTail(list,node)	LN_AddBefore(node,list)

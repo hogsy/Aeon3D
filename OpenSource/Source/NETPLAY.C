@@ -81,8 +81,6 @@ BOOL FAR PASCAL DPEnumConnectionsCallback(
 
 static void DoDPError(HRESULT Hr);
 
-FILE *DebugF;
-
 //========================================================================================================
 //	InitNetPlay
 //	Enumerate the service providers, and everything else...
@@ -510,18 +508,15 @@ HRESULT DPlayEnumSessions(DWORD dwTimeout, LPDPENUMSESSIONSCALLBACK2 lpEnumCallb
 BOOL WINAPI EnumSession(LPCDPSESSIONDESC2 lpDPSessionDesc, LPDWORD lpdwTimeOut, DWORD dwFlags, 
                         LPVOID lpContext)
 {
-    HWND hWnd = (HWND) lpContext;
-	LPSTR Str = NULL;
-
     if(dwFlags & DPESC_TIMEDOUT) 
 		return FALSE;       // don't try again
 
 	gSessionCnt++;
 
 	if( GlobalSession )
-		GlobalSession = realloc( GlobalSession, gSessionCnt * sizeof(SESSION_DESC));
+		GlobalSession = (SESSION_DESC*)realloc( GlobalSession, gSessionCnt * sizeof(SESSION_DESC));
 	else
-		GlobalSession = malloc( sizeof( SESSION_DESC ) );
+		GlobalSession = (SESSION_DESC*)malloc( sizeof( SESSION_DESC ) );
 
 	GlobalSession[gSessionCnt-1].Guid = lpDPSessionDesc->guidInstance;
 
@@ -649,215 +644,215 @@ static void DoDPError(HRESULT Hr)
 	switch (Hr)
 	{
 	case CLASS_E_NOAGGREGATION:
-		geErrorLog_AddString(-1, "A non-NULL value was passed for the pUnkOuter parameter in DirectPlayCreate, DirectPlayLobbyCreate, or IDirectPlayLobby2::Connect.\n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "A non-NULL value was passed for the pUnkOuter parameter in DirectPlayCreate, DirectPlayLobbyCreate, or IDirectPlayLobby2::Connect.\n", NULL);
 		break;
 
 	case DP_OK:
-		geErrorLog_AddString(-1, "The request completed successfully.\n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The request completed successfully.\n", NULL);
 		break;
 
 	case DPERR_ACCESSDENIED:
-		geErrorLog_AddString(-1, "The session is full or an incorrect password was supplied.\n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The session is full or an incorrect password was supplied.\n", NULL);
 		break;
 
 	case DPERR_ACTIVEPLAYERS:
-		geErrorLog_AddString(-1, "The requested operation cannot be performed because there are existing active players.\n", NULL); 
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The requested operation cannot be performed because there are existing active players.\n", NULL); 
 		break;
 
 	case DPERR_ALREADYINITIALIZED:
-		geErrorLog_AddString(-1, "This object is already initialized. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "This object is already initialized. \n", NULL);
 		break;
 
 	case DPERR_APPNOTSTARTED:
-		geErrorLog_AddString(-1, "The application has not been started yet.\n", NULL); 
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The application has not been started yet.\n", NULL); 
 		break;
 
 	case DPERR_AUTHENTICATIONFAILED:
-		geErrorLog_AddString(-1, "The password or credentials supplied could not be authenticated. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The password or credentials supplied could not be authenticated. \n", NULL);
 		break;
 
 	case DPERR_BUFFERTOOLARGE:
-		geErrorLog_AddString(-1, "The data buffer is too large to store. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The data buffer is too large to store. \n", NULL);
 		break;
 
 	case DPERR_BUSY:
-		geErrorLog_AddString(-1, "A message cannot be sent because the transmission medium is busy. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "A message cannot be sent because the transmission medium is busy. \n", NULL);
 		break;
 
 	case DPERR_BUFFERTOOSMALL:
-		geErrorLog_AddString(-1, "The supplied buffer is not large enough to contain the requested data. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The supplied buffer is not large enough to contain the requested data. \n", NULL);
 		break;
 
 	case DPERR_CANTADDPLAYER:
-		geErrorLog_AddString(-1, "The player cannot be added to the session. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The player cannot be added to the session. \n", NULL);
 		break;
 
 	case DPERR_CANTCREATEGROUP:
-		geErrorLog_AddString(-1, "A new group cannot be created. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "A new group cannot be created. \n", NULL);
 		break;
 
 	case DPERR_CANTCREATEPLAYER:
-		geErrorLog_AddString(-1, "A new player cannot be created. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "A new player cannot be created. \n", NULL);
 		break;
 
 	case DPERR_CANTCREATEPROCESS:
-		geErrorLog_AddString(-1, "Cannot start the application. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "Cannot start the application. \n", NULL);
 		break;
 
 	case DPERR_CANTCREATESESSION:
-		geErrorLog_AddString(-1, "A new session cannot be created. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "A new session cannot be created. \n", NULL);
 		break;
 
 	case DPERR_CANTLOADCAPI:
-		geErrorLog_AddString(-1, "No credentials were supplied and the CryptoAPI package (CAPI) to use for cryptography services cannot be loaded. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "No credentials were supplied and the CryptoAPI package (CAPI) to use for cryptography services cannot be loaded. \n", NULL);
 		break;
 
 	case DPERR_CANTLOADSECURITYPACKAGE:
-		geErrorLog_AddString(-1, "The software security package cannot be loaded. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The software security package cannot be loaded. \n", NULL);
 		break;
 
 	case DPERR_CANTLOADSSPI:
-		geErrorLog_AddString(-1, "No credentials were supplied and the software security package (SSPI) that will prompt for credentials cannot be loaded. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "No credentials were supplied and the software security package (SSPI) that will prompt for credentials cannot be loaded. \n", NULL);
 		break;
 
 	case DPERR_CAPSNOTAVAILABLEYET:
-		geErrorLog_AddString(-1, "The capabilities of the DirectPlay object have not been determined yet. This error will occur if the DirectPlay object is implemented on a connectivity solution that requires polling to determine available bandwidth and latency. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The capabilities of the DirectPlay object have not been determined yet. This error will occur if the DirectPlay object is implemented on a connectivity solution that requires polling to determine available bandwidth and latency. \n", NULL);
 		break;
 
 	case DPERR_CONNECTING:
-		geErrorLog_AddString(-1, "The method is in the process of connecting to the network. The application should keep calling the method until it returns DP_OK, indicating successful completion, or it returns a different error. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The method is in the process of connecting to the network. The application should keep calling the method until it returns DP_OK, indicating successful completion, or it returns a different error. \n", NULL);
 		break;
 
 	case DPERR_ENCRYPTIONFAILED:
-		geErrorLog_AddString(-1, "The requested information could not be digitally encrypted. Encryption is used for message privacy. This error is only relevant in a secure session. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The requested information could not be digitally encrypted. Encryption is used for message privacy. This error is only relevant in a secure session. \n", NULL);
 		break;
 
 	case DPERR_EXCEPTION:
-		geErrorLog_AddString(-1, "An exception occurred when processing the request. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "An exception occurred when processing the request. \n", NULL);
 		break;
 
 	case DPERR_GENERIC:
-		geErrorLog_AddString(-1, "An undefined error condition occurred. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "An undefined error condition occurred. \n", NULL);
 		break;
 
 	case DPERR_INVALIDFLAGS:
-		geErrorLog_AddString(-1, "The flags passed to this method are invalid. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The flags passed to this method are invalid. \n", NULL);
 		break;
 
 	case DPERR_INVALIDGROUP:
-		geErrorLog_AddString(-1, "The group ID is not recognized as a valid group ID for this game session. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The group ID is not recognized as a valid group ID for this game session. \n", NULL);
 		break;
 
 	case DPERR_INVALIDINTERFACE:
-		geErrorLog_AddString(-1, "The interface parameter is invalid. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The interface parameter is invalid. \n", NULL);
 		break;
 
 	case DPERR_INVALIDOBJECT:
-		geErrorLog_AddString(-1, "The DirectPlay object pointer is invalid. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The DirectPlay object pointer is invalid. \n", NULL);
 		break;
 
 	case DPERR_INVALIDPARAMS: 
-		geErrorLog_AddString(-1, "One or more of the parameters passed to the method are invalid. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "One or more of the parameters passed to the method are invalid. \n", NULL);
 		break;
 
 	case DPERR_INVALIDPASSWORD: 
-		geErrorLog_AddString(-1, "An invalid password was supplied when attempting to join a session that requires a password. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "An invalid password was supplied when attempting to join a session that requires a password. \n", NULL);
 		break;
 
 	case DPERR_INVALIDPLAYER: 
-		geErrorLog_AddString(-1, "The player ID is not recognized as a valid player ID for this game session. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The player ID is not recognized as a valid player ID for this game session. \n", NULL);
 		break;
 	
 	case DPERR_LOGONDENIED: 
-		geErrorLog_AddString(-1, "The session could not be opened because credentials are required and either no credentials were supplied or the credentials were invalid. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The session could not be opened because credentials are required and either no credentials were supplied or the credentials were invalid. \n", NULL);
 		break;
 
 	case DPERR_NOCAPS:
-		geErrorLog_AddString(-1, "The communication link that DirectPlay is attempting to use is not capable of this function. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The communication link that DirectPlay is attempting to use is not capable of this function. \n", NULL);
 		break;
 
 	case DPERR_NOCONNECTION: 
-		geErrorLog_AddString(-1, "No communication link was established. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "No communication link was established. \n", NULL);
 		break;
 
 	case DPERR_NOINTERFACE: 
-		geErrorLog_AddString(-1, "The interface is not supported. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The interface is not supported. \n", NULL);
 		break;
 
 	case DPERR_NOMESSAGES:
-		geErrorLog_AddString(-1, "There are no messages in the receive queue. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "There are no messages in the receive queue. \n", NULL);
 		break;
 
 	case DPERR_NONAMESERVERFOUND:
-		geErrorLog_AddString(-1, "No name server (host) could be found or created. A host must exist to create a player. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "No name server (host) could be found or created. A host must exist to create a player. \n", NULL);
 		break;
 
 	case DPERR_NONEWPLAYERS: 
-		geErrorLog_AddString(-1, "The session is not accepting any new players. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The session is not accepting any new players. \n", NULL);
 		break;
 
 	case DPERR_NOPLAYERS: 
-		geErrorLog_AddString(-1, "There are no active players in the session. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "There are no active players in the session. \n", NULL);
 		break;
 
 	case DPERR_NOSESSIONS: 
-		geErrorLog_AddString(-1, "There are no existing sessions for this game. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "There are no existing sessions for this game. \n", NULL);
 		break;
 
 	case DPERR_NOTLOBBIED: 
-		geErrorLog_AddString(-1, "Returned by the IDirectPlayLobby2::Connect method if the application was not started by using the IDirectPlayLobby2::RunApplication method or if there is no DPLCONNECTION structure currently initialized for this DirectPlayLobby object. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "Returned by the IDirectPlayLobby2::Connect method if the application was not started by using the IDirectPlayLobby2::RunApplication method or if there is no DPLCONNECTION structure currently initialized for this DirectPlayLobby object. \n", NULL);
 		break;
 
 	case DPERR_NOTLOGGEDIN: 
-		geErrorLog_AddString(-1, "An action cannot be performed because a player or client application is not logged in. Returned by the IDirectPlay3::Send method when the client application tries to send a secure message without being logged in. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "An action cannot be performed because a player or client application is not logged in. Returned by the IDirectPlay3::Send method when the client application tries to send a secure message without being logged in. \n", NULL);
 		break;
 
 	case DPERR_OUTOFMEMORY: 
-		geErrorLog_AddString(-1, "There is insufficient memory to perform the requested operation. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "There is insufficient memory to perform the requested operation. \n", NULL);
 		break;
 
 	case DPERR_PLAYERLOST:
-		geErrorLog_AddString(-1, "A player has lost the connection to the session. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "A player has lost the connection to the session. \n", NULL);
 		break;
 
 	case DPERR_SENDTOOBIG: 
-		geErrorLog_AddString(-1, "The message being sent by the IDirectPlay3::Send method is too large. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The message being sent by the IDirectPlay3::Send method is too large. \n", NULL);
 		break;
 
 	case DPERR_SESSIONLOST: 
-		geErrorLog_AddString(-1, "The connection to the session has been lost. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The connection to the session has been lost. \n", NULL);
 		break;
 
 	case DPERR_SIGNFAILED: 
-		geErrorLog_AddString(-1, "The requested information could not be digitally signed. Digital signatures are used to establish the authenticity of messages. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The requested information could not be digitally signed. Digital signatures are used to establish the authenticity of messages. \n", NULL);
 		break;
 
 	case DPERR_TIMEOUT: 
-		geErrorLog_AddString(-1, "The operation could not be completed in the specified time. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The operation could not be completed in the specified time. \n", NULL);
 		break;
 
 	case DPERR_UNAVAILABLE: 
-		geErrorLog_AddString(-1, "The requested function is not available at this time. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The requested function is not available at this time. \n", NULL);
 		break;
 
 	case DPERR_UNINITIALIZED: 
-		geErrorLog_AddString(-1, "The requested object has not been initialized. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The requested object has not been initialized. \n", NULL);
 		break;
 
 	case DPERR_UNKNOWNAPPLICATION: 
-		geErrorLog_AddString(-1, "An unknown application was specified. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "An unknown application was specified. \n", NULL);
 		break;
 
 	case DPERR_UNSUPPORTED:
-		geErrorLog_AddString(-1, "The function is not available in this implementation. Returned from IDirectPlay3::GetGroupConnectionSettings and IDirectPlay3::SetGroupConnectionSettings if they are called from a session that is not a lobby session. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "The function is not available in this implementation. Returned from IDirectPlay3::GetGroupConnectionSettings and IDirectPlay3::SetGroupConnectionSettings if they are called from a session that is not a lobby session. \n", NULL);
 		break;
 
 	case DPERR_USERCANCEL: 
-		geErrorLog_AddString(-1, "Can be returned in two ways. 1) The user canceled the connection process during a call to the IDirectPlay3::Open method. 2) The user clicked Cancel in one of the DirectPlay service provider dialog boxes during a call to IDirectPlay3::EnumSessions. \n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "Can be returned in two ways. 1) The user canceled the connection process during a call to the IDirectPlay3::Open method. 2) The user clicked Cancel in one of the DirectPlay service provider dialog boxes during a call to IDirectPlay3::EnumSessions. \n", NULL);
 		break;
 
 	default:
-		geErrorLog_AddString(-1, "NetPlayError:  Don't know this one...\n", NULL);
+		geErrorLog_AddString(GE_ERR_UNKNOWN, "NetPlayError:  Don't know this one...\n", NULL);
 		break;
 	}
 }

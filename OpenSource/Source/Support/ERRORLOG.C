@@ -64,7 +64,7 @@ GENESISAPI int  geErrorLog_Count(void)
 }
 
 
-GENESISAPI void geErrorLog_AddExplicit(geErrorLog_ErrorClassType Error, 
+GENESISAPI void geErrorLog_AddExplicit(unsigned int Error,
 	const char *ErrorIDString,
 	const char *ErrorFileString,
 	int LineNumber,

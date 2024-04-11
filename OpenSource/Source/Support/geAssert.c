@@ -65,6 +65,7 @@ void geAssert_SetCriticalShutdownCallback( geAssert_CriticalShutdownCallback CB 
 	CriticalCallBackContext = Context;
 }
 
+#if 0
 #ifndef NDEBUG
 
 #if defined( _WIN32 )
@@ -74,7 +75,7 @@ void geAssert_SetCriticalShutdownCallback( geAssert_CriticalShutdownCallback CB 
 
 #define MAX_ASSERT_STRING_LENGTH 4096
 
-void __cdecl _assert (void *expr,void *filename,unsigned lineno)
+void __cdecl _assert (void *expr,void *filename,unsigned int lineno)
 {
 int nCode;
 char assertbuf[MAX_ASSERT_STRING_LENGTH];	
@@ -125,7 +126,7 @@ static int in_assert_cnt = 0; // a semaphore
 	//	to the asserting line of code :
 
     if (nCode == IDRETRY)
-        __asm { int 3 };
+		DebugBreak();
 
 #else
 
@@ -138,7 +139,4 @@ static int in_assert_cnt = 0; // a semaphore
 }
 
 #endif	// NDEBUG
-
-
-
-
+#endif

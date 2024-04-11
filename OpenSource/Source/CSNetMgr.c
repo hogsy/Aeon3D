@@ -21,14 +21,16 @@
 /****************************************************************************************/
 #include <assert.h>
 
+#if defined( _WIN32 )
 //#define INITGUID
-#include <Windows.H>
-#include <objbase.h>
+#	include <Windows.H>
+#	include <objbase.h>
+#endif
 
 #include "CSNetMgr.h"
 #include "NetPlay.h"
 
-#include "BaseType.h"
+#include "BASETYPE.H"
 #include "Ram.h"
 #include "ErrorLog.h"
 

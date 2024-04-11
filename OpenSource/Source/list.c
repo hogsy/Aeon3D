@@ -20,7 +20,7 @@
 /*                                                                                      */
 /****************************************************************************************/
 
-//#define SAFE_HASH_DEBUG
+#define SAFE_HASH_DEBUG
 
 /*****
 
@@ -108,33 +108,11 @@ static int UsageCount = 0;
 
 /**********************************/
 
-int LN_ListLen(LinkNode *pList)
-{
-LinkNode *pNode;
-int Len=0;
-	if ( ! pList )
-		return 0;
-	LN_Walk(pNode,pList) {
-		Len++;
-	}
-return Len;
-}
-
 LinkNode *	LISTCALL LN_CutHead(LinkNode *pList)
 {
 LinkNode * LN;
 	assert(pList);
 	LN = pList->Next;
-	if ( LN == pList ) return NULL;
-	LN_Cut(LN);
-return LN;
-}
-
-LinkNode *	LISTCALL LN_CutTail(LinkNode *pList)
-{
-LinkNode * LN;
-	assert(pList);
-	LN = pList->Prev;
 	if ( LN == pList ) return NULL;
 	LN_Cut(LN);
 return LN;
@@ -532,12 +510,6 @@ void * RadixList_CutMin(RadixList *pRadixList,int *pKey)
 return NULL;
 }
 
-void * RadixList_CutKey(RadixList *pRadixList,int Key)
-{
-	assert(pRadixList);
-return List_CutHead(pRadixList->Lists[Key]);
-}
-
 /*************************************************/
 
 struct RadixLN
@@ -572,13 +544,6 @@ TIMER_P(List_RadixInit); // not counting the allocs, tracking in List_Ram
 TIMER_Q(List_RadixInit);
 
 return pRadixLN;
-}
-
-void RadixLN_Destroy(RadixLN * pRadixLN)
-{
-	assert(pRadixLN);
-	MemFree(pRadixLN->LNs);
-	MemFree(pRadixLN);
 }
 
 void RadixLN_AddHead(RadixLN *pRadixLN,LinkNode *LN,int Key)
@@ -647,180 +612,6 @@ LinkNode * RadixLN_CutKey(RadixLN *pRadixLN,int Key)
 {
 	assert(pRadixLN);
 return LN_CutHead(&(pRadixLN->LNs[Key]));
-}
-
-
-LinkNode * RadixLN_PeekMax(RadixLN *pRadixLN,int *pKey)
-{
-LinkNode * LNs;
-	assert(pRadixLN);
-
-TIMER_P(List_RadixWalk);
-	LNs = & pRadixLN->LNs[pRadixLN->Max];
-	while ( pRadixLN->Max >= 0 )
-	{
-	LinkNode * LN;
-
-		LN = LNs->Next;
-		if ( LN != LNs )
-		{
-			if ( pKey ) *pKey = pRadixLN->Max;
-TIMER_Q(List_RadixWalk);
-			return LN;
-		}
-		pRadixLN->Max --;
-		LNs --;
-	}
-TIMER_Q(List_RadixWalk);
-
-return NULL;
-}
-
-LinkNode * RadixLN_PeekMin(RadixLN *pRadixLN,int *pKey)
-{
-LinkNode * LNlist;
-	assert(pRadixLN);
-
-TIMER_P(List_RadixWalk);
-	LNlist = & pRadixLN->LNs[pRadixLN->Min];
-	while ( pRadixLN->Min < pRadixLN->NumLNs )
-	{
-	LinkNode * LN;
-
-		LN = LNlist->Next;
-		if ( LN != LNlist )
-		{
-			if ( pKey ) *pKey = pRadixLN->Min;
-TIMER_Q(List_RadixWalk);
-			return LN;
-		}
-		pRadixLN->Min ++;
-		LNlist ++;
-	}
-TIMER_Q(List_RadixWalk);
-
-return NULL;
-}
-
-/*************************************************/
-
-struct RadixLink
-{
-	int NumLinks;
-	int Min,Max;
-	Link * Links;
-};
-
-RadixLink * RadixLink_Create(int RadixLinkMax)
-{
-RadixLink * pRadixLink;
-	pRadixLink = new(RadixLink);
-	assert(pRadixLink);
-	pRadixLink->NumLinks = RadixLinkMax+1;
-	pRadixLink->Links = MemAlloc(sizeof(Link)*(pRadixLink->NumLinks));
-	assert(pRadixLink->Links);
-	//memset(pRadixLink->Links,0,(sizeof(Link)*(pRadixLink->NumLinks)));
-	pRadixLink->Min = pRadixLink->NumLinks;
-	pRadixLink->Max = - 1;
-return pRadixLink;
-}
-
-void RadixLink_Grow(RadixLink *pRadixLink,int NewMax)
-{
-Link * OldLinks;
-int OldNumLinks;
-
-	OldNumLinks = pRadixLink->NumLinks;
-	OldLinks = pRadixLink->Links;
-
-	pRadixLink->NumLinks = NewMax + 1;
-	pRadixLink->Links = MemAlloc(sizeof(Link)*(pRadixLink->NumLinks));
-
-	assert(pRadixLink->Links);
-
-	memcpy(pRadixLink->Links, OldLinks, (sizeof(Link)*OldNumLinks));
-	//memset(pRadixLink->Links + OldNumLinks,0,(sizeof(Link)*(pRadixLink->NumLinks - OldNumLinks)));
-
-	MemFree(OldLinks);
-}
-
-void RadixLink_Destroy(RadixLink * pRadixLink)
-{
-int r;
-	assert(pRadixLink);
-	for(r=0;r<(pRadixLink->NumLinks);r++)
-	{
-		if ( pRadixLink->Links[r].Next )
-			Link_Destroy(pRadixLink->Links[r].Next);
-	}
-	MemFree(pRadixLink->Links);
-	MemFree(pRadixLink);
-}
-
-void RadixLink_Add(RadixLink *pRadixLink,void * Data,int Key)
-{
-	assert(pRadixLink);
-	assert( Key >= 0 );
-
-	if ( Key >= pRadixLink->NumLinks )
-		RadixLink_Grow(pRadixLink, Key + (Key>>2) );
-
-	Link_Push(&(pRadixLink->Links[Key]),Data);
-
-	if ( Key < pRadixLink->Min ) pRadixLink->Min = Key;
-	if ( Key > pRadixLink->Max ) pRadixLink->Max = Key;
-}
-
-void * RadixLink_CutMax(RadixLink *pRadixLink,int *pKey)
-{
-Link * pLink;
-	pLink = (pRadixLink->Links) + (pRadixLink->Max);
-	while ( pRadixLink->Max >= 0 )
-	{
-		if ( pLink->Next )
-		{
-			if ( pKey ) *pKey = pRadixLink->Max;
-			return Link_Pop(pLink);
-		}
-		pRadixLink->Max --;
-		pLink --;
-	}
-return NULL;
-}
-
-void * RadixLink_CutMin(RadixLink *pRadixLink,int *pKey)
-{
-Link * pLink;
-	pLink = (pRadixLink->Links) + (pRadixLink->Min);
-	while ( pRadixLink->Min < pRadixLink->NumLinks )
-	{
-		if ( pLink->Next )
-		{
-			if ( pKey ) *pKey = pRadixLink->Min;
-			return Link_Pop(pLink);
-		}
-		pRadixLink->Min ++;
-		pLink ++;
-	}
-return NULL;
-}
-
-void * RadixLink_CutKey(RadixLink *pRadixLink,int Key)
-{
-	assert(pRadixLink);
-return Link_Pop(&(pRadixLink->Links[Key]));
-}
-
-
-/***** debug only : **********************/
-
-void List_TimerReport(void)
-{
-#ifdef DO_TIMER
-	TIMER_REPORT(List_Ram);
-	TIMER_REPORT(List_RadixWalk);
-	TIMER_REPORT(List_RadixInit);
-#endif
 }
 
 /*************************************************/
@@ -1349,11 +1140,6 @@ return N;
 }
 
 #endif //}{ hashes
-
-uint32	Hash_StringToKey(const char * String)
-{
-return CRC32_Array(String,strlen(String));
-}
 
 void	HashNode_SetData(HashNode *pNode,uint32 Data)
 {

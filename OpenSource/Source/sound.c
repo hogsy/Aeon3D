@@ -24,10 +24,10 @@
 #include	<stdio.h>
 #include	<assert.h>
 
-#include	"BaseType.h"
+#include	"BASETYPE.H"
 #include	"ErrorLog.h"
 #include	"VFile.h"
-#include	"Sound.h"
+#include "sound.H"
 #include	"Ram.h"
 
 typedef struct	SoundManager	SoundManager;
@@ -120,7 +120,7 @@ GENESISAPI	geSound_System *geSound_CreateSoundSystem(HWND hWnd)
 	}
 
 	memset(SoundSystem, 0, sizeof(geSound_System));
-	
+
 	// Initialize the sound system
 	SoundSystem->SoundM = CreateSoundManager(hWnd);
 
@@ -163,7 +163,7 @@ GENESISAPI	geSound_Def *geSound_LoadSoundDef(geSound_System *SoundS, geVFile *Fi
 //	if (!FillSoundChannel(SoundS->SoundM, (char*)Path, (char*)FileName, &SoundDef))
 	if (!FillSoundChannel(SoundS->SoundM, File, &SoundDef))
 		return 0;
-	
+
 	return (geSound_Def *)SoundDef;
 }
 
@@ -215,15 +215,15 @@ GENESISAPI	geBoolean geSound_SetMasterVolume( geSound_System *SoundS, geFloat Vo
 	SoundS->GlobalVolume = Volume;
 	return( GE_TRUE );
 }
-	
+
 //=====================================================================================
 //	Sound_PlaySound
 //=====================================================================================
-GENESISAPI	geSound *geSound_PlaySoundDef(geSound_System *SoundS, 
-							geSound_Def *SoundDef, 
-							geFloat Volume, 
-							geFloat Pan, 
-							geFloat Frequency, 
+GENESISAPI	geSound *geSound_PlaySoundDef(geSound_System *SoundS,
+							geSound_Def *SoundDef,
+							geFloat Volume,
+							geFloat Pan,
+							geFloat Frequency,
 							geBoolean Loop)
 {
 	unsigned int Sound;
@@ -241,7 +241,7 @@ GENESISAPI	geSound *geSound_PlaySoundDef(geSound_System *SoundS,
 
 	return (geSound *)Sound;
 }
-	
+
 //=====================================================================================
 //	Sound_StopSound
 //=====================================================================================
@@ -250,29 +250,29 @@ GENESISAPI	geBoolean geSound_StopSound(geSound_System *SoundS, geSound *Sound)
 	Channel*	Channel;
 
 	assert(SoundS != NULL);
-	assert(Sound  != NULL);	
+	assert(Sound  != NULL);
 
 	Channel = GetChannel(SoundS->SoundM, (unsigned int)Sound);
 
 	if (!Channel)
 		return GE_FALSE;
 
-	return StopSoundChannel(Channel);	
+	return StopSoundChannel(Channel);
 }
 
 //=====================================================================================
 //	Sound_ModifySound
 //=====================================================================================
-GENESISAPI	geBoolean geSound_ModifySound(geSound_System *SoundS, 
-								geSound *Sound,geFloat Volume, 
-								geFloat Pan, 
+GENESISAPI	geBoolean geSound_ModifySound(geSound_System *SoundS,
+								geSound *Sound,geFloat Volume,
+								geFloat Pan,
 								geFloat Frequency)
 {
 	Channel*	Channel;
 	geSound_Cfg	LocalCfg;
 
 	assert(SoundS != NULL);
-	assert(Sound  != NULL);	
+	assert(Sound  != NULL);
 
 	Channel = GetChannel(SoundS->SoundM, (unsigned int)Sound);
 
@@ -293,7 +293,7 @@ GENESISAPI	geBoolean geSound_SoundIsPlaying(geSound_System *SoundS, geSound *Sou
 	Channel*	Channel;
 
 	assert(SoundS != NULL);
-	assert(Sound  != NULL);	
+	assert(Sound  != NULL);
 
 	Channel = GetChannel(SoundS->SoundM, (unsigned int)Sound);
 
@@ -461,7 +461,7 @@ static	SoundManager *	CreateSoundManager(HWND hWnd )
 	//pcmwf.wf.nChannels = 1;
 	//pcmwf.wf.nSamplesPerSec = 44050;
 	//pcmwf.wf.nBlockAlign = 2;
-#if 1	
+#if 1
 	pcmwf.wf.nChannels = 2;
 	pcmwf.wf.nSamplesPerSec = 44100;
 	pcmwf.wf.nBlockAlign = 4;
@@ -537,7 +537,7 @@ static	BOOL CreateChannel(DSBUFFERDESC*	dsBD, Channel** chanelPtr)
 static	BOOL GetSoundData( geVFile *File, unsigned char** dataPtr)
 {
 //	FILE * f;
-	int32 Size;
+	long Size;
 	uint8 *data;
 //	int32		CurPos;
 
@@ -561,14 +561,14 @@ static	BOOL GetSoundData( geVFile *File, unsigned char** dataPtr)
 	if	(geVFile_Size(File, &Size) == GE_FALSE)
 		return FALSE;
 
-	data = geRam_Allocate(Size);
+	data = ( uint8_t * ) geRam_Allocate(Size);
 
-	if (!data) 
+	if (!data)
 	{
 		geErrorLog_Add(GE_ERR_OUT_OF_MEMORY, NULL);
 		return FALSE;
 	}
-	
+
 	if	(geVFile_Read(File, data, Size) == GE_FALSE)
 	{
 		geRam_Free(data);
@@ -641,7 +641,7 @@ static	BOOL FillSoundChannel(SoundManager *sm, geVFile *File, unsigned int* Hand
 	}
 
 	NumBytes = dsBD.dwBufferBytes;
-	
+
 	//Create the channel
 //	if( !CreateChannel( Name2, &dsBD, &channel ) )
 	if	(!CreateChannel(&dsBD, &channel))
@@ -659,7 +659,7 @@ static	BOOL FillSoundChannel(SoundManager *sm, geVFile *File, unsigned int* Hand
 	//Fill the channel
 	if (!DSFillSoundBuffer(channel->buffer, pbWaveData, NumBytes))
 		return FALSE;
-	
+
 //	free( data );
 //	geRam_Free(data);
 
@@ -755,7 +755,7 @@ static	void ClearDupBuffers( Channel* channel )
 static	BOOL FreeAllChannels(SoundManager *sm)
 {
 	int Error;
-	
+
 	Channel* channel, *nextChannel;
 
 	channel = sm->smChannels;
@@ -776,7 +776,7 @@ static	BOOL FreeAllChannels(SoundManager *sm)
 			geErrorLog_Add(GE_ERR_DS_ERROR, NULL);
 			return FALSE;
 		}
-		
+
 //		if( channel->name )
 //			geRam_Free(channel->name);
 //			free( channel->name );
@@ -857,7 +857,7 @@ static	Channel* ReloadData(void *Data)
 		return( NULL );
 
 	NumBytes = dsBD.dwBufferBytes;
-	
+
 	//Create the channel
 //	if( !CreateChannel( Name, &dsBD, &channel ) )
 	if( !CreateChannel(&dsBD, &channel ) )
@@ -866,7 +866,7 @@ static	Channel* ReloadData(void *Data)
 	//Fill the channel
 	if ( !DSFillSoundBuffer(channel->buffer, pbWaveData, NumBytes))
 		return NULL;
-	
+
 //	geRam_Free(data);
 //	free( data );
 	return( channel );
@@ -879,7 +879,7 @@ static	BOOL DupChannel( SoundManager *sm, Channel* channel, Channel** dupChannel
 
 	*dupChannelPtr = NULL;
 //	dupChannel =  malloc( sizeof(Channel ) );
-	dupChannel =  geRam_Allocate( sizeof(Channel ) );
+	dupChannel = (Channel*) geRam_Allocate( sizeof(Channel ) );
 	if( dupChannel == NULL )
 	{
 		geErrorLog_Add(GE_ERR_OUT_OF_MEMORY, NULL );
@@ -912,7 +912,7 @@ static	BOOL	StartSoundChannel( SoundManager *sm, unsigned int Handle, geSound_Cf
 {
 	HRESULT	hres;
 	Channel* channel, *dupChannel;
-	
+
 	if( Handle == 0 )
 		return( FALSE );
 	channel = GetChannel( sm, Handle );
@@ -940,7 +940,7 @@ static	BOOL	StartSoundChannel( SoundManager *sm, unsigned int Handle, geSound_Cf
 			*sfx = channel->ID;
 		return TRUE;
 	}
-	
+
 	geErrorLog_Add(GE_ERR_DS_ERROR, NULL);
 	return FALSE;
 }
@@ -979,7 +979,7 @@ static	BOOL	ModifyChannel( Channel *channel, geSound_Cfg *cfg )
 {
 	int Error, Vol, Pan, Freq;
 	assert(channel);
-	
+
 	if( !cfg )
 		return( TRUE );
 	ClearDupBuffers(channel);

@@ -119,7 +119,7 @@ static	void *	GENESISCC FSMemory_OpenNewSystem(
 	if	(OpenModeFlags & GE_VFILE_OPEN_DIRECTORY)
 		return NULL;
 
-	NewFS = geRam_Allocate(sizeof(*NewFS));
+	NewFS = ( MemoryFile * ) geRam_Allocate(sizeof(*NewFS));
 	if	(!NewFS)
 		return NewFS;
 	memset(NewFS, 0, sizeof(*NewFS));
@@ -252,7 +252,7 @@ static	geBoolean	GENESISCC FSMemory_Read(void *Handle, void *Buff, int Count)
 	assert(Buff);
 	assert(Count != 0);
 
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 
 	CHECK_HANDLE(File);
 
@@ -283,7 +283,7 @@ static	geBoolean	GENESISCC TestForExpansion(MemoryFile *File, int Size)
 		char *	NewBlock;
 
 		NewSize = ((File->AllocatedSize + Size + (MEMORY_FILE_GROW - 1)) / MEMORY_FILE_GROW) * MEMORY_FILE_GROW;
-		NewBlock = geRam_Realloc(File->Memory, NewSize);
+		NewBlock = ( char * ) geRam_Realloc(File->Memory, NewSize);
 		if	(!NewBlock)
 			return GE_FALSE;
 		File->Memory = NewBlock;
@@ -301,7 +301,7 @@ static	geBoolean	GENESISCC FSMemory_Write(void *Handle, const void *Buff, int Co
 	assert(Buff);
 	assert(Count != 0);
 
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 
 	CHECK_HANDLE(File);
 
@@ -324,7 +324,7 @@ static	geBoolean	GENESISCC FSMemory_Seek(void *Handle, int Where, geVFile_Whence
 {
 	MemoryFile *	File;
 
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 
 	CHECK_HANDLE(File);
 
@@ -378,7 +378,7 @@ static	geBoolean	GENESISCC FSMemory_EOF(const void *Handle)
 {
 	const MemoryFile *	File;
 
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 
 	CHECK_HANDLE(File);
 
@@ -392,7 +392,7 @@ static	geBoolean	GENESISCC FSMemory_Tell(const void *Handle, long *Position)
 {
 	const MemoryFile *	File;
 
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 
 	CHECK_HANDLE(File);
 
@@ -405,7 +405,7 @@ static	geBoolean	GENESISCC FSMemory_Size(const void *Handle, long *Size)
 {
 	const MemoryFile *	File;
 
-	File = Handle;
+	File = ( MemoryFile * ) Handle;
 
 	CHECK_HANDLE(File);
 	

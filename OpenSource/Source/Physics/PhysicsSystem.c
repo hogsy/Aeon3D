@@ -236,11 +236,6 @@ GENESISAPI geBoolean GENESISCC gePhysicsSystem_Destroy(gePhysicsSystem** ppPhyss
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // physics stuff follows
 
-static float fmin(float a, float b)
-{
-	return a < b ? a : b;
-}
-
 GENESISAPI geBoolean GENESISCC gePhysicsSystem_Iterate(gePhysicsSystem* psPtr, float Time)
 {
 	int				i;

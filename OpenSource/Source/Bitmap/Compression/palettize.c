@@ -331,7 +331,7 @@ struct palInfo
 
 int colorDistance(uint8 *ca,uint8 *cb);
 int findClosestPalBrute(int R,int G,int B,palInfo *pi);
-void addOctNode(octNode *root,int R,int G,int B,int palVal);
+static void addOctNode(octNode *root,int R,int G,int B,int palVal);
 void addHash(palInfo *pi,int R,int G,int B,int palVal,int hash);
 
 #define RGBbits(R,G,B,bits) (((((R)>>(bits))&1)<<2) + ((((G)>>(bits))&1)<<1) + (((B)>>((bits)))&1))
@@ -520,7 +520,7 @@ int d,x;
 return d;
 }
 
-void addOctNode(octNode *root,int R,int G,int B,int palVal)
+static void addOctNode(octNode *root,int R,int G,int B,int palVal)
 {
 int idx;
 int bits;

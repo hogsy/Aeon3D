@@ -1783,6 +1783,7 @@ static void Engine_DrawFontBuffer(geEngine *Engine)
 
 static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta)
 {
+#if 0
 	_asm {
 		mov ebx,dword ptr [start]
 		mov esi,dword ptr [end]
@@ -1797,6 +1798,9 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 		mov dword ptr [ebx+0],eax
 		mov dword ptr [ebx+4],edx
 	}
+#else
+    delta->QuadPart = end->QuadPart - start->QuadPart;
+#endif
 }
 
 
@@ -1908,7 +1912,7 @@ geBoolean Engine_SetupPixelFormats(geEngine *Engine)
 
 	PixelArrayPtr = PixelFormatsArray;
 
-	Engine->DriverInfo.RDriver->EnumPixelFormats(Hack_EnumCallBack , &PixelArrayPtr);
+	Engine->DriverInfo.RDriver->EnumPixelFormats((geBoolean (*)(geRDriver_PixelFormat *, void *)) Hack_EnumCallBack, &PixelArrayPtr);
 
 	PixelFormatsLen = ((uint32)PixelArrayPtr - (uint32)PixelFormatsArray)/sizeof(geRDriver_PixelFormat);
 	assert(PixelFormatsLen > 0);

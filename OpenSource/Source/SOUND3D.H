@@ -23,7 +23,7 @@
 #define GE_SOUND3D_H
 
 #include "BaseType.h"
-#include "Sound.h"
+#include "sound.H"
 
 #ifdef __cplusplus
 extern "C" {

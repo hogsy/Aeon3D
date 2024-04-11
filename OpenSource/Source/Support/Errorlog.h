@@ -159,6 +159,8 @@ typedef enum
 
 typedef enum 
 {
+	GE_ERR_UNKNOWN,
+
 	GE_ERR_MEMORY_RESOURCE,
 	GE_ERR_DISPLAY_RESOURCE,
 	GE_ERR_SOUND_RESOURCE,
@@ -183,7 +185,7 @@ GENESISAPI void geErrorLog_Clear(void);
 GENESISAPI int  geErrorLog_Count(void);
 	// reports size of current error log
 
-GENESISAPI void geErrorLog_AddExplicit(geErrorLog_ErrorClassType,
+GENESISAPI void geErrorLog_AddExplicit(unsigned int Error,
 	const char *ErrorIDString,
 	const char *ErrorFileString,
 	int LineNumber,

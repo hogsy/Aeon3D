@@ -82,11 +82,19 @@ add_library(hg3d-core STATIC
         Ge.c
         list.c
         NETPLAY.C
-        SOUND.C
+        sound.c
         Sound3d.c
         Tclip.c
         timer.c
         tsc.c
+)
+
+# Because of the mixed-case, CMake/CLion seem to be getting confused and assuming these are C++??
+# We'll fix that by explicitly specifying them as C sources for now...
+set_source_files_properties(
+        NETPLAY.C
+        CAMERA.C
+        PROPERTIES LANGUAGE C
 )
 
 target_include_directories(hg3d-core PRIVATE

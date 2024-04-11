@@ -51,7 +51,7 @@
 #include	"timer.h"
 #endif
 
-//#define DONT_USE_ASM
+#define DONT_USE_ASM
 
 /*}{*********************************************************************/
 

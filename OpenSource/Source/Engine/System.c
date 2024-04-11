@@ -35,7 +35,7 @@
 #include "LIGHT.H"
 #include "WBitmap.h"
 #include "CAMERA.H"
-#include "SOUND.H"
+#include "sound.H"
 #include "ENTITIES.H"
 #include "USER.H"
 

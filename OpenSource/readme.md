@@ -2,7 +2,9 @@
 
 This is a fork of Genesis3D 1.1 that's updated to compile on current platforms w/ current compilers. I threw this together because I couldn't find a fork of the engine that wasn't trying to do a bunch of extra things I wasn't particularly interested in.
 
-Plus no offence intended, but some other forks I'd seen seemed to have absolutely butchered some things.
+Why Genesis3D? Eh, it's rather interesting historically, and this is my way of preserving it. This might also be helpful or useful to those that want to play around with an older, more simplistic engine rather than the behemoths we've got today.
+
+Additionally, I didn't know at first, but it's got a very [liberal license](#license) compared to some others out there.
 
 ## Roadmap
 
@@ -14,7 +16,7 @@ Some short-term things just to get this into a useful state.
 Eh, I'm not really planning on doing much else at this stage? Some things I'm considering...
 
 - Clean up all the includes - system includes via system.h, etc.
-- Deprecating the editor and add support for Valve .map format instead
+- Add support for Valve .map format
 
 ## License
 

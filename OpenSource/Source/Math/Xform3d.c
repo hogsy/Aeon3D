@@ -374,6 +374,8 @@ GENESISAPI void GENESISCC geXForm3d_TransformArray(const geXForm3d *XForm, const
 	if (Count <= 0)								// Early out if possible
 		return;
 
+#if 0
+
 	_asm 
 	{
 	mov     ecx,Count							// get item count
@@ -434,6 +436,15 @@ Again:
 	cmp ecx, 0
 	jne Again
 	}
+
+#else
+
+	while ( Count-- )
+	{
+		geXForm3d_Transform( XForm, Source++, Dest++ );
+	}
+
+#endif
 
 	// 34 cycles predicted (per loop)
 	// 39 cycles measured

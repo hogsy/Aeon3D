@@ -55,7 +55,6 @@ extern	SP_DESC					GlobalSP;			// Global info about the sp
 extern  SESSION_DESC*			GlobalSession;		// Global sessions availible
 extern	LPGUID					glpGuid;
 													
-void DoDPError(HRESULT Hr);
 BOOL InitNetPlay(LPGUID lpGuid);
 BOOL NetPlayEnumSession(LPSTR IPAdress, SESSION_DESC** SessionList, DWORD* SessionNum);
 BOOL NetPlayJoinSession(SESSION_DESC* SessionList);
