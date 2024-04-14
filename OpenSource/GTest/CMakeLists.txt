@@ -41,7 +41,7 @@ add_executable(GTest WIN32
         modelist.c
         NetMgr.c
         Server.c
-        TEXT.C
+        Text.c
         VidMode.c
 )
 

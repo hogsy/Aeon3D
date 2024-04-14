@@ -981,7 +981,7 @@ GENESISAPI gePoly *geWorld_AddPoly(		geWorld *World,
 	else
 		gGFXModels = NULL;
 
-#ifdef _DEBUG
+#if !defined(NDEBUG)
 	Poly->Self1 = Poly;
 	Poly->Self2 = Poly;
 #endif

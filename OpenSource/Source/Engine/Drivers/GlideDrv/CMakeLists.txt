@@ -7,6 +7,8 @@ add_library(GlideDrv SHARED
         GSpan.cpp
         GThandle.c
         Render.c
+
+        ../Bmp.c
 )
 
 target_include_directories(GlideDrv PRIVATE
@@ -16,8 +18,10 @@ target_include_directories(GlideDrv PRIVATE
         ../../../Math
         ../../../Support
 
-        3rdParty/Glide2x/Src/Include
+        Glide2x/Src/Include
 )
 
-target_link_directories(GlideDrv PRIVATE 3rdParty/Glide2x/Src/Lib/Win32)
-target_link_libraries(GlideDrv -L -lglide2x)
+target_compile_definitions(GlideDrv PRIVATE __MSC__)
+
+target_link_directories(GlideDrv PRIVATE Glide2x/Src/Lib/Win32)
+target_link_libraries(GlideDrv glide2x)

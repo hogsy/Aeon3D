@@ -13,7 +13,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////
 #pragma warning ( disable : 4514 )
-#include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 #include "Text.h"
@@ -40,18 +39,17 @@ typedef struct
 ////////////////////////////////////////////////////////////////////////////////////////
 //	Globals
 ////////////////////////////////////////////////////////////////////////////////////////
-static char			*Dir = "Bmp\\";						// where font decals are found
-static char			*Ext = ".Bmp";						// exetension of decal files
-static geEngine		*Engine = NULL;						// engine to use for output
-Font_Type			Fonts[MAX_FONTS];					// font list
-int32				FontLookup[MAX_SUPPORTED_CHARS];	// character lookup table
-static char			FontNames[MAX_FONTS][100] =			// font names
-{
-	"SFont1",
-	"SFont2",
-	"Console\\640x480\\font"
+static const char *Dir = "Bmp\\";                    // where font decals are found
+static const char *Ext = ".Bmp";                     // exetension of decal files
+static geEngine   *Engine = NULL;                    // engine to use for output
+Font_Type          Fonts[ MAX_FONTS ];               // font list
+int32              FontLookup[ MAX_SUPPORTED_CHARS ];// character lookup table
+static char        FontNames[ MAX_FONTS ][ 100 ] =   // font names
+        {
+                "SFont1",
+                "SFont2",
+                "Console\\640x480\\font",
 };
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
