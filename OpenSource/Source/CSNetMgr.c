@@ -36,8 +36,6 @@
 
 #include <InitGuid.h>
 
-#pragma message(" some assertions in here would be nice:")
-
 #define PACKET_HEADER_SIZE				1
 
 #define NET_TIMEOUT						15000		// Givem 15 secs
@@ -149,6 +147,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveFromServer(geCSNetMgr *M, geCSN
 	// Find the server player
 	IdTo = 0;
 
+#if 0//todo
+
 	Result = NetPlayReceive(&ServerId, &IdTo, DPRECEIVE_FROMPLAYER, (uint8*)&Packet, &BSize);
 
 	if (Result != DP_OK)
@@ -159,6 +159,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveFromServer(geCSNetMgr *M, geCSN
 		geErrorLog_AddString(-1, "geCSNetMgr_ReceiveFromServer:  NetPlayReceive failed.\n", NULL);
 		return GE_FALSE;
 	}
+
+#endif
 
 	if (BSize > 0)
 	{
@@ -199,6 +201,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveFromClient(geCSNetMgr *M, geCSN
 		return( GE_TRUE );
 	}
 
+#if 0//todo
+
 	// Find the client player
 	IdTo = ServerId;
 
@@ -219,6 +223,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveFromClient(geCSNetMgr *M, geCSN
 		*Data = (uint8*)&Packet[1];
 	}
 
+#endif
+
     return GE_TRUE;	
 }
 
@@ -227,6 +233,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveFromClient(geCSNetMgr *M, geCSN
 //================================================================================
 GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveSystemMessage(geCSNetMgr *M, geCSNetMgr_NetID IdFor, geCSNetMgr_NetMsgType *Type, geCSNetMgr_NetClient *Client)
 {
+#if 0//todo
+
 	DPID				SystemId, IdTo;
 	DWORD				BSize = BUFFER_SIZE;
 	HRESULT				Result;
@@ -258,6 +266,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveSystemMessage(geCSNetMgr *M, ge
 			return GE_FALSE;
 	}
 
+#endif
+
     return GE_TRUE;
 }
 
@@ -266,6 +276,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveSystemMessage(geCSNetMgr *M, ge
 //================================================================================
 static geBoolean geCSNetMgr_ProcessSystemMessage(geCSNetMgr *M, geCSNetMgr_NetID IdTo, LPDPMSG_GENERIC lpMsg, geCSNetMgr_NetMsgType *Type, geCSNetMgr_NetClient *Client)
 {
+#if 0//todo
+
 	DWORD dwSize;
 
 	assert( geCSNetMgr_IsValid(M)!=GE_FALSE );
@@ -335,6 +347,8 @@ static geBoolean geCSNetMgr_ProcessSystemMessage(geCSNetMgr *M, geCSNetMgr_NetID
 
     }
 
+#endif
+
 	return GE_TRUE;
 }
 
@@ -343,6 +357,8 @@ static geBoolean geCSNetMgr_ProcessSystemMessage(geCSNetMgr *M, geCSNetMgr_NetID
 //================================================================================
 GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveAllMessages(geCSNetMgr *M, geCSNetMgr_NetID *IdFrom, geCSNetMgr_NetID *IdTo, geCSNetMgr_NetMsgType *Type, int32 *Size, uint8 **Data)
 {
+#if 0//todo
+
 	DWORD				BSize = BUFFER_SIZE;
 	HRESULT				Result;
 
@@ -397,6 +413,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_ReceiveAllMessages(geCSNetMgr *M, geCS
 		}
 	}
 
+#endif
+
     return GE_TRUE;
 }
 
@@ -424,8 +442,16 @@ GENESISAPI geCSNetMgr_NetID GENESISCC geCSNetMgr_GetOurID(geCSNetMgr *M)
 //================================================================================
 GENESISAPI geCSNetMgr_NetID GENESISCC geCSNetMgr_GetAllPlayerID(geCSNetMgr *M)
 {
+#if 0//todo
+
 	assert( geCSNetMgr_IsValid(M)!=GE_FALSE );
 	return(DPID_ALLPLAYERS);
+
+#else
+
+	return 0;
+
+#endif
 }
 
 //================================================================================
@@ -455,6 +481,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_StartSession(geCSNetMgr *M, const char
 
 	if (!NetPlayCreateSession((char*)SessionName, 16))
 		return GE_FALSE;
+
+#if 0//todo
 	
 	if (!NetPlayCreatePlayer(&ServerId, "Server", NULL, NULL, 0, GE_TRUE))
 	{
@@ -469,6 +497,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_StartSession(geCSNetMgr *M, const char
 		geErrorLog_AddString(-1, "geCSNetMgr_StartSession:  NetPlayCreatePlayer failed for client player.\n", NULL);
 		return GE_FALSE;
 	}
+
+#endif
 
 	WeAreTheServer = GE_TRUE;
 	NetSession = GE_TRUE;
@@ -500,6 +530,7 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_FindSession(geCSNetMgr *M, const char 
 //================================================================================
 GENESISAPI geBoolean GENESISCC geCSNetMgr_JoinSession(geCSNetMgr *M, const char *Name, const geCSNetMgr_NetSession* Session)
 {
+#if 0//todo
 
 	uint32	StartTime;
 	DWORD	BSize = BUFFER_SIZE;
@@ -562,6 +593,12 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_JoinSession(geCSNetMgr *M, const char 
 #endif
 
 	return( GE_FALSE);
+
+#else
+
+	return GE_FALSE;
+
+#endif
 } 	
 
 //================================================================================
@@ -611,6 +648,8 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_SendToServer(geCSNetMgr *M,  BOOL Guar
 
 	if( DataSize+PACKET_HEADER_SIZE >= BUFFER_SIZE )
 		return GE_FALSE;
+
+#if 0//todo
 	
 	if (Guaranteed)
 		dwFlags |= DPSEND_GUARANTEED;
@@ -621,7 +660,9 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_SendToServer(geCSNetMgr *M,  BOOL Guar
 
 	if (NetPlaySend(OurPlayerId, ServerId, dwFlags, (void*)&Packet, DataSize) != DP_OK)
 		return GE_FALSE;
-	
+
+#endif
+
 	return GE_TRUE;
 }
 
@@ -641,15 +682,23 @@ GENESISAPI geBoolean GENESISCC geCSNetMgr_SendToClient(geCSNetMgr *M, geCSNetMgr
 	if( DataSize+PACKET_HEADER_SIZE >= BUFFER_SIZE )
 		return GE_FALSE;
 
+#if 0//todo
+
 	if (Guaranteed)
 		dwFlags |= DPSEND_GUARANTEED;
+
+#endif
 	
 	memcpy( &Packet[1], Data, DataSize );
 	DataSize += PACKET_HEADER_SIZE;
 	Packet[0] = NET_MSG_USER;
 
+#if 0//todo
+
 	if (NetPlaySend(ServerId, To, dwFlags, (void*)&Packet, DataSize) != DP_OK)
 		return GE_FALSE;
+
+#endif
 	
 	return GE_TRUE;
 }

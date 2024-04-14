@@ -23,52 +23,55 @@
 #define GE_NETPLAY_H
 
 #include <windows.h>
-#include <dplay.h>
 
 #include "BaseType.h"
 
-#ifdef	__cplusplus
-extern "C" {
+#ifdef __cplusplus
+extern "C"
+{
 #endif
 
 // ************************************************************************************
 //	Defines
 // ************************************************************************************
-#define NETPLAY_OPEN_CREATE		1
-#define NETPLAY_OPEN_JOIN		2
+#define NETPLAY_OPEN_CREATE 1
+#define NETPLAY_OPEN_JOIN   2
 
+	typedef struct
+	{
+		char Desc[ 200 ];// Description of Service provider
+		GUID Guid;       // Global Service Provider GUID
+	} SP_DESC;
 
-typedef struct
-{
-	char	Desc[200];								// Description of Service provider
-	GUID	Guid;									// Global Service Provider GUID
-} SP_DESC;
+	// must match stuct AFX_SESSION in cengine.h
+	typedef struct
+	{
+		char SessionName[ 200 ];// Description of Service provider
+		GUID Guid;              // Global Service Provider GUID
+	} SESSION_DESC;
 
-// must match stuct AFX_SESSION in cengine.h
-typedef struct
-{
-	char	SessionName[200];						// Description of Service provider
-	GUID	Guid;									// Global Service Provider GUID
-} SESSION_DESC;
+	typedef uint32_t  DPID;
+	typedef uintptr_t LPDPID;
+	typedef void     *LPDPMSG_GENERIC;
 
-extern	SP_DESC					GlobalSP;			// Global info about the sp
-extern  SESSION_DESC*			GlobalSession;		// Global sessions availible
-extern	LPGUID					glpGuid;
-													
-BOOL InitNetPlay(LPGUID lpGuid);
-BOOL NetPlayEnumSession(LPSTR IPAdress, SESSION_DESC** SessionList, DWORD* SessionNum);
-BOOL NetPlayJoinSession(SESSION_DESC* SessionList);
-BOOL NetPlayCreateSession(LPSTR SessionName, DWORD MaxPlayers);
-BOOL NetPlayCreatePlayer(LPDPID lppidID, LPTSTR lptszPlayerName, HANDLE hEvent, LPVOID lpData, DWORD dwDataSize, geBoolean ServerPlayer);
-BOOL NetPlayDestroyPlayer(DPID pid);
-HRESULT NetPlaySend(DPID idFrom, DPID idTo, DWORD dwFlags, LPVOID lpData, DWORD dwDataSize);
-HRESULT NetPlayReceive(LPDPID lpidFrom, LPDPID lpidTo, DWORD dwFlags, LPVOID lpData, LPDWORD lpdwDataSize);
-BOOL DeInitNetPlay(void);
+	extern SP_DESC       GlobalSP;     // Global info about the sp
+	extern SESSION_DESC *GlobalSession;// Global sessions availible
+	extern LPGUID        glpGuid;
 
-// HACK!!!! Function is in Engine.cpp (So NetPlay.C can call it...)
-BOOL			AFX_CPrintfC(char *String);
+	BOOL    InitNetPlay( LPGUID lpGuid );
+	BOOL    NetPlayEnumSession( LPSTR IPAdress, SESSION_DESC **SessionList, int32_t *SessionNum );
+	BOOL    NetPlayJoinSession( SESSION_DESC *SessionList );
+	BOOL    NetPlayCreateSession( LPSTR SessionName, DWORD MaxPlayers );
+	BOOL    NetPlayCreatePlayer( LPDPID lppidID, LPTSTR lptszPlayerName, HANDLE hEvent, LPVOID lpData, DWORD dwDataSize, geBoolean ServerPlayer );
+	BOOL    NetPlayDestroyPlayer( DPID pid );
+	HRESULT NetPlaySend( DPID idFrom, DPID idTo, DWORD dwFlags, LPVOID lpData, DWORD dwDataSize );
+	HRESULT NetPlayReceive( LPDPID lpidFrom, LPDPID lpidTo, DWORD dwFlags, LPVOID lpData, LPDWORD lpdwDataSize );
+	BOOL    DeInitNetPlay( void );
 
-#ifdef	__cplusplus
+	// HACK!!!! Function is in Engine.cpp (So NetPlay.C can call it...)
+	BOOL AFX_CPrintfC( char *String );
+
+#ifdef __cplusplus
 }
 #endif
 
