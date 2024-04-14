@@ -27,7 +27,7 @@
 #include "RAM.H"
 #include "BASETYPE.H"
 #include "GBSPFILE.H"
-#include "CAMERA.H"
+#include "Camera.h"
 #include "PLANE.H"
 #include "SURFACE.H"
 #include "LIGHT.H"

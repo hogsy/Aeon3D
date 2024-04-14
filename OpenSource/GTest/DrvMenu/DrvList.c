@@ -21,7 +21,7 @@
 #include	"genesis.h"
 
 #include	"resource.h"
-#include	"drvlist.h"
+#include "DrvList.h"
 
 
 #define DRVLIST_OK		1

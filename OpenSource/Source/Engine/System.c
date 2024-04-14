@@ -34,7 +34,7 @@
 #include "PLANE.H"
 #include "LIGHT.H"
 #include "WBitmap.h"
-#include "CAMERA.H"
+#include "Camera.h"
 #include "sound.H"
 #include "ENTITIES.H"
 #include "USER.H"
@@ -325,9 +325,8 @@ geBoolean Sys_GetCPUFreq(Sys_CPUInfo *Info)
 	assert(Info != NULL);
 
 #if defined( _WIN32 )
+
 	LARGE_INTEGER Freq;
-
-
 	if (!QueryPerformanceFrequency(&Freq))
 	{
 		geErrorLog_Add(GE_ERR_NO_PERF_FREQ, NULL);
@@ -335,6 +334,11 @@ geBoolean Sys_GetCPUFreq(Sys_CPUInfo *Info)
 	}
 
 	Info->Freq = Freq.LowPart;
+
+#else
+
+	Info->Freq = 10000000;
+
 #endif
 
 	return GE_TRUE;

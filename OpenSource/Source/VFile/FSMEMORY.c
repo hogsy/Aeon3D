@@ -36,7 +36,7 @@
 #include	"vfile.h"
 #include	"vfile._h"
 
-#include	"FSMEMORY.H"
+#include "FSMEMORY.h"
 
 //	"MF01"
 #define	MEMORYFILE_SIGNATURE	0x3130464D

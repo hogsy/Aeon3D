@@ -27,7 +27,7 @@
 
 #include <math.h>
 
-#include "CAMERA.H"
+#include "Camera.h"
 #include "FRUSTUM.H"
 #include "SURFACE.H"
 

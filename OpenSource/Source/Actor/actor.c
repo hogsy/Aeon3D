@@ -1050,9 +1050,6 @@ GENESISAPI void GENESISCC geActor_SetUserData(geActor *A, void *UserData)
 	A->UserData = UserData;
 }
 
-#define MAX(aa,bb)   ( (aa)>(bb)?(aa):(bb) )
-#define MIN(aa,bb)   ( (aa)<(bb)?(aa):(bb) )
-
 static void GENESISCC geActor_StretchBoundingBox( geVec3d *Min, geVec3d *Max,
 							const geVec3d *Corner, 
 							const geVec3d *DX, const geVec3d *DY, const geVec3d *DZ)

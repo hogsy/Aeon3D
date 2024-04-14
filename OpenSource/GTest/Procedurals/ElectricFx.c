@@ -266,11 +266,11 @@ Procedural_Table *ElectricFx_GetProcedural_Table(void)
 
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
-// sgn() - This function is used by Line() to determine the sign of a long //
+// dsgn() - This function is used by Line() to determine the sign of a long //
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-int sgn (long a) 
+static int dsgn (long a)
 {
 	if (a > 0) 
 		return +1;
@@ -283,12 +283,12 @@ int sgn (long a)
 
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         //
-// round() - This function is used by Line() to round a long to the        //
+// dround() - This function is used by Line() to round a long to the        //
 //           nearest integer.                                              //
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
-int round (long a) 
+static int dround(long a)
 {
 	if ( (a - (int)a) < 0.5) 
 		return (int)floor(a);
@@ -319,9 +319,9 @@ void ElectricFx_ZLine(Procedural *Fx, int a, int b, int c, int d, int32 ZVal, fl
 
 	u   = c-a;			// x2-x1
 	v   = d-b;			// y2-y1
-	d1x = sgn(u);		// d1x is the sign of u (x2-x1) (VALUE -1,0,1)
-	d1y = sgn(v);		// d1y is the sign of v (y2-y1) (VALUE -1,0,1)
-	d2x = sgn(u);		// d2x is the sign of u (x2-x1) (VALUE -1,0,1)
+	d1x = dsgn(u);		// d1x is the sign of u (x2-x1) (VALUE -1,0,1)
+	d1y = dsgn(v);		// d1y is the sign of v (y2-y1) (VALUE -1,0,1)
+	d2x = dsgn(u);		// d2x is the sign of u (x2-x1) (VALUE -1,0,1)
 	d2y = 0;
 	m   = abs(u);		// m is the distance between x1 and x2
 	n   = abs(v);		// n is the distance between y1 and y2
@@ -329,14 +329,14 @@ void ElectricFx_ZLine(Procedural *Fx, int a, int b, int c, int d, int32 ZVal, fl
 	if (m<=n)			// if the x distance is greater than the y distance
 	{     
 		d2x = 0;
-		d2y = sgn(v);	// d2y is the sign of v (x2-x1) (VALUE -1,0,1)
+		d2y = dsgn(v);	// d2y is the sign of v (x2-x1) (VALUE -1,0,1)
 		m   = abs(v);	// m is the distance between y1 and y2
 		n   = abs(u);	// n is the distance between x1 and x2
 	}
 
 	s = (int)(m>>1);						// s is the m distance (either x or y) divided by 2
 
-	for (i=round(m); i>0; i--)				// repeat this loop until it
+	for (i= dround( m ); i>0; i--)				// repeat this loop until it
 	{ 
 											// is = to m (y or x distance)
 		ElectricFx_PutZ(Fx, a, b, ZVal, ZAge);// plot a pixel at the original x1, y1
@@ -414,7 +414,7 @@ void ElectricFx_ZLine2(Procedural *Fx, int x1, int y1, int x2, int y2, int32 ZVa
 		{
 			for (x=x1; x<x2+1; x++) 
 			{
-				y = round((int)(yslope*x));
+				y = dround( ( int ) ( yslope * x ) );
 				ElectricFx_PutZ(Fx, x, y, ZVal, ZAge);
 			}
 		}
@@ -422,7 +422,7 @@ void ElectricFx_ZLine2(Procedural *Fx, int x1, int y1, int x2, int y2, int32 ZVa
 		{
 			for (x=x2; x<x1+1; x++) 
 			{
-				y = round((int)(yslope*x));
+				y = dround( ( int ) ( yslope * x ) );
 				ElectricFx_PutZ(Fx, x, y, ZVal, ZAge);
 			}
 		}
@@ -433,7 +433,7 @@ void ElectricFx_ZLine2(Procedural *Fx, int x1, int y1, int x2, int y2, int32 ZVa
 		{
 			for (y=x1; y<x2+1; y++) 
 			{
-				x = round((int)(xslope*y));
+				x = dround( ( int ) ( xslope * y ) );
 				ElectricFx_PutZ(Fx, x, y, ZVal, ZAge);
 			}
 		}
@@ -441,7 +441,7 @@ void ElectricFx_ZLine2(Procedural *Fx, int x1, int y1, int x2, int y2, int32 ZVa
 		{
 			for (y=x2; y<x1+1; y++) 
 			{
-				x = round((int)(xslope*y));
+				x = dround( ( int ) ( xslope * y ) );
 				ElectricFx_PutZ(Fx, x, y, ZVal, ZAge);
 			}
 		}

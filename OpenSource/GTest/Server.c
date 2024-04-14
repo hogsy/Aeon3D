@@ -18,7 +18,7 @@
 
 #include "Server.h"
 
-LARGE_INTEGER			g_Freq, g_OldTick, g_CurTick;
+static LARGE_INTEGER			g_Freq, g_OldTick, g_CurTick;
 
 #define	NUM_AVG			10
 static float			AvgTime[NUM_AVG];
@@ -26,6 +26,8 @@ static int32			CurAvg;
 
 static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta)
 {
+#if 0
+
 	_asm {
 		mov ebx,dword ptr [start]
 		mov esi,dword ptr [end]
@@ -40,6 +42,12 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 		mov dword ptr [ebx+0],eax
 		mov dword ptr [ebx+4],edx
 	}
+
+#else
+
+	delta->QuadPart = end->QuadPart - start->QuadPart;
+
+#endif
 }
 
 #define BEGIN_TIMER()		QueryPerformanceCounter(&g_OldTick)
@@ -70,7 +78,7 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 					geEngine_Printf(GameMgr_GetEngine(g), 1, 70, "Timer ms: %2.3f/%2.3f", ElapsedTime, Total);	\
 				}
 extern		geBoolean	ShowStats;
-static		ServerBotCount = 0;
+static		unsigned int ServerBotCount = 0;
 
 void		GenVS_Error(const char *Msg, ...);
 static		geBoolean Server_ManageBots(Server_Server *Server);

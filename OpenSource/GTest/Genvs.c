@@ -33,7 +33,7 @@
 #include "Client.h"
 #include "Console.h"
 
-#include "DrvList.h"
+#include "DrvMenu/DrvList.h"
 
 #include "Menu.h"
 #include "GMenu.h"
@@ -187,6 +187,8 @@ uint32	GlobalMouseFlags;
 
 static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta)
 {
+#if 0
+
 	_asm {
 		mov ebx,dword ptr [start]
 		mov esi,dword ptr [end]
@@ -201,6 +203,12 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 		mov dword ptr [ebx+0],eax
 		mov dword ptr [ebx+4],edx
 	}
+
+#else
+
+	delta->QuadPart = end->QuadPart - start->QuadPart;
+
+#endif
 }
 
 Host_Init		HostInit;
@@ -227,8 +235,7 @@ static void PickMode(HWND hwnd, HANDLE hInstance, geBoolean NoSelection, geBoole
 //	WinMain
 //=====================================================================================
 #pragma warning (disable: 4028)
-int WINAPI WinMain(HANDLE hInstance, HANDLE hPrevInstance,
-				   LPSTR lpszCmdParam, int nCmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
 #pragma warning (default: 4028)
 	geDriver		*Driver     = NULL;

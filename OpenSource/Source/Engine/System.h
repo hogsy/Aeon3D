@@ -30,7 +30,7 @@
 #	include <windows.h>
 #endif
 #include "Dcommon.h"
-#include "CAMERA.H"
+#include "Camera.h"
 #include "PTRTYPES.H"
 
 #define		VectorToSUB(a, b) ( *(((float*)&a) + b) )

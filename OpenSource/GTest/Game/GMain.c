@@ -18,7 +18,7 @@
 
 #include "GMain.h"
 
-#include "Quatern.h"
+#include "quatern.h"
 
 #define INCHES_PER_METER (39.37007874016f)
 
@@ -44,7 +44,7 @@ static geBoolean Plat_Trigger(GenVSI *VSI, void *PlayerData, void *TargetData, v
 
 static geBoolean PhysicsObject_Spawn(GenVSI* VSI, void* PlayerData, void* Class,char *EntityName);
 static void PhysicsObject_Destroy(GenVSI *VSI, void *PlayerData, void *ClassData);
-static geBoolean PhysicsObject_Trigger(GenVSI* VSI, void* PlayerData, void* TargetData, void* data);
+static geBoolean PhysicsObject_Trigger(GenVSI* VSI, void* PlayerData, GPlayer* TargetData, void* data);
 static geBoolean PhysicsObject_Control(GenVSI* VSI, void* PlayerData, float Time);
 
 static geBoolean PhysicsJoint_Spawn(GenVSI* VSI, void* PlayerData, void* Class,char *EntityName);
@@ -1629,9 +1629,6 @@ geVec3d bboxVerts[8] =
 	{1.0f, -1.0f, -1.0f},
 	{1.0f, 1.0f, -1.0f}
 };
-
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-#define MAX(a,b) ((a) > (b) ? (a) : (b))
 
 static geBoolean PhysicsObject_Control(GenVSI* VSI, void* PlayerData, float Time)
 {

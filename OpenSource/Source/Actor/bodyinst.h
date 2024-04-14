@@ -36,7 +36,7 @@
 #include "XFORM3D.H"
 #include "body.h"
 #include "xfarray.h"
-#include "CAMERA.H"
+#include "Camera.h"
 
 
 #ifdef __cplusplus

@@ -19,7 +19,7 @@
 
 #include "Genesis.h"
 
-#include "Console.h"
+#include "../Console.h"
 
 #ifdef __cplusplus
 extern "C" {

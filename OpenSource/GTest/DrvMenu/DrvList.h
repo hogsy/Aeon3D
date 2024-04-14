@@ -16,7 +16,7 @@
 #ifndef	DRVLIST_H
 #define DRVLIST_H
 
-#include "ModeList.h"
+#include "../ModeList.h"
 
 #ifdef __cplusplus
 extern "C" {

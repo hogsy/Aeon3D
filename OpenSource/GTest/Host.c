@@ -24,7 +24,7 @@
 
 #include "Game\Game.h"
 
-#include "cd.h"
+#include "cd.H"
 
 extern int32			CWidth;
 extern int32			CHeight;

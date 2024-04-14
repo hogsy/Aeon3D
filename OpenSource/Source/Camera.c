@@ -23,7 +23,7 @@
 #include <assert.h>
 #include <memory.h>		// memset
 
-#include "CAMERA.H"
+#include "Camera.h"
 #include "RAM.H"
 #include "Errorlog.h"
 

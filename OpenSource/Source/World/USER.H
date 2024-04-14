@@ -31,7 +31,7 @@
 #include "BASETYPE.H"
 #include "VEC3D.H"
 #include "XFORM3D.H"
-#include "CAMERA.H"
+#include "Camera.h"
 #include "GENESIS.H"
 #include "WORLD.H"
 #include "SURFACE.H"
@@ -51,7 +51,7 @@ extern "C" {
 
 typedef struct	gePoly
 {
-#ifdef _DEBUG
+#if !defined(NDEBUG)
 	struct gePoly	*Self1;
 #endif
 
@@ -75,7 +75,7 @@ typedef struct	gePoly
 
 	struct gePoly	*AddOnceNext;
 
-#ifdef _DEBUG
+#if !defined(NDEBUG)
 	struct gePoly	*Self2;
 #endif
 } gePoly;

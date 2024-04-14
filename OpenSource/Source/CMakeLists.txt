@@ -1,4 +1,4 @@
-add_library(hg3d-core STATIC
+add_library(Core STATIC
         World/Fog.c
         World/Frustum.c
         World/Gbspfile.c
@@ -61,7 +61,7 @@ add_library(hg3d-core STATIC
 
         VFile/dirtree.c
         VFile/fsdos.c
-        VFile/FSMEMORY.C
+        VFile/FSMEMORY.c
         VFile/fsvfs.c
         VFile/vfile.c
 
@@ -77,7 +77,7 @@ add_library(hg3d-core STATIC
         Font/font.c
         Font/wgClip.c
 
-        CAMERA.C
+        Camera.c
         CSNetMgr.c
         Ge.c
         list.c
@@ -92,12 +92,12 @@ add_library(hg3d-core STATIC
 # Because of the mixed-case, CMake/CLion seem to be getting confused and assuming these are C++??
 # We'll fix that by explicitly specifying them as C sources for now...
 set_source_files_properties(
-        NETPLAY.C
-        CAMERA.C
+        VFile/FSMEMORY.c
         PROPERTIES LANGUAGE C
 )
 
-target_include_directories(hg3d-core PRIVATE
+# ewwwwww need to restructure all this sometime...
+target_include_directories(Core PUBLIC
         ./
         ./World
         ./Engine
@@ -112,6 +112,6 @@ target_include_directories(hg3d-core PRIVATE
         ./Bitmap/Compression
 )
 
-target_compile_definitions(hg3d-core PRIVATE
+target_compile_definitions(Core PRIVATE
         BUILDGENESIS
 )

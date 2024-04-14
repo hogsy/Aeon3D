@@ -24,20 +24,20 @@
 #	include <windows.h>
 #endif
 
-#include	<stdio.h>
-#include	<assert.h>
-#include	<stdarg.h>
-#include	<string.h>
+#include <stdio.h>
+#include <assert.h>
+#include <stdarg.h>
+#include <string.h>
 
-#include	"BASETYPE.H"
-#include	"RAM.H"
+#include "BASETYPE.H"
+#include "RAM.H"
 
-#include	"vfile.h"
-#include	"vfile._h"
+#include "vfile.h"
+#include "vfile._h"
 
-#include	"fsdos.h"
-#include	"FSMEMORY.H"
-#include	"fsvfs.h"
+#include "fsdos.h"
+#include "FSMEMORY.h"
+#include "fsvfs.h"
 
 typedef	struct	FSSearchList
 {

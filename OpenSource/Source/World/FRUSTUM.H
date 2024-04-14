@@ -28,7 +28,7 @@
 #include "BASETYPE.H"
 #include "GBSPFILE.H"
 #include "VEC3D.H"
-#include "CAMERA.H"
+#include "Camera.h"
 #include "XFORM3D.H"
 #include "SURFACE.H"
 

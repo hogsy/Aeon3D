@@ -6,7 +6,7 @@
 #include	<stdio.h>
 #include	<stdlib.h>
 
-#include "cd.h"
+#include "cd.H"
 
 UINT	OpenCDPlayer(void)
 {

@@ -32,7 +32,7 @@
 #include "System.h"
 #include "SURFACE.H"
 #include "GENESIS.H"
-#include "CAMERA.H"
+#include "Camera.h"
 #include "FRUSTUM.H"
 #include "PLANE.H"
 
@@ -67,7 +67,7 @@ static geBoolean RenderUserPoly(geCamera *Camera, gePoly *Poly);
 static void geWorld_LinkPolyToLeaf(const geWorld *World, gePoly *Poly);
 static void geWorld_UnLinkPolyFromLeaf(gePoly *Poly);
 
-#ifdef _DEBUG
+#if !defined(NDEBUG)
 geBoolean geWorld_PolyIsValid(gePoly *Poly)
 {
 	if (!Poly)

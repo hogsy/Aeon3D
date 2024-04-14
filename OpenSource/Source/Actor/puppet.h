@@ -23,7 +23,7 @@
 #define GE_PUPPET_H
 
 #include "motion.h"
-#include "CAMERA.H"
+#include "Camera.h"
 #include "body.h"
 #include "pose.h"
 #include "ExtBox.h"			// geExtBox for gePuppet_RenderThroughFrustum

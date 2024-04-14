@@ -28,7 +28,7 @@
 #include "RAM.H"
 #include "SURFACE.H"
 #include "TRACE.H"
-#include "CAMERA.H"
+#include "Camera.h"
 #include "FRUSTUM.H"
 #include "System.h"
 

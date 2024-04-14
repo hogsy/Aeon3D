@@ -60,12 +60,12 @@ extern "C"
 #	define NULL ( ( void * ) 0 )
 #endif
 
-	typedef int32_t int32;
-	typedef int16_t int16;
-	typedef int8_t int8;
+	typedef int32_t  int32;
+	typedef int16_t  int16;
+	typedef int8_t   int8;
 	typedef uint32_t uint32;
 	typedef uint16_t uint16;
-	typedef uint8_t uint8;
+	typedef uint8_t  uint8;
 
 #ifndef TRUE
 #	define TRUE GE_TRUE
@@ -87,27 +87,25 @@ extern "C"
 #	define max MAX
 #endif
 
-#if !defined( _WIN32 )
+#include <string.h>
+#include <libgen.h>
+#include <ctype.h>
+#include <stdio.h>
 
-#	include <string.h>
-#	include <libgen.h>
-#	include <ctype.h>
-#	include <stdio.h>
-
-#	define strnicmp strncasecmp
-#	define stricmp  strcasecmp
+#define strnicmp strncasecmp
+#define stricmp  strcasecmp
 
 	// A portable implementation of _splitpath (and mildly safer too)
 	static inline void p_splitpath(
 	        const char *path,
-	        char *drive,
-	        size_t driveSize,
-	        char *dir,
-	        size_t dirSize,
-	        char *fname,
-	        size_t fnameSize,
-	        char *ext,
-	        size_t extSize )
+	        char       *drive,
+	        size_t      driveSize,
+	        char       *dir,
+	        size_t      dirSize,
+	        char       *fname,
+	        size_t      fnameSize,
+	        char       *ext,
+	        size_t      extSize )
 	{
 		if ( isalpha( *path ) && *( path + 1 ) == ':' )
 		{
@@ -158,8 +156,6 @@ extern "C"
 			strncpy( fname, b, fnameSize );
 		}
 	}
-
-#endif
 
 	/******** Macros on Genesis basic types *************/
 
