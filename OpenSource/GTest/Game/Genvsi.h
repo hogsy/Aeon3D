@@ -15,7 +15,7 @@
 #ifndef GENVSI_H
 #define GENVSI_H
 
-#include "Genesis.h"	// FIXME:  Should get rid of this, and make wrapper functions
+#include "GENESIS.H"	// FIXME:  Should get rid of this, and make wrapper functions
 
 //===========================================================================
 //===========================================================================

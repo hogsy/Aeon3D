@@ -12,15 +12,18 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
+#if defined( _WIN32 )
 #include <Windows.h>
-#include <Assert.h>
-#include <Math.h>
+#endif
+#include <assert.h>
+#include <math.h>
 
-#include "Client.h"
+#include "CLIENT.H"
 
 #include "Buffer.h"
 #include "GMenu.h"
 #include "cd.H"
+#include "System.h"
 
 static LARGE_INTEGER			g_Freq, g_OldTick, g_CurTick;
 

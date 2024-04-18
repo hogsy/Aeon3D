@@ -15,17 +15,19 @@
 #ifndef GAMEMGR_H
 #define GAMEMGR_H
 
-#include <Windows.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
 
-#include "Genesis.h"
+#include "GENESIS.H"
 #include "Console.h"
 
 // Effects
-#include "Fx\\Fx.h"
-#include "Fx\\Corona.h"
-#include "Fx\\Electric.h"
-#include "Fx\\DynLight.h"
-#include "Fx\\ModelCtl.h"
+#include "FX/Fx.h"
+#include "FX/corona.h"
+#include "FX/electric.h"
+#include "FX/DynLight.h"
+#include "FX/ModelCtl.h"
 
 #include "VidMode.h"
 

@@ -1,7 +1,9 @@
 #ifndef CD_H
 #define CD_H
 
-#include <Windows.H>
+#if defined( _WIN32 )
+#	include <Windows.H>
+#endif
 
 #ifdef __cplusplus
 extern "C" {

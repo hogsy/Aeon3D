@@ -4,8 +4,8 @@
 #ifndef GENVS_H
 #define GENVS_H
 
-#include "Quatern.h"
-#include "GenVSI.h"
+#include "quatern.h"
+#include "Genvsi.h"
 
 #include "PhysicsObject.h"
 #include "PhysicsJoint.h"

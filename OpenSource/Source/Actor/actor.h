@@ -91,7 +91,7 @@
 #include "motion.h"
 
 #ifdef GE_WORLD_H
-#include "CAMERA.H"
+#include "Camera.h"
 #include "FRUSTUM.H"
 #endif
 

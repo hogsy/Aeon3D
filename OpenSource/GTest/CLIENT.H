@@ -20,16 +20,16 @@
 
 #include "VidMode.h"
 
-#include "Genesis.h"
+#include "GENESIS.H"
 #include "Errorlog.h"
-#include "Quatern.h"
-#include "Ram.h"
+#include "quatern.h"
+#include "RAM.H"
 
-#include "Game\Game.h"
-#include "Game\GPlayer.h"
-#include "Game\GenVSI.h"
+#include "Game/Game.h"
+#include "Game/Gplayer.h"
+#include "Game/Genvsi.h"
 
-#include "GameMgr.h"
+#include "Gamemgr.h"
 #include "NetMgr.h"
 
 #ifdef __cplusplus

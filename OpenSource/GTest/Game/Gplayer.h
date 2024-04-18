@@ -15,9 +15,9 @@
 #ifndef GPLAYER_H
 #define GPLAYER_H
 
-#include "Genesis.h"
+#include "GENESIS.H"
 
-#include "GenVSI.h"
+#include "Genvsi.h"
 
 #define MAX_CLASS_NAME_SIZE			32
 #define MAX_PLAYER_ITEMS			32

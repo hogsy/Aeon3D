@@ -21,16 +21,32 @@
 #include <Assert.h>
 #include <Time.h>
 #include <direct.h>		//_chdir()
+#if defined( _WIN32 )
+#	include <Dos.h>
+#endif
+#include <math.h>
+#if defined( _WIN32 )
+#	include <Windows.H>
+#	include <MMSystem.H>
+#endif
+#include <stdlib.h>
+#include <assert.h>
+#include <time.h>
+#if defined( _WIN32 )
+#	include <direct.h>//_chdir()
+#endif
 
-#include "Genesis.h"
+#include "GENESIS.H"
 #include "bitmap.h"
 #include "Errorlog.h"
 
-#include "GameMgr.h"
+#include "Gamemgr.h"
 #include "NetMgr.h"
 
 #include "Host.h"
 #include "Client.h"
+#include "HOST.H"
+#include "CLIENT.H"
 #include "Console.h"
 
 #include "DrvMenu/DrvList.h"

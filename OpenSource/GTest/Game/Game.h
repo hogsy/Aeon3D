@@ -15,14 +15,16 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <Windows.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
 
-#include "Genesis.h"
-#include "Ram.h"
+#include "GENESIS.H"
+#include "RAM.H"
 
-#include "GenVSI.h"
-#include "GPlayer.h"
-#include "GenVS.h"
+#include "Genvsi.h"
+#include "Gplayer.h"
+#include "Genvs.h"
 
 #ifdef __cplusplus
 extern "C" {
