@@ -13,14 +13,6 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <stdio.h>
-#include <Dos.h>
-#include <Math.h>
-#include <Windows.H>
-#include <MMSystem.H>
-#include <StdLib.h>
-#include <Assert.h>
-#include <Time.h>
-#include <direct.h>		//_chdir()
 #if defined( _WIN32 )
 #	include <Dos.h>
 #endif
@@ -43,8 +35,6 @@
 #include "Gamemgr.h"
 #include "NetMgr.h"
 
-#include "Host.h"
-#include "Client.h"
 #include "HOST.H"
 #include "CLIENT.H"
 #include "Console.h"
