@@ -10,8 +10,10 @@ Additionally, I didn't know at first, but it's got a very [liberal license](#lic
 
 Some short-term things just to get this into a useful state.
 
-- [ ] OpenGL driver to replace D3D/Glide drivers
+- [ ] OpenGL driver to replace D3D/Glide drivers (**in-progress**)
+- [ ] Get the tools building
 - [ ] Replace networking DirectPlay code
+- [ ] Get it compiling under Linux/Unix targets
 
 Eh, I'm not really planning on doing much else at this stage? Some things I'm considering...
 
@@ -25,3 +27,5 @@ The original engine was under the `GENESIS3D PUBLIC LICENSE`, however, it appear
 > Genesis3D 1.x is abandonware and the principal stakeholders are gone. You may use it free of license restrictions.
 
 In such a case, I've opted to release this under [MIT](license), though you can find the original license [here](license.old).
+
+I've also opted to include the original GDemo sources and content too, though this, to my knowledge, was technically _not_ part of the Genesis3D 1.x distribution but distributed separately, so it's unclear if the waiver applies there. I would suggest considering it just for historical/educational purposes.

@@ -70,7 +70,7 @@ DRV_CacheInfo		CacheInfo;
 
 uint32				CurrentLRU;
 
-extern				g_FogEnable;
+extern		geBoolean 		g_FogEnable;
 
 static FxU32 LastTextureAddr[2] = {(FxU32)-1, (FxU32)-1};
 

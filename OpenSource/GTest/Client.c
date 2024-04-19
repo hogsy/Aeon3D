@@ -23,7 +23,7 @@
 #include "Buffer.h"
 #include "GMenu.h"
 #include "cd.H"
-#include "System.h"
+//#include "System.h"
 
 static LARGE_INTEGER			g_Freq, g_OldTick, g_CurTick;
 
