@@ -101,7 +101,7 @@ typedef struct
 	// Info the enuming fills in
 	geDriver		SubDrivers[MAX_SUB_DRIVERS];
 	int32			NumSubDrivers;
-	char			*CurFileName;
+	const char		*CurFileName;
 
 	//	Data for current driver
 	geBoolean		Active;				// GE_TRUE if a driver and mode has been initialized
