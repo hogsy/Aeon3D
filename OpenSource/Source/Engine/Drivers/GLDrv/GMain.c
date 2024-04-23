@@ -97,7 +97,14 @@ geBoolean GMain_Startup( DRV_DriverHook *Hook )
 	}
 
 	// initialize glew
-	glewInit();
+	GLenum err;
+	if ( ( err = glewInit() ) != GLEW_OK )
+	{
+		char tmp[ 128 ];
+		snprintf( tmp, sizeof( tmp ), "Failed to initialize GLEW: %s", glewGetErrorString( err ) );
+		SetLastDrvError( DRV_ERROR_INIT_ERROR, tmp );
+		return GE_FALSE;
+	}
 
 	// Get the info about this board
 	if ( !GMain_GetBoardInfo( &g_BoardInfo ) )

@@ -78,7 +78,7 @@ geBoolean DRIVERCC GetGamma( float *Gamma )
 //================================================================================================
 geBoolean DRIVERCC EnumModes( int32 Driver, char *DriverName, DRV_ENUM_MODES_CB *Cb, void *Context )
 {
-#if defined( _WIN32 )
+#if 0
 
 	DEVMODE devMode;
 	int     modeNum = 0;
@@ -106,7 +106,15 @@ geBoolean DRIVERCC EnumModes( int32 Driver, char *DriverName, DRV_ENUM_MODES_CB 
 
 #else
 
-	return GE_FALSE;
+	// Interface supports limited modes, so for now just hard-code it...
+
+	char resString[ 25 ];
+	snprintf( resString, sizeof( resString ), "%ux%u", 800, 600 );
+	Cb( 0, resString, 800, 600, Context );
+	snprintf( resString, sizeof( resString ), "%ux%u", 1024, 768 );
+	Cb( 0, resString, 1024, 768, Context );
+	snprintf( resString, sizeof( resString ), "%ux%u", 1280, 1024 );
+	Cb( 0, resString, 1280, 1024, Context );
 
 #endif
 }
@@ -117,10 +125,10 @@ geBoolean DRIVERCC EnumSubDrivers( DRV_ENUM_DRV_CB *Cb, void *Context )
 {
 	// Get the info about this board
 	if ( !GMain_GetBoardInfo( &g_BoardInfo ) )
-		return GE_TRUE;
+		return GE_FALSE;
 
 	if ( g_BoardInfo.MainRam == 0 )
-		return GE_TRUE;// No modes, so don't return any drivers
+		return GE_FALSE;// No modes, so don't return any drivers
 
 	if ( !Cb( 0, "GL Driver v" DRV_VMAJS "." DRV_VMINS ".", Context ) )
 		return GE_TRUE;
@@ -130,14 +138,14 @@ geBoolean DRIVERCC EnumSubDrivers( DRV_ENUM_DRV_CB *Cb, void *Context )
 
 geRDriver_PixelFormat PixelFormats[] =
         {
-                {GE_PIXELFORMAT_8BIT,             RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP},
-                { GE_PIXELFORMAT_16BIT_4444_ARGB, RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP},
-                { GE_PIXELFORMAT_16BIT_565_RGB,   RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP},
-                { GE_PIXELFORMAT_8BIT,            RDRIVER_PF_3D                              },
-                { GE_PIXELFORMAT_16BIT_565_RGB,   RDRIVER_PF_2D | RDRIVER_PF_CAN_DO_COLORKEY },
-                { GE_PIXELFORMAT_16BIT_565_RGB,   RDRIVER_PF_LIGHTMAP                        },
-                { THANDLE_PALETTE_FORMAT,         RDRIVER_PF_PALETTE                         },
-                { GE_PIXELFORMAT_16BIT_1555_ARGB, RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP},
+                {GE_PIXELFORMAT_8BIT,            RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP},
+                {GE_PIXELFORMAT_16BIT_4444_ARGB, RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP},
+                {GE_PIXELFORMAT_16BIT_565_RGB,   RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP},
+                {GE_PIXELFORMAT_8BIT,            RDRIVER_PF_3D                              },
+                {GE_PIXELFORMAT_16BIT_565_RGB,   RDRIVER_PF_2D | RDRIVER_PF_CAN_DO_COLORKEY },
+                {GE_PIXELFORMAT_16BIT_565_RGB,   RDRIVER_PF_LIGHTMAP                        },
+                {THANDLE_PALETTE_FORMAT,         RDRIVER_PF_PALETTE                         },
+                {GE_PIXELFORMAT_16BIT_1555_ARGB, RDRIVER_PF_3D | RDRIVER_PF_COMBINE_LIGHTMAP},
 };
 
 #define NUM_PIXEL_FORMATS ( sizeof( PixelFormats ) / sizeof( geRDriver_PixelFormat ) )

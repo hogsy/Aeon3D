@@ -45,4 +45,5 @@ add_executable(GTest WIN32
         VidMode.c
 )
 
+target_sources(GTest PRIVATE DrvMenu/genvs.rc)
 target_link_libraries(GTest Core Winmm Ws2_32)
