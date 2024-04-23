@@ -48,6 +48,43 @@
 //extern BOOL GlobalReset;
 
 //=====================================================================================
+//	Implementation of Win32 functions for other platforms
+//=====================================================================================
+#if !defined( _WIN32 )
+
+#	include <dlfcn.h>
+#	include <time.h>
+
+void *LoadLibrary( const char *path )
+{
+	return dlopen( path, RTLD_LAZY );
+}
+
+geBoolean FreeLibrary( void *handle )
+{
+	return ( dlclose( handle ) == 0 );
+}
+
+void *GetProcAddress( void *handle, const char *name )
+{
+	return dlsym( handle, name );
+}
+
+geBoolean QueryPerformanceCounter( LARGE_INTEGER *performanceCount )
+{
+	struct timespec tp;
+	if ( clock_gettime( CLOCK_MONOTONIC, &tp ) != -1 )
+	{
+		return GE_FALSE;
+	}
+
+	performanceCount->QuadPart = tp.tv_sec * 10000000 + tp.tv_nsec / 100;
+	return GE_TRUE;
+}
+
+#endif
+
+//=====================================================================================
 //	Local static globals
 //=====================================================================================
 static const char DriverFileNames[][ 200 ] = {
@@ -77,7 +114,7 @@ GENESISAPI geDriver *geDriver_SystemGetNextDriver(geDriver_System *DriverSystem,
 	geDriver		*Last;
 
 	assert(DriverSystem != NULL);
-	
+
 	DriverInfo = (Sys_DriverInfo*)DriverSystem;
 
 	if (!DriverInfo->NumSubDrivers)
@@ -169,7 +206,7 @@ GENESISAPI geBoolean geDriver_ModeGetWidthHeight(geDriver_Mode *Mode, int32 *Wid
 //=====================================================================================
 
 const uint32 geEngine_Version = GE_VERSION;
-const uint32 geEngine_Version_OldestSupported = 
+const uint32 geEngine_Version_OldestSupported =
 	( (GE_VERSION_MAJOR << GE_VERSION_MAJOR_SHIFT) + GE_VERSION_MINOR_MIN );
 
 geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDirectory, uint32 Version)
@@ -208,7 +245,7 @@ geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDir
 		geErrorLog_Add(GE_ERR_OUT_OF_MEMORY, NULL);
 		goto ExitWithError;
 	}
-	
+
 	// Clear the engine structure...
 	memset(NewEngine, 0, sizeof(geEngine));
 
@@ -216,7 +253,7 @@ geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDir
 	{
 		geErrorLog_Add(GE_ERR_OUT_OF_MEMORY, NULL);
 		goto ExitWithError;
-	}	
+	}
 
 	Length = strlen(DriverDirectory) + 1;
 	NewEngine->DriverDirectory = geRam_Allocate(Length);
@@ -225,14 +262,14 @@ geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDir
 		goto ExitWithError;
 
 	memcpy(NewEngine->DriverDirectory, DriverDirectory, Length);
-	
+
 	NewEngine->hWnd = hWnd;
 	strcpy(NewEngine->AppName, AppName);
 
 	// Get cpu info
 	if (!Sys_GetCPUFreq(&NewEngine->CPUInfo))
 		goto ExitWithError;
-	
+
 	// Build the wavetable
 	for (i = 0; i < 20; i++)
 		NewEngine->WaveTable[i] = ((i * 65)%200) + 50;
@@ -257,7 +294,7 @@ geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDir
 	NewEngine->DisplayFrameRateCounter = GE_TRUE;	// Default to showing the FPS counter
 
 	geAssert_SetCriticalShutdownCallback( ( geAssert_CriticalShutdownCallback ) geEngine_ShutdownDriver, NewEngine );
-	
+
 	NewEngine->CurrentGamma = 1.0f;
 
 	//geEngine_SetFogEnable(NewEngine, GE_TRUE, 255.0f, 0.0f, 0.0f, 250.0f, 1000.0f);
@@ -385,12 +422,12 @@ static BOOL EnumSubDriversCB(S32 DriverId, char *Name, void *Context)
 
 	if (strlen(Name) >=	DRV_STR_SIZE)
 		return TRUE;		// Ignore
-	
+
 	if (DriverInfo->NumSubDrivers+1 >= MAX_SUB_DRIVERS)
 		return FALSE;		// Stop when no more driver slots available
 
 	Driver = &DriverInfo->SubDrivers[DriverInfo->NumSubDrivers];
-	
+
 	Driver->Id = DriverId;
 	strcpy(Driver->Name, Name);
 	strcpy(Driver->FileName, DriverInfo->CurFileName);
@@ -399,7 +436,7 @@ static BOOL EnumSubDriversCB(S32 DriverId, char *Name, void *Context)
 
 	// Store this, so enum modes know what driver we are working on...
 	DriverInfo->CurDriver = Driver;
-	
+
 	if (!RDriver->EnumModes(Driver->Id, Driver->Name, EnumModesCB, (void*)DriverInfo))
 		return FALSE;
 
@@ -423,7 +460,7 @@ static BOOL EnumModesCB(S32 ModeId, char *Name, S32 Width, S32 Height, void *Con
 	DriverInfo = (Sys_DriverInfo*)Context;
 
 	Driver = DriverInfo->CurDriver;
-	
+
 	if (Driver->NumModes+1 >= MAX_DRIVER_MODES)
 		return FALSE;
 
@@ -488,7 +525,7 @@ static geBoolean EnumSubDrivers(Sys_DriverInfo *DriverInfo, const char *DriverDi
 		}
 
 		DriverInfo->RDriver = RDriver;
-		
+
 		if (!RDriver->EnumSubDrivers(EnumSubDriversCB, (void*)DriverInfo))
 		{
 			FreeLibrary(Handle);

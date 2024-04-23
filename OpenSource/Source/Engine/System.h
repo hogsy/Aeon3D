@@ -22,8 +22,6 @@
 #ifndef GE_SYSTEM_H
 #define GE_SYSTEM_H
 
-//#define OLD_FONT
-
 #include "Errorlog.h"
 #include "GENESIS.H"
 #if defined( _WIN32 )

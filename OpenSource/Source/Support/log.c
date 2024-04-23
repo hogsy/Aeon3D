@@ -30,7 +30,7 @@ void Log_Out(const char * string)
 #if !defined( NDEBUG ) && defined( _WIN32 )
 	OutputDebugString( string );
 #endif
-	printf(string);
+	printf("%s",string);
 }
 
 

@@ -1,18 +1,20 @@
 /****************************************************************************/
 /*    FILE: _bot.c	- Misc bot utilities & support							*/
 /****************************************************************************/
-#include <Windows.h>
-#include <Assert.h>
-#include <Math.h>
-#include <Time.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
+#include <assert.h>
+#include <math.h>
+#include <time.h>
 
-#include "Genesis.h"
-#include "Ram.h"
+#include "GENESIS.H"
+#include "RAM.H"
 
 #include "GMain.h"
 
-#include "_Bot.h"
-#include "Track.h"
+#include "_bot.h"
+#include "track.h"
 
 int32 randomseed=17;
 
@@ -111,8 +113,8 @@ float DistWeightedY(const geVec3d *Pos1, const geVec3d *Pos2, const float Scale)
 
 void Ang2Vec(float ang, geVec3d *vec)
 {
-vec->X = (float)cos(ang);
-vec->Z = (float)sin(ang);
+vec->X = cosf(ang);
+vec->Z = sinf(ang);
 vec->Y = 0.0f;
 SqueezeVector(vec, 0.0001f);
 
