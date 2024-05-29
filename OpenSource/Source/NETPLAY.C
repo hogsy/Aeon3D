@@ -22,8 +22,8 @@
 
 #include <assert.h>
 
-#include "netplay.h"
-#include "ErrorLog.h"
+#include "NETPLAY.H"
+#include "Errorlog.h"
 
 //#define INIT_GUID
 

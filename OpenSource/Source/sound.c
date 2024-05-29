@@ -19,20 +19,21 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include	<windows.h>
-#include	<dsound.h>
+#if defined( _WIN32 )
+#	include <windows.h>
+#	include <dsound.h>
+#endif
 #include	<stdio.h>
 #include	<assert.h>
 
-#include	"BASETYPE.H"
-#include	"ErrorLog.h"
-#include	"VFile.h"
+#include "BASETYPE.H"
+#include "Errorlog.h"
+#include "vfile.h"
 #include "sound.H"
-#include	"Ram.h"
+#include "RAM.H"
 
 typedef struct	SoundManager	SoundManager;
 typedef struct  Channel			Channel;
-
 
 typedef struct geSound_System
 {

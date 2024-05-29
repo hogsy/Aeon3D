@@ -21,11 +21,9 @@
 /****************************************************************************************/
 #include <math.h>
 
-#include "Trace.h"
-#include "Vec3d.h"
-#include "XForm3d.h"
+#include "TRACE.H"
 #include "Camera.h"
-#include "Sound3d.h"
+#include "SOUND3D.H"
 
 // Sound
 typedef struct geSound3d_Cfg

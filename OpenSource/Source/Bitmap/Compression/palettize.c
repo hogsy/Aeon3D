@@ -39,7 +39,7 @@ we palettize ("inverse colormap") using an octree lookup system
 #include "palettize.h"
 #include <stdlib.h>
 #include <assert.h>
-#include "ram.h"
+#include "RAM.H"
 #include "mempool.h"
 
 #ifdef _TSC

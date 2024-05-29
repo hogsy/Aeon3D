@@ -67,6 +67,9 @@ extern "C"
 	typedef uint16_t uint16;
 	typedef uint8_t  uint8;
 
+#ifndef BOOL
+#	define BOOL geBoolean
+#endif
 #ifndef TRUE
 #	define TRUE GE_TRUE
 #endif
@@ -96,7 +99,7 @@ extern "C"
 #define stricmp  strcasecmp
 
 	// A portable implementation of _splitpath (and mildly safer too)
-	static inline void p_splitpath(
+	static inline void geSplitPath(
 	        const char *path,
 	        char       *drive,
 	        size_t      driveSize,

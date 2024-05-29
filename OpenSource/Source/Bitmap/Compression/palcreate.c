@@ -84,7 +84,7 @@ why this isn't exactly optimal:
 #include "palcreate.h"
 #include "tsc.h"
 #include "paloptimize.h"
-#include "ram.h"
+#include "RAM.H"
 #include "yuv.h"
 #include "mempool.h"
 #include "utility.h"		// delete macro

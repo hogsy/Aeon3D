@@ -20,14 +20,9 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <assert.h>
-#include <math.h>
 
 #include "WORLD.H"
-#include "System.h"
-#include "RAM.H"
-#include "BASETYPE.H"
 #include "GBSPFILE.H"
-#include "Camera.h"
 #include "PLANE.H"
 #include "SURFACE.H"
 #include "LIGHT.H"
@@ -39,13 +34,7 @@
 #include "ENTITIES.H"
 #include "VIS.H"
 #include "USER.H"
-#include "vfile.h"
-
-#include "TRACE.H"
-
 #include "list.h"
-
-#include "bitmap.h"
 #include "bitmap._h"
 
 //#define BSP_BACK_TO_FRONT
@@ -126,7 +115,7 @@ static void RenderTransPoly(geCamera *Camera, World_TransPoly *pPoly);
 typedef struct
 {
 	uint8		Type;
-	uint32		Data;
+	uintptr_t	Data;
 } GList_Operation;
 
 typedef struct
@@ -156,7 +145,7 @@ void GList_Destroy(GList *GList)
 //=====================================================================================
 //	GList_AddOperation
 //=====================================================================================
-void GList_AddOperation(uint8 Type, uint32 Data)
+void GList_AddOperation(uint8 Type, uintptr_t Data)
 {
 	int32		Op;
 

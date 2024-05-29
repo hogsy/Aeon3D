@@ -22,9 +22,11 @@
 #ifndef GE_NETPLAY_H
 #define GE_NETPLAY_H
 
-#include <windows.h>
+#if defined( _WIN32 )
+#	include <windows.h>
+#endif
 
-#include "BaseType.h"
+#include "BASETYPE.H"
 
 #ifdef __cplusplus
 extern "C"

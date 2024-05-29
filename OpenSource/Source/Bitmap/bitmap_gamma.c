@@ -26,7 +26,7 @@
 #include "bitmap.__h"
 #include "bitmap_gamma.h"
 #include "pixelformat.h"
-#include "errorlog.h"
+#include "Errorlog.h"
 #include <assert.h>
 #include <math.h>
 

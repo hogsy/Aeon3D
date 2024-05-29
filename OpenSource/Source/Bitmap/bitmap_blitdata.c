@@ -23,29 +23,20 @@
 
 /*}{*********************************************************************/
 
-#include	<math.h>
-#include	<time.h>
-#include	<stdio.h>
 #include	<assert.h>
-#include	<stdlib.h>
 #include	<string.h>
 
-#include	"basetype.h"
-#include	"getypes.h"
-#include	"ram.h"
+#include	"BASETYPE.H"
 
 #include	"bitmap.h"
 #include	"bitmap._h"
 #include	"bitmap.__h"
 #include	"bitmap_blitdata.h"
 
-#include	"vfile.h"
-#include	"ErrorLog.h"
+#include	"Errorlog.h"
 
 #include	"palcreate.h"
 #include	"palettize.h"
-
-#include	"tsc.h"
 
 #ifdef DO_TIMER
 #include	"timer.h"

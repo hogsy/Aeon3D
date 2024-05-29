@@ -22,9 +22,6 @@
 #include "ExtBox.h"
 #include <assert.h>
 
-#define MAX(aa,bb)   ( ((aa)>(bb))?(aa):(bb) )
-#define MIN(aa,bb)   ( ((aa)<(bb))?(aa):(bb) )
-
 geBoolean GENESISCC geExtBox_IsValid(  const geExtBox *B )
 {
 	if (B == NULL) return GE_FALSE;

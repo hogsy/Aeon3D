@@ -20,28 +20,18 @@
 /*                                                                                      */
 /****************************************************************************************/
 
-#include <Windows.h>
-#include <Math.h>
-#include <Assert.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
+#include <assert.h>
 
-#include "Genesis.H"
+#include "GENESIS.H"
 #include "System.h"
-#include "Ram.h"
 
-//#include "Sound.h"
-//#include "Sound3d.h"
-
-#include "World.h"
-#include "Surface.h"
-//#include "Camera.h"
-#include "Light.h"
-#include "Plane.h"
-#include "Entities.h"
-#include "Trace.h"
-#include "User.h"
-//#include "Host.h"
-#include "Motion.h"
-#include "Vis.h"
+#include "WORLD.H"
+#include "ENTITIES.H"
+#include "TRACE.H"
+#include "VIS.H"
 
 //=====================================================================================
 //	local static globals

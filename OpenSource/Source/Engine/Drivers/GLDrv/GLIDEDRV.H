@@ -24,7 +24,7 @@
 
 #include "BASETYPE.H"
 
-#include "DCommon.h"
+#include "Dcommon.h"
 
 extern		DRV_Driver GLIDEDRV;
 

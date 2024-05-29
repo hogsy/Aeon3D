@@ -22,9 +22,11 @@
 #ifndef THANDLE_H
 #define THANDLE_H
 
-#include <Windows.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
 
-#include "DCommon.h"
+#include "Dcommon.h"
 #include "BASETYPE.H"
 
 #ifdef __cplusplus

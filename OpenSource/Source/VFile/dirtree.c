@@ -670,7 +670,7 @@ DirTree_Finder * DirTree_CreateFinder(DirTree *Tree, const char *Path)
 	assert(Tree);
 	assert(Path);
 
-	p_splitpath(Path, NULL, 0, Directory, sizeof( Directory ), Name, sizeof( Name ), Ext, sizeof( Ext ) );
+	geSplitPath( Path, NULL, 0, Directory, sizeof( Directory ), Name, sizeof( Name ), Ext, sizeof( Ext ) );
 
 	SubTree = DirTree_FindExact(Tree, Directory);
 	if	(!SubTree)
@@ -770,7 +770,7 @@ DirTree * DirTree_FinderGetNextFile(DirTree_Finder *Finder)
 
 	do
 	{
-		p_splitpath(Res->Name, NULL, 0, NULL, 0, Name, sizeof( Name ), Ext, sizeof( Ext ) );
+		geSplitPath( Res->Name, NULL, 0, NULL, 0, Name, sizeof( Name ), Ext, sizeof( Ext ) );
 		if	(MatchPattern(Name, Finder->MatchName) == GE_TRUE &&
 			 MatchPattern(Ext,  Finder->MatchExt) == GE_TRUE)
 		{

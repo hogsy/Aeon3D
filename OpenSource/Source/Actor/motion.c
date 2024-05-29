@@ -40,9 +40,6 @@
 
 #define gePath_TimeType geFloat
 
-#define MIN(aa,bb)  (( (aa)>(bb) ) ? (bb) : (aa) )
-#define MAX(aa,bb)  (( (aa)>(bb) ) ? (aa) : (bb) )
-
 typedef enum { MOTION_NODE_UNDECIDED, MOTION_NODE_BRANCH, MOTION_NODE_LEAF } geMotion_NodeType;
 
 #define MOTION_BLEND_PART_OF_TRANSFORM(TForm)  ((TForm).Translation.X)						

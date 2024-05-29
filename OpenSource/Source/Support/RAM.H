@@ -53,7 +53,7 @@ GENESISAPI int geRam_EnableCriticalCallback(int add);
   mode, we track where the memory was allocated and can optionally provide a
   report of allocated blocks.  See geRam_ReportAllocations.
 */
-#ifndef NDEBUG
+#if defined( _WIN32 ) && !defined( NDEBUG )
 
 #define geRam_Allocate(size) _geRam_DebugAllocate(size, __FILE__, __LINE__)
 
@@ -82,7 +82,7 @@ GENESISAPI void geRam_Free_(void *ptr);
   and will also act like ram_allocate if the pointer passed to it is NULL.
   It won't, however, free the memory if you pass it a 0 size.
 */
-#ifndef NDEBUG
+#if defined( _WIN32 ) && !defined( NDEBUG )
 
 #define geRam_Realloc(ptr, newsize) _geRam_DebugRealloc(ptr, newsize, __FILE__, __LINE__)
 

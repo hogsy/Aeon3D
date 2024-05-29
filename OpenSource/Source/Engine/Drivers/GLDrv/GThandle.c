@@ -19,12 +19,14 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+#if defined( _WIN32 )
 #include <Windows.h>
-#include <Assert.h>
+#endif
+#include <assert.h>
 
 #include "GTHandle.h"
 #include "GMain.h"
-#include "GlideDrv.h"
+#include "GLIDEDRV.H"
 
 #define TEXTURE_CACHE_PERCENT			0.75f
 #define LMAP_CACHE_PERCENT				0.25f

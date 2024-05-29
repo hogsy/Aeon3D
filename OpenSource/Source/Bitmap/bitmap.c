@@ -57,13 +57,13 @@ see {} for notes/long-term-todos
 #include	<stdlib.h>
 #include	<string.h>
 
-#include	"basetype.h"
+#include	"BASETYPE.H"
 #include	"getypes.h"
-#include	"ram.h"
+#include	"RAM.H"
 
 #include	"vfile.h"
-#include	"ErrorLog.h"
-#include	"Log.h"
+#include	"Errorlog.h"
+#include	"log.h"
 #include	"mempool.h"
 
 #include	"bitmap.h"

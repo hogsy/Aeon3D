@@ -245,7 +245,7 @@ GENESISAPI     void *geRam_Realloc
         memcpy (p+HEADER_SIZE+size, MemStamp, MemStampSize);
     }
 
-#ifndef NDEBUG
+#if defined( _WIN32 ) && !defined( NDEBUG )
 GENESISAPI 	void* _geRam_DebugAllocate(uint32 size, const char* pFile, int line)
 	{
       char *p;
@@ -381,7 +381,7 @@ GENESISAPI     void geRam_Free_ (void *ptr)
         assert ((geRam_CurrentlyUsed >= 0) && "free()d more ram than you allocated!");
     }
 
-#ifndef NDEBUG
+#if defined( _WIN32 ) && !defined( NDEBUG )
 
 GENESISAPI     void * _geRam_DebugRealloc (void *ptr, uint32 newsize, const char* pFile, int line)
     {

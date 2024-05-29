@@ -68,13 +68,9 @@ TClip_Rasterize      : 0.006183 : 1.$ %
 #include <assert.h>
 #include <string.h>
 
-#include "TClip.h"
-#include "engine.h"
+#include "tclip.h"
 #include "bitmap._h"
-
 #include "list.h"
-#include "ram.h"  
-
 #include "timer.h"
 
 TIMER_VARS(TClip_Triangle);

@@ -25,16 +25,16 @@
 //#define INITGUID
 #	include <Windows.H>
 #	include <objbase.h>
+#	include <InitGuid.h>
 #endif
 
 #include "CSNetMgr.h"
-#include "NetPlay.h"
+#include "NETPLAY.H"
 
 #include "BASETYPE.H"
-#include "Ram.h"
-#include "ErrorLog.h"
+#include "RAM.H"
+#include "Errorlog.h"
 
-#include <InitGuid.h>
 
 #define PACKET_HEADER_SIZE				1
 
