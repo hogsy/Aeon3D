@@ -19,6 +19,7 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+#define INITGUID
 #include <Windows.h>
 #include <Assert.h>
 #include <stdio.h>
@@ -32,7 +33,6 @@
 #include "d3dcache.h"
 
 #include "Render.h"
-#include "D3DCache.h"
 #include "THandle.h"
 #include "PCache.h"
 

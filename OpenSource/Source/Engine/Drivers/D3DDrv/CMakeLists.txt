@@ -20,3 +20,7 @@ target_include_directories(D3DDrv PRIVATE
         ../../../Math
         ../../../Support
 )
+
+target_link_libraries(D3DDrv PRIVATE
+        Ddraw
+)
