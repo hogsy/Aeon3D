@@ -12,3 +12,6 @@ cmake-build-*
 # Output files
 *.exe
 *.dll
+
+*.ini
+*.old

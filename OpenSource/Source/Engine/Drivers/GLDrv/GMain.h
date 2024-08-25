@@ -30,36 +30,39 @@
 #include "GTHandle.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-#define GMAIN_MAX_TMU_SUPPORT						8
+#define GMAIN_MAX_TMU_SUPPORT 8
 
-typedef struct
-{
-	uint32		MainRam;
-	int32		NumTMU;
-	uint32		TmuRam[GMAIN_MAX_TMU_SUPPORT];
-} GMain_BoardInfo;
+	typedef struct
+	{
+		uint32 MainRam;
+		int32  NumTMU;
+		uint32 TmuRam[ GMAIN_MAX_TMU_SUPPORT ];
+	} GMain_BoardInfo;
 
-extern DRV_Window			ClientWindow;
-extern GMain_BoardInfo		g_BoardInfo;			// Global board info for current hardware
+	extern DRV_Window      ClientWindow;
+	extern GMain_BoardInfo g_BoardInfo;// Global board info for current hardware
 
-extern geBoolean			g_FogEnable;
-extern float				g_FogR;
-extern float				g_FogG;
-extern float				g_FogB;
+	extern geBoolean g_FogEnable;
+	extern float     g_FogR;
+	extern float     g_FogG;
+	extern float     g_FogB;
 
-//============================================================================================
-//============================================================================================
+	//============================================================================================
+	//============================================================================================
 
-geBoolean GMain_Startup(DRV_DriverHook *Hook);
-void GMain_Shutdown(void);
-geBoolean GMain_GetBoardInfo(GMain_BoardInfo *Info);
-geBoolean GMain_InitGlideRegisters(void);
-geBoolean GMain_ResetAll(void);
-geBoolean DRIVERCC GMain_ScreenShot(const char *Name);
-geBoolean DRIVERCC GMain_SetFogEnable(geBoolean Enable, float r, float g, float b, float Start, float End);
+	geBoolean          GMain_Startup( DRV_DriverHook *Hook );
+	void               GMain_Shutdown( void );
+	geBoolean          GMain_GetBoardInfo( GMain_BoardInfo *Info );
+	geBoolean          GMain_InitGlideRegisters( void );
+	geBoolean          GMain_ResetAll( void );
+	geBoolean DRIVERCC GMain_ScreenShot( const char *Name );
+	geBoolean DRIVERCC GMain_SetFogEnable( geBoolean Enable, float r, float g, float b, float Start, float End );
+
+	void GLMain_Log( const char *string, ... );
 
 #ifdef __cplusplus
 }

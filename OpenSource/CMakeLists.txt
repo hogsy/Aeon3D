@@ -20,12 +20,13 @@ endforeach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
 
 add_subdirectory(Source)
 add_subdirectory(GTest)
+#add_subdirectory(GDemo)
 
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 # 3D Drivers
 add_subdirectory(Source/Engine/Drivers/GLDrv)
 if (WIN32)
-    #add_subdirectory(Source/Engine/Drivers/D3DDrv)
+    add_subdirectory(Source/Engine/Drivers/D3DDrv)
     #add_subdirectory(Source/Engine/Drivers/GlideDrv)
 endif ()

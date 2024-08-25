@@ -40,6 +40,23 @@ float     g_FogR;
 float     g_FogG;
 float     g_FogB;
 
+void GLMain_Log( const char *string, ... )
+{
+	char buffer[ 2048 ];
+	wvsprintf( buffer, string, ( char * ) ( &string + 1 ) );
+
+	OutputDebugString( buffer );
+
+	FILE *file = fopen( "GLDrv.log", "a+t" );
+	if ( file == NULL )
+	{
+		return;
+	}
+
+	fprintf( file, "%s", buffer );
+	fclose( file );
+}
+
 //==============================================================================
 //==============================================================================
 geBoolean GMain_Startup( DRV_DriverHook *Hook )
@@ -79,6 +96,8 @@ geBoolean GMain_Startup( DRV_DriverHook *Hook )
 
 	ClientWindow.hWnd = Hook->hWnd;
 
+#if defined( _WIN32 )
+
 	// Go full-screen so we won't lose the mouse
 	{
 		RECT DeskTop;
@@ -96,12 +115,41 @@ geBoolean GMain_Startup( DRV_DriverHook *Hook )
 		SetCursorPos( ClientWindow.Width / 2, ClientWindow.Height / 2 );
 	}
 
+	HDC dc = GetDC( ClientWindow.hWnd );
+
+	PIXELFORMATDESCRIPTOR pfd = { 0 };
+	pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
+	pfd.nVersion = 1;
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+	pfd.cColorBits = 32;
+	pfd.cDepthBits = 24;
+	pfd.cStencilBits = 8;
+	pfd.iLayerType = PFD_MAIN_PLANE;
+
+	int format = ChoosePixelFormat( dc, &pfd );
+	SetPixelFormat( dc, format, &pfd );
+
+	HGLRC hRC = wglCreateContext( dc );
+	if ( !wglMakeCurrent( dc, hRC ) )
+	{
+		const char *msg = "Failed to make GL context current!\n";
+		GLMain_Log( "%s", msg );
+		SetLastDrvError( DRV_ERROR_INIT_ERROR, msg );
+		return GE_FALSE;
+	}
+
+#endif
+
 	// initialize glew
 	GLenum err;
 	if ( ( err = glewInit() ) != GLEW_OK )
 	{
 		char tmp[ 128 ];
 		snprintf( tmp, sizeof( tmp ), "Failed to initialize GLEW: %s", glewGetErrorString( err ) );
+
+		GLMain_Log( "%s\n", tmp );
+
 		SetLastDrvError( DRV_ERROR_INIT_ERROR, tmp );
 		return GE_FALSE;
 	}
@@ -115,23 +163,6 @@ geBoolean GMain_Startup( DRV_DriverHook *Hook )
 		SetLastDrvError( DRV_ERROR_INIT_ERROR, "GLIDE_DrvInit:  Not enough texture mapping units." );
 		return GE_FALSE;
 	}
-
-#if 0//todo
-	// select the current graphics system
-	grSstSelect( 0 );
-
-	// initialize and open the graphics system
-	if ( !grSstWinOpen( ( U32 ) ClientWindow.hWnd,
-	                    VidMode,
-	                    GR_REFRESH_60Hz,
-	                    GR_COLORFORMAT_ABGR,
-	                    GR_ORIGIN_UPPER_LEFT,
-	                    2, 1 ) )
-	{
-		SetLastDrvError( DRV_ERROR_INIT_ERROR, "GLIDE_DrvInit:  grSstWinOpen failed." );
-		return GE_FALSE;
-	}
-#endif
 
 	// We know that GLIDE will be in 5-6-5 mode...
 	ClientWindow.R_shift = 5 + 6;
