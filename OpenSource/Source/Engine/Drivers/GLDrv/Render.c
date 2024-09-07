@@ -498,12 +498,12 @@ geBoolean DRIVERCC Render_WorldPoly( DRV_TLVertex *Pnts, int32 NumPoints, geRDri
 	assert( Pnts );
 	assert( TexInfo );
 
-#ifdef ENABLE_WIREFRAME
+#	ifdef ENABLE_WIREFRAME
 	if ( DoWireFrame )
 		return ( Render_LinesPoly( Pnts, NumPoints ) );
-#endif
+#	endif
 
-#if 0
+#	if 0
 	switch (PolyMode)
 	{
 		case DRV_POLYMODE_NORMAL:
@@ -513,7 +513,7 @@ geBoolean DRIVERCC Render_WorldPoly( DRV_TLVertex *Pnts, int32 NumPoints, geRDri
 		case DRV_POLYMODE_LINES:
 			return (Render_LinesPoly(Pnts, NumPoints));
 	}
-#endif
+#	endif
 
 	GLIDEDRV.NumRenderedPolys++;
 
@@ -529,7 +529,7 @@ geBoolean DRIVERCC Render_WorldPoly( DRV_TLVertex *Pnts, int32 NumPoints, geRDri
 
 	pVrtx = Vrtx;
 
-#if 0
+#	if 0
 	// Fix the uv's to be as close to the origin as possible, without affecting their appearance...
 	//if (pPnts->u > 1000.0f || pPnts->v > 1000.0f)
 	{
@@ -540,7 +540,7 @@ geBoolean DRIVERCC Render_WorldPoly( DRV_TLVertex *Pnts, int32 NumPoints, geRDri
 		ShiftU -= (float)(((int32)(pPnts->u*ScaleU/THandle->Width))*THandle->Width);
 		ShiftV -= (float)(((int32)(pPnts->v*ScaleV/THandle->Height))*THandle->Height);
 	}
-#endif
+#	endif
 
 	Alpha = Pnts->a;
 
@@ -593,7 +593,7 @@ geBoolean DRIVERCC Render_WorldPoly( DRV_TLVertex *Pnts, int32 NumPoints, geRDri
 		grDrawPolygonVertexList( NumPoints, Vrtx );
 	}
 
-#if 0//todo
+#	if 0//todo
 	if ( LInfo )// If there is a lightmap, render it now, on top of the first pass poly
 	{
 		geBoolean Dynamic;
@@ -625,7 +625,7 @@ geBoolean DRIVERCC Render_WorldPoly( DRV_TLVertex *Pnts, int32 NumPoints, geRDri
 
 		RenderLightmapPoly( Vrtx, NumPoints, LInfo, ( geBoolean ) Dynamic, Flags );
 	}
-#endif
+#	endif
 
 	return TRUE;
 #endif
@@ -842,104 +842,26 @@ void SetupTexture( geRDriver_THandle *THandle )
 //==================================================================================
 geBoolean DRIVERCC Render_DrawDecal( geRDriver_THandle *THandle, RECT *SRect, int32 x, int32 y )
 {
-#if 0//TODO
-	int32       Width, Height, Stride, OriginalWidth, w, h, Add1, Add2;
-	uint16     *Data;
-	GrLfbInfo_t Info;
-	uint16     *BackBuffer;
-
 	if ( x >= ClientWindow.Width )
 		return TRUE;
 	if ( y >= ClientWindow.Height )
 		return TRUE;
 
-	Width = THandle->Width;
-	OriginalWidth = Width;
-	Height = THandle->Height;
-	Stride = Width << 1;
-	Data = ( uint16 * ) THandle->Data;
+	glBegin( GL_QUADS );
 
-	if ( SRect )
-	{
-		Data += SRect->top * Width + SRect->left;
-		Height = SRect->bottom - SRect->top;
-		Width = SRect->right - SRect->left;
-	}
+	glVertex3i( x, y, 0 );
+	glColor3f( 1.0f, 0.0f, 0.0f );
 
-	if ( x < 0 )
-	{
-		if ( x + Width <= 0 )
-			return TRUE;
-		Data += -x;
-		Width -= -x;
-		x = 0;
-	}
+	glVertex3i( x + SRect->right, y, 0 );
+	glColor3f( 0.0f, 1.0f, 0.0f );
 
-	if ( y < 0 )
-	{
-		if ( y + Height <= 0 )
-			return TRUE;
-		Data += ( -y ) * OriginalWidth;
-		Height -= -y;
-		y = 0;
-	}
+	glVertex3i( x + SRect->right, y + SRect->bottom, 0 );
+	glColor3f( 1.0f, 0.0f, 0.0f );
 
-	if ( x + Width >= ClientWindow.Width )
-		Width -= ( x + Width ) - ClientWindow.Width;
+	glVertex3i( x, y + SRect->bottom, 0 );
+	glColor3f( 0.0f, 1.0f, 0.0f );
 
-	if ( y + Height >= ClientWindow.Height )
-		Height -= ( y + Height ) - ClientWindow.Height;
-
-	/*
-	if (!grLfbWriteRegion(GR_BUFFER_BACKBUFFER , 
-						x, y, 
-						GR_LFB_SRC_FMT_1555, 
-						Width, Height, Stride, 
-						(void*)Data))
-	{
-		SetLastDrvError(DRV_ERROR_GENERIC, "GLIDE_BlitDecal:  The GLIDE decal blit operation could not be performed.");
-		return FALSE;
-	}
-	*/
-
-	Info.size = sizeof( Info );
-
-	Render_SetHardwareMode( RENDER_DECAL_MODE, 0 );
-
-	if ( !grLfbLock( GR_LFB_WRITE_ONLY, GR_BUFFER_BACKBUFFER, GR_LFBWRITEMODE_565, 0, FXFALSE, &Info ) )
-	//if (!grLfbLock(GR_LFB_WRITE_ONLY, GR_BUFFER_BACKBUFFER, GR_LFBWRITEMODE_1555, 0, FXTRUE, &Info))
-	{
-		SetLastDrvError( DRV_ERROR_GENERIC, "GLIDE_BlitDecal:  Could not lock the back buffer." );
-		return FALSE;
-	}
-
-	BackBuffer = ( uint16 * ) Info.lfbPtr;
-
-	BackBuffer += ( y * ( Info.strideInBytes >> 1 ) ) + x;
-
-	Add1 = OriginalWidth - Width;
-	Add2 = ( Info.strideInBytes >> 1 ) - Width;
-
-	for ( h = 0; h < Height; h++ )
-	{
-		for ( w = 0; w < Width; w++ )
-		{
-			if ( *Data != 1 )
-				*BackBuffer = *Data;
-
-			Data++;
-			BackBuffer++;
-		}
-		Data += Add1;
-		BackBuffer += Add2;
-	}
-
-	if ( !grLfbUnlock( GR_LFB_WRITE_ONLY, GR_BUFFER_BACKBUFFER ) )
-	{
-		SetLastDrvError( DRV_ERROR_GENERIC, "GLIDE_BlitDecal:  Could not unlock the back buffer." );
-		return GE_FALSE;
-	}
-#endif
+	glEnd();
 
 	return GE_TRUE;
 }
@@ -991,6 +913,11 @@ geBoolean DRIVERCC BeginScene( geBoolean Clear, geBoolean ClearZ, RECT *WorldRec
 		}
 		else
 		{
+#if !defined( NDEBUG )
+			glClearColor( 1.0f, 0.0f, 0.0f, 1.0f );
+#else
+			glClearColour( 0.0f, 0.0f, 0.0f, 1.0f );
+#endif
 			glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 		}
 	}
@@ -1041,7 +968,7 @@ geBoolean DRIVERCC BeginWorld( void )
 geBoolean DRIVERCC EndWorld( void )
 {
 	GLIDEDRV.NumWorldPixels = 0;//NumWorldPixels;
-	GLIDEDRV.NumWorldSpans = 0;//NumSpans;
+	GLIDEDRV.NumWorldSpans = 0; //NumSpans;
 
 	RenderMode = RENDER_NONE;
 
