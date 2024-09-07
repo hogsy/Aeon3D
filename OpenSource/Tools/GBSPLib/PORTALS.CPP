@@ -22,22 +22,20 @@
 #if defined( _WIN32 )
 #	include <Windows.h>
 #endif
-#include <stdio.h>
-#include <assert.h>
+
+#include <cassert>
 
 #include "PORTALS.H"
 #include "POLY.H"
 #include "BSP.H"
 #include "GBSPFILE.H"
-#include "Leaf.h"
-#include "Utils.h"
-#include "MAP.H"
-
 #include "RAM.H"
 
 GBSP_Node	*OutsideNode;
 geVec3d		NodeMins, NodeMaxs;
-geBoolean	VisPortals;
+
+//TODO: there's another global variable called VisPortals, so this should be renamed...
+static geBoolean	VisPortals;
 
 geBoolean CreateAllOutsidePortals(GBSP_Node *Node);
 void GetNodeMinsMaxs(GBSP_Node *Node);

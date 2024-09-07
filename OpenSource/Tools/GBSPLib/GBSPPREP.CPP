@@ -835,7 +835,7 @@ int32 PrepGFXNodes_r(int32 Original, GBSP_Node *Node)
 geBoolean SaveGFXTextures(geVFile *f)
 {
 	GBSP_Chunk	Chunk;
-	int32		Pos1, Pos2;
+	long		Pos1, Pos2;
 	uint8		Data[256*256*4];
 	int32		Size, Width, Height, Offset, i;
 	char		*File;

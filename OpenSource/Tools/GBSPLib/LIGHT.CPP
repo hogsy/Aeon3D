@@ -826,7 +826,7 @@ geBoolean SaveLightmaps(geVFile *f)
 	float		Max, Max2;
 	GBSP_Chunk	Chunk;
 	uint8		LData[MAX_LMAP_SIZE*MAX_LMAP_SIZE*3*4], *pLData;
-	int32		Pos1, Pos2;
+	long		Pos1, Pos2;
 	int32		NumLTypes;
 	FInfo		*pFaceInfo;
 

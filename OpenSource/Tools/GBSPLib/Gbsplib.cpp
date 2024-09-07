@@ -49,10 +49,10 @@ GBSP_RETVAL GBSP_CreateBSP(char *FileName, BspParms *Parms)
 	CancelRequest = GE_FALSE;
 
 	GHook.Printf("** BSP Compile Version: %i \n", GBSP_VERSION);
-	GHook.Printf("** Build Date/Time: "__DATE__","__TIME__"\n");
+	GHook.Printf("** Build Date/Time: " __DATE__ "," __TIME__ "\n");
 
 #ifdef HANDLE_EXCEPTIONS
-	__try
+	try
 	{
 		if (!CreateBSP(FileName, Parms))
 		{
@@ -64,7 +64,7 @@ GBSP_RETVAL GBSP_CreateBSP(char *FileName, BspParms *Parms)
 	
 		return GBSP_OK;
 	}
-	__except(1)
+	catch(...)
 	{
 		// Clean up all errors, free any possible left-over data
 		GHook.Printf("GBSPLib: Fatal error in BSP!  Doing Clean-up work.\n");
@@ -109,7 +109,7 @@ GBSP_RETVAL GBSP_SaveGBSPFile(char *FileName)
 	CancelRequest = GE_FALSE;
 
 #ifdef HANDLE_EXCEPTIONS
-	__try
+	try
 	{
 		if (!ConvertGBSPToFile(FileName))
 		{
@@ -119,7 +119,7 @@ GBSP_RETVAL GBSP_SaveGBSPFile(char *FileName)
 				return GBSP_ERROR;
 		}
 	}
-	__except(1)
+	catch(...)
 	{
 		// Clean up all errors, free any possible left-over data
 		GHook.Printf("GBSPLib: Fatal error Saving BSP!  Doing Clean-up work.\n");
@@ -170,7 +170,7 @@ GBSP_RETVAL GBSP_VisGBSPFile(char *FileName, VisParms *Parms)
 	CancelRequest = GE_FALSE;
 
 #ifdef HANDLE_EXCEPTIONS
-	__try
+	try
 	{
 		if (!VisGBSPFile(FileName, Parms))
 		{
@@ -180,7 +180,7 @@ GBSP_RETVAL GBSP_VisGBSPFile(char *FileName, VisParms *Parms)
 				return GBSP_ERROR;
 		}
 	}
-	__except(1)
+	catch (...)
 	{
 		// Clean up all errors, free any possible left-over data
 		GHook.Printf("GBSPLib: Fatal error in Vis!  Doing Clean-up work.\n");
@@ -209,7 +209,7 @@ GBSP_RETVAL GBSP_LightGBSPFile(char *FileName, LightParms *Parms)
 	CancelRequest = GE_FALSE;
 
 #ifdef HANDLE_EXCEPTIONS
-	__try
+	try
 	{
 		if (!LightGBSPFile(FileName, Parms))
 		{
@@ -219,7 +219,7 @@ GBSP_RETVAL GBSP_LightGBSPFile(char *FileName, LightParms *Parms)
 				return GBSP_ERROR;
 		}
 	}
-	__except(1)
+	catch (...)
 	{
 		// Clean up all errors, free any possible left-over data
 		GHook.Printf("GBSPLib: Fatal error in Radiosity!  Doing Clean-up work.\n");

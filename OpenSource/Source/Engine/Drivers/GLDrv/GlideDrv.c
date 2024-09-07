@@ -116,6 +116,8 @@ geBoolean DRIVERCC EnumModes( int32 Driver, char *DriverName, DRV_ENUM_MODES_CB 
 	snprintf( resString, sizeof( resString ), "%ux%u", 1280, 1024 );
 	Cb( 0, resString, 1280, 1024, Context );
 
+	return GE_TRUE;
+
 #endif
 }
 
@@ -179,12 +181,12 @@ geBoolean DRIVERCC DrvSetActive( geBoolean Active )
 //================================================================================================
 DRV_Driver GLIDEDRV =
         {
-                "GL driver. v" DRV_VMAJS "." DRV_VMINS ".",
-                DRV_VERSION_MAJOR,
-                DRV_VERSION_MINOR,
+                "GL driver. v" DRV_VMAJS "." DRV_VMINS ".",// Name
+                DRV_VERSION_MAJOR,                         // VersionMajor
+                DRV_VERSION_MINOR,                         // VersionMinor
 
-                DRV_ERROR_NONE,
-                NULL,
+                DRV_ERROR_NONE,// LastError
+                NULL,          // LastErrorStr
 
                 EnumSubDrivers,
                 EnumModes,
@@ -237,9 +239,10 @@ DRV_Driver GLIDEDRV =
 
                 GMain_SetFogEnable,
 
-                NULL,
+                NULL,// EngineSettings
                 NULL,// Init to NULL, engine SHOULD set this (SetupLightmap)
-                NULL };
+                NULL // GlobalInfo
+};
 
 //================================================================================================
 //================================================================================================
