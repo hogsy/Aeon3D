@@ -110,7 +110,7 @@ GENESISAPI void geErrorLog_AddExplicit( unsigned int Error,
 
 	{
 		char Number[ 20 ];
-		itoa( LineNumber, Number, 10 );
+		snprintf( Number, sizeof( Number ), "%d", LineNumber );
 		strncat( SDst, Number, MAX_USER_NAME_LEN );
 	}
 

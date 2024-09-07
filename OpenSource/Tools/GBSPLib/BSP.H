@@ -22,9 +22,7 @@
 #ifndef BSP_H
 #define BSP_H
 
-#include <Windows.h>
-
-#include "GBSPLib.h"
+#include "Gbsplib.h"
 
 //====================================================================================
 //	Global defines
@@ -262,6 +260,6 @@ void		SnapPlane(geVec3d *Normal, geFloat *Dist);
 void		PlaneInverse(GBSP_Plane *Plane);
 int32		FindPlane(GBSP_Plane *Plane, int32 *Side);
 void		PlaneInverse(GBSP_Plane *Plane);
-float		_fastcall Plane_PointDistanceFast(GBSP_Plane *Plane, geVec3d *Point);
+float		GBSP_FASTCALL Plane_PointDistanceFast(GBSP_Plane *Plane, geVec3d *Point);
 
 #endif

@@ -22,10 +22,8 @@
 #ifndef POLY_H
 #define POLY_H
 
-#include <Windows.h>
-
-#include "BSP.h"
-#include "MathLib.h"
+#include "BSP.H"
+#include "MATHLIB.H"
 
 extern geBoolean	gCountVerts;
 extern int32		gTotalVerts;

@@ -22,10 +22,7 @@
 #ifndef GBSPPREP_H
 #define GBSPPREP_H
 
-#include <Windows.h>
-#include <Stdio.h>
-
-#include "BSP.h"
+#include "BSP.H"
 
 void		BeginGBSPModels(void);
 geBoolean	PrepGBSPModel(GBSP_Model *Model, geBoolean SaveVis);

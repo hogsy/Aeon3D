@@ -19,16 +19,15 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "Fill.h"
-#include "Map.h"
-#include "Portals.h"
+#include "MAP.H"
+#include "PORTALS.H"
 #include "Leaf.h"
-#include "Poly.h"
-#include "GBSPFile.h"
-#include "Bsp.h"
+#include "POLY.H"
+#include "GBSPFILE.H"
+#include "BSP.H"
 
 int32		CurrentFill;
 geBoolean	HitEntity = GE_FALSE;

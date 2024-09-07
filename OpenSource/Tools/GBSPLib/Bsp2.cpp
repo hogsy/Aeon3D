@@ -19,22 +19,21 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Assert.h>
-#include <Math.h>
+#include <cassert>
+#include <cmath>
 
-#include "Mathlib.h"
-#include "Poly.h"
-#include "BSP.h"
-#include "GBSPFile.h"
-#include "Map.h"
-#include "Portals.h"
-#include "Texture.h"
+#include "MATHLIB.H"
+#include "POLY.H"
+#include "BSP.H"
+#include "GBSPFILE.H"
+#include "MAP.H"
+#include "PORTALS.H"
+#include "TEXTURE.H"
 #include "Fill.h"
-#include "Brush2.h"
+#include "BRUSH2.H"
 
-#include "Vec3d.h"
-#include "Ram.h"
+#include "VEC3D.H"
+#include "RAM.H"
 
 #define USE_VOLUMES
 

@@ -53,7 +53,6 @@ typedef	struct	geVFile
 	void *						FSData;
 	geVFile *					Context;
 	FSSearchList *				SearchList;
-	CRITICAL_SECTION			CriticalSection;
 	geVFile *					BaseFile;
 }	geVFile;
 
@@ -70,8 +69,6 @@ static	geBoolean					BuiltInAPIsRegistered = GE_FALSE;
 #ifndef	NDEBUG
 static	geBoolean					SystemInitialized = GE_FALSE;
 #endif
-
-static	CRITICAL_SECTION			MainCriticalSection;
 
 static	geBoolean GENESISCC geVFile_RegisterFileSystemInternal(const geVFile_SystemAPIs *APIs, geVFile_TypeIdentifier *Type)
 {

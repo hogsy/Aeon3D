@@ -48,4 +48,10 @@ add_executable(GTest WIN32
 target_sources(GTest PRIVATE DrvMenu/genvs.rc)
 target_link_libraries(GTest Core Winmm Ws2_32)
 
-add_dependencies(GTest GLDrv D3DDrv)
+if (WIN32)
+    set(DEPENDS GLDrv D3DDrv)
+else ()
+    set(DEPENDS GLDrv)
+endif ()
+
+add_dependencies(GTest ${DEPENDS})

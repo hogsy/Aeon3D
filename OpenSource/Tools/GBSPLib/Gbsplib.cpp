@@ -19,13 +19,12 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
 
-#include "GBSPPrep.h"
-#include "BSP.h"
-#include "Vis.h"
-#include "Light.h"
-#include "Map.h"
+#include "GBSPPREP.H"
+#include "BSP.H"
+#include "VIS.H"
+#include "LIGHT.H"
+#include "MAP.H"
 
 #define HANDLE_EXCEPTIONS
 

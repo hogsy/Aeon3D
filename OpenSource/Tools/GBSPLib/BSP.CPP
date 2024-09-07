@@ -19,24 +19,20 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <stdio.h>
-#include <Math.h>
+#include <cstdio>
+#include <cmath>
 
-#include "GBSPPrep.h"
-#include "BSP.h"
-#include "Map.h"
-#include "Poly.h"
-#include "Portals.h"
-#include "Brush2.h"
-#include "Vis.h"
+#include "GBSPPREP.H"
+#include "BSP.H"
+#include "MAP.H"
+#include "POLY.H"
+#include "PORTALS.H"
+#include "BRUSH2.H"
+#include "VIS.H"
 #include "Leaf.h"
-#include "Fill.h"
-#include "Utils.h"
-#include "Light.h"
-#include "GBSPFile.h"
+#include "GBSPFILE.H"
 
-#include "Ram.h"
+#include "RAM.H"
 
 // Globals
 GBSP_Model	BSPModels[MAX_BSP_MODELS];
@@ -404,7 +400,7 @@ int32 FindPlane(GBSP_Plane *Plane, int32 *Side)
 
 //=======================================================================================
 //=======================================================================================
-float _fastcall Plane_PointDistanceFast(GBSP_Plane *Plane, geVec3d *Point)
+float GBSP_FASTCALL Plane_PointDistanceFast(GBSP_Plane *Plane, geVec3d *Point)
 {
    float	Dist,Dist2;
 

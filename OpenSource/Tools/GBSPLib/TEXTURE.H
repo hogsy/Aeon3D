@@ -22,13 +22,10 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-//#include <Windows.h>
-
-#include <Stdio.h>
-#include "Map.h"
-#include "DCommon.h"
-#include "GBSPFile.h"
-#include "VFile.h"
+#include "MAP.H"
+#include "Dcommon.h"
+#include "GBSPFILE.H"
+#include "vfile.h"
 
 #define TEXTURE_SKYBOX		(1<<0)
 

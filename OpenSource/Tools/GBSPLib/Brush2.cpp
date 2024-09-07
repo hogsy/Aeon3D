@@ -19,18 +19,17 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Math.h>
+#include <cmath>
 
-#include "Brush2.h"
-#include "Mathlib.h"
-#include "Poly.h"
-#include "BSP.h"
-#include "Texture.h"
+#include "BRUSH2.H"
+#include "MATHLIB.H"
+#include "POLY.H"
+#include "BSP.H"
+#include "TEXTURE.H"
 
-#include "VFile.h"
-#include "Vec3d.h"
-#include "Ram.h"
+#include "vfile.h"
+#include "VEC3D.H"
+#include "RAM.H"
 
 #define BSP_BRUSH_SIZE(s) ((sizeof(GBSP_Brush)-sizeof(GBSP_Side[NUM_BRUSH_DEFAULT_SIDES]))+(sizeof(GBSP_Side)*(s)));
 #define MAP_BRUSH_SIZE(s) ((sizeof(MAP_Brush)-sizeof(GBSP_Side[NUM_BRUSH_DEFAULT_SIDES]))+(sizeof(GBSP_Side)*(s)));
