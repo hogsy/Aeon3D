@@ -728,7 +728,9 @@ geBoolean DRIVERCC Render_MiscTexturePoly( DRV_TLVertex *Pnts, int32 NumPoints, 
 
 #ifdef ENABLE_WIREFRAME
 	if ( DoWireFrame )
+	{
 		return ( Render_LinesPoly( Pnts, NumPoints ) );
+	}
 #endif
 
 	assert( Pnts != NULL );
@@ -842,23 +844,35 @@ void SetupTexture( geRDriver_THandle *THandle )
 //==================================================================================
 geBoolean DRIVERCC Render_DrawDecal( geRDriver_THandle *THandle, RECT *SRect, int32 x, int32 y )
 {
-	if ( x >= ClientWindow.Width )
+	if ( x >= ClientWindow.Width || y >= ClientWindow.Height )
+	{
 		return TRUE;
-	if ( y >= ClientWindow.Height )
-		return TRUE;
+	}
+
+	int32 width, height;
+	if ( SRect != NULL )
+	{
+		width = SRect->right - SRect->left;
+		height = SRect->bottom - SRect->top;
+	}
+	else
+	{
+		width = THandle->Width;
+		height = THandle->Height;
+	}
 
 	glBegin( GL_QUADS );
 
 	glVertex3i( x, y, 0 );
 	glColor3f( 1.0f, 0.0f, 0.0f );
 
-	glVertex3i( x + SRect->right, y, 0 );
+	glVertex3i( x + width, y, 0 );
 	glColor3f( 0.0f, 1.0f, 0.0f );
 
-	glVertex3i( x + SRect->right, y + SRect->bottom, 0 );
+	glVertex3i( x + width, y + height, 0 );
 	glColor3f( 1.0f, 0.0f, 0.0f );
 
-	glVertex3i( x, y + SRect->bottom, 0 );
+	glVertex3i( x, y + height, 0 );
 	glColor3f( 0.0f, 1.0f, 0.0f );
 
 	glEnd();
@@ -894,7 +908,9 @@ geBoolean DRIVERCC BeginScene( geBoolean Clear, geBoolean ClearZ, RECT *WorldRec
 #endif
 
 	if ( !GTHandle_CheckTextures() )
+	{
 		return GE_FALSE;
+	}
 
 	glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE );// FIXME: Make clear zbuffer and frame buffer separate
 	if ( Clear )
@@ -914,7 +930,7 @@ geBoolean DRIVERCC BeginScene( geBoolean Clear, geBoolean ClearZ, RECT *WorldRec
 		else
 		{
 #if !defined( NDEBUG )
-			glClearColor( 1.0f, 0.0f, 0.0f, 1.0f );
+			glClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
 #else
 			glClearColour( 0.0f, 0.0f, 0.0f, 1.0f );
 #endif

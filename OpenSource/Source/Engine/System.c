@@ -19,31 +19,14 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <assert.h>
 
 #include "BASETYPE.H"
 #include "System.h"
-#include "GENESIS.H"
-#include "Errorlog.h"
 #include "RAM.H"
 #include "engine.h"
-
 #include "list.h"
-#include "SURFACE.H"
-#include "WORLD.H"
-#include "PLANE.H"
-#include "LIGHT.H"
-#include "WBitmap.h"
-#include "Camera.h"
-#include "sound.H"
-#include "ENTITIES.H"
-#include "USER.H"
-
-#include "Dcommon.h"
-
 #include "geAssert.h"
 
-#include "BitmapList.h"
 //#define SKY_HACK
 //extern BOOL GlobalReset;
 
@@ -213,7 +196,6 @@ geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDir
 {
 	int32			i;
 	geEngine		*NewEngine;
-	int				Length;
 
 	if ( (Version & GE_VERSION_MAJOR_MASK) != (geEngine_Version & GE_VERSION_MAJOR_MASK) )
 	{
@@ -255,7 +237,7 @@ geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDir
 		goto ExitWithError;
 	}
 
-	Length = strlen(DriverDirectory) + 1;
+	size_t Length = strlen(DriverDirectory) + 1;
 	NewEngine->DriverDirectory = geRam_Allocate(Length);
 
 	if (!NewEngine->DriverDirectory)
@@ -542,5 +524,3 @@ static geBoolean EnumSubDrivers(Sys_DriverInfo *DriverInfo, const char *DriverDi
 
 	return GE_TRUE;
 }
-
-

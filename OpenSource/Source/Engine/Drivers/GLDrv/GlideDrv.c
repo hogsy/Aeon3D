@@ -112,9 +112,9 @@ geBoolean DRIVERCC EnumModes( int32 Driver, char *DriverName, DRV_ENUM_MODES_CB 
 	snprintf( resString, sizeof( resString ), "%ux%u", 800, 600 );
 	Cb( 0, resString, 800, 600, Context );
 	snprintf( resString, sizeof( resString ), "%ux%u", 1024, 768 );
-	Cb( 0, resString, 1024, 768, Context );
+	Cb( 1, resString, 1024, 768, Context );
 	snprintf( resString, sizeof( resString ), "%ux%u", 1280, 1024 );
-	Cb( 0, resString, 1280, 1024, Context );
+	Cb( 2, resString, 1280, 1024, Context );
 
 	return GE_TRUE;
 

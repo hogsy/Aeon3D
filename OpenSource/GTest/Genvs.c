@@ -239,14 +239,15 @@ static void PickMode( HWND hwnd, HANDLE hInstance, geBoolean NoSelection, geBool
 //=====================================================================================
 //	WinMain
 //=====================================================================================
-#pragma warning( disable : 4028 )
+#if defined( _WIN32 )
+#	pragma warning( disable : 4028 )
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow )
 {
-#pragma warning( default : 4028 )
-	geDriver      *Driver = NULL;
-	geDriver_Mode *DriverMode = NULL;
-
-	SYSTEMTIME    SystemTime;
+#	pragma warning( default : 4028 )
+#else
+int main( int argc, char **argv )
+{
+#endif
 	MSG           Msg;
 	char         *CmdLine = lpszCmdParam;
 	int32         i;
@@ -264,18 +265,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdP
 		NewKeyDown( i );// Need to flush all the keys
 	}
 
+	SYSTEMTIME SystemTime;
 	GetSystemTime( &SystemTime );
-
-#if 0
-	if	(SystemTime.wYear > 1999 || SystemTime.wMonth > 11)
-	{
-		MessageBox(NULL,"The time limit on this demo has expired. \n" 
-			"Please contact WildTangent for more information.",
-			"Notice",MB_OK | MB_TASKMODAL);
-		return 0;
-	}
-#endif
-
 
 	// set the currrent directory to where the exe is
 	{
@@ -310,11 +301,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdP
 		}
 	}
 
-
 	// Setup the appname
-	sprintf( AppName, "GTest v1.0 "__DATE__
-	                  ","__TIME__
-	                  "" );
+	sprintf( AppName, "GTest v1.0 " __DATE__ "," __TIME__ "" );
 
 	// Get defaults
 	ShowStats = Mute = GE_FALSE;
@@ -330,7 +318,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdP
 		strncpy( PlayerName, TempName, sizeof( PlayerName ) );
 		PlayerName[ sizeof( PlayerName ) - 1 ] = '\0';
 	}
-
 
 	HostInit.Mode = HOST_MODE_SINGLE_PLAYER;
 	HostInit.DemoMode = HOST_DEMO_NONE;
@@ -591,8 +578,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdP
 		{
 			LARGE_INTEGER DeltaTick;
 			float         ElapsedTime;
-			geWorld      *World;
-			geCamera     *Camera;
 
 			GameRunning = TRUE;
 
@@ -631,13 +616,11 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdP
 					GenVS_Error( "Host_Frame failed..." );
 			}
 
-			// Get the world, and the camera from the GameMgr
-			World = GameMgr_GetWorld( GMgr );
-			Camera = GameMgr_GetCamera( GMgr );
-			;
-
 			if ( !GameMgr_Frame( GMgr, ElapsedTime ) )
 				GenVS_Error( "GameMgr_Frame failed..." );
+
+			// Get the world, and the camera from the GameMgr
+			geWorld *World = GameMgr_GetWorld( GMgr );
 
 			// Begin frame
 			if ( g_FarClipPlaneEnable )// If we are using a far clip plane, then clear the screen
@@ -716,7 +699,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdP
 					break;
 				}
 			}
-
 
 			if ( ChangingDisplayMode )
 			{

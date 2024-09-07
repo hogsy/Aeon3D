@@ -21,7 +21,6 @@
 /****************************************************************************************/
 #include <Windows.h>
 #include <StdIO.h>
-#include <Assert.h>
 
 #include "GlideDrv.h"
 #include "GMain.h"
@@ -65,26 +64,20 @@ geBoolean GMain_Startup( DRV_DriverHook *Hook )
 	{
 		case 0:
 		{
-			ClientWindow.Width = 512;
-			ClientWindow.Height = 384;
+			ClientWindow.Width = 800;
+			ClientWindow.Height = 600;
 			break;
 		}
 		case 1:
 		{
-			ClientWindow.Width = 640;
+			ClientWindow.Width = 1024;
 			ClientWindow.Height = 480;
 			break;
 		}
 		case 2:
 		{
-			ClientWindow.Width = 800;
-			ClientWindow.Height = 600;
-			break;
-		}
-		case 3:
-		{
-			ClientWindow.Width = 1024;
-			ClientWindow.Height = 768;
+			ClientWindow.Width = 1280;
+			ClientWindow.Height = 1024;
 			break;
 		}
 		default:
