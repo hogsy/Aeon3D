@@ -30,3 +30,6 @@ if (WIN32)
     add_subdirectory(Source/Engine/Drivers/D3DDrv)
     #add_subdirectory(Source/Engine/Drivers/GlideDrv)
 endif ()
+
+# Tools
+add_subdirectory(Tools/GBSPLib)
