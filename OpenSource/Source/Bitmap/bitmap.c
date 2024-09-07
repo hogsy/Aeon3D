@@ -1699,8 +1699,6 @@ geBoolean	BITMAP_GENESIS_INTERNAL geBitmap_AttachToDriver(geBitmap *Bmp,
 		
 		assert( geBitmap_IsValid(Bmp) );
 
-		assert( geBitmap_IsValid(Bmp) );
-
 		if ( ! geBitmap_Update_SystemToDriver(Bmp) )
 		{
 			geErrorLog_AddString(-1,"AttachToDriver : Update_SystemToDriver", NULL);
