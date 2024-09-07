@@ -75,7 +75,7 @@ GENESISAPI void geRam_Free_(void *ptr);
 		// possible warning you get if you use the geRam_Free macro below, without
 		// using the xxx pointer again in the same block.  This is ugly.
  
-#define geRam_Free(xxx) geRam_Free_(xxx) ,(xxx)=NULL, StupidUnusedPointer=(xxx)
+#define geRam_Free(xxx) geRam_Free_(xxx) ,(xxx)=NULL
 
 /*
   Reallocate memory.  This function supports shrinking and expanding blocks,
