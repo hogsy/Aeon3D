@@ -133,7 +133,7 @@ typedef struct PhysicalSystem
 
 // ForceField
 
-typedef enum
+enum
 {
 	FALLOFF_NONE = 0,
 	FALLOFF_ONE_OVER_D,

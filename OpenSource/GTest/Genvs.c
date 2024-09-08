@@ -253,7 +253,6 @@ int main( int argc, char **argv )
 	int32         i;
 	LARGE_INTEGER Freq, OldTick, CurTick;
 	char          TempName[ 256 ];
-	int32         TempNameLength;
 	geBoolean     ManualPick = GE_FALSE;
 
 	MainTime = 0.0f;
@@ -308,7 +307,7 @@ int main( int argc, char **argv )
 	ShowStats = Mute = GE_FALSE;
 
 	strcpy( IPAddress, "" );// Deafult our IP address to blank (LAN game)
-	TempNameLength = sizeof( TempName );
+	DWORD TempNameLength = sizeof( TempName );
 	if ( GetUserName( TempName, &TempNameLength ) == 0 )
 	{
 		strcpy( PlayerName, "Player" );
