@@ -22,13 +22,10 @@
 #ifndef BRUSH2_H
 #define BRUSH2_H
 
-#include <Windows.h>
+#include "MAP.H"
 
-#include "Mathlib.h"
-#include "Map.h"
-
-#include "VFile.h"
-#include "Vec3d.h"
+#include "vfile.h"
+#include "VEC3D.H"
 
 #define	NUM_BRUSH_DEFAULT_SIDES		6
 

@@ -22,12 +22,9 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include <Windows.h>
-#include <Stdio.h>
-
-#include "GBSPfile.h"
-#include "GBSPLib.h"				// Lightparms
-#include "BSP.h"
+#include "GBSPFILE.H"
+#include "Gbsplib.h"				// Lightparms
+#include "BSP.H"
 
 #define MAX_PATCHES		65000		// Any higher and 16 bit overflow will result
 

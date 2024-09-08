@@ -22,7 +22,7 @@
 #ifndef MATHLIB_H
 #define MATHLIB_H
 
-#include "Vec3d.h"
+#include "VEC3D.H"
 
 //#define	ON_EPSILON			(geFloat)0.05
 #define		ON_EPSILON			(geFloat)0.1

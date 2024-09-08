@@ -22,11 +22,7 @@
 #ifndef GBSPLIB_H
 #define GBSPLIB_H
 
-#include <Windows.h>
-
-#include "MathLib.h"
-
-#include "Vec3d.h"
+#include "VEC3D.H"
 
 #define GBSP_VERSION_MAJOR	6
 #define GBSP_VERSION_MINOR	0
@@ -36,8 +32,17 @@
 //====================================================================================
 //	Main driver interfaces
 //====================================================================================
+#if defined( __WIN32 )
 #define DllImport	extern "C" __declspec( dllimport )
 #define DllExport	extern "C" __declspec( dllexport )
+
+#define GBSP_FASTCALL	__fastcall
+#else
+#define DllImport	extern "C" __declspec( dllimport )
+#define DllExport	extern "C" __declspec( dllexport )
+
+#define GBSP_FASTCALL	__attribute__((fastcall))
+#endif
 
 typedef void ERROR_CB(char *String, ...);
 typedef void PRINTF_CB(char *String, ...);

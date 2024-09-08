@@ -22,12 +22,7 @@
 #ifndef VIS_H
 #define VIS_H
 
-#include <Windows.h>
-#include <stdio.h>
-
-#include "BSP.h"
-#include "GBSPFile.h"
-
+#include "BSP.H"
 
 typedef struct _VIS_Portal
 {

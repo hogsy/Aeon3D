@@ -19,13 +19,12 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <stdio.h>
+#include <cstdio>
 
-#include "DCommon.h"
-#include "GBSPFile.h"
-#include "VFile.h"
-#include "Ram.h"
+#include "Dcommon.h"
+#include "GBSPFILE.H"
+#include "vfile.h"
+#include "RAM.H"
 
 //========================================================================================
 //	Globals

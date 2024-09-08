@@ -22,9 +22,7 @@
 #ifndef FILL_H
 #define FILL_H
 
-#include <Windows.h>
-
-#include "BSP.h"
+#include "BSP.H"
 
 int32	RemoveHiddenLeafs(GBSP_Node *RootNode, GBSP_Node *ONode);
 
