@@ -22,10 +22,6 @@
 #ifndef PORTALS_H
 #define PORTALS_H
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#endif
-
 #include "BSP.H"
 
 extern GBSP_Node	*OutsideNode;				// Current outside node being used

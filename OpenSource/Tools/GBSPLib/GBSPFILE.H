@@ -22,14 +22,13 @@
 #ifndef GBSPFILE_H
 #define GBSPFILE_H
 
-#include <Windows.h>
-#include <stdio.h>
+#include <cstdio>
 
-#include "DCommon.h"
+#include "Dcommon.h"
 #include "MathLib.h"
 #include "vfile.h"
 #include "motion.h"
-#include "Vec3d.h"
+#include "VEC3D.H"
 
 #define GBSP_VERSION				15
 

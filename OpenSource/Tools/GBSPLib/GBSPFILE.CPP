@@ -19,11 +19,9 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <cstdio>
 
 #include "Dcommon.h"
 #include "GBSPFILE.H"
-#include "vfile.h"
 #include "RAM.H"
 
 //========================================================================================

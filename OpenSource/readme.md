@@ -13,12 +13,14 @@ Some short-term things just to get this into a useful state.
 - [ ] OpenGL driver to replace D3D/Glide drivers (**in-progress**)
 - [ ] Get the tools building
 - [ ] Replace networking DirectPlay code
-- [ ] Get it compiling under Linux/Unix targets
+- [ ] Get it compiling under Linux/Unix targets (**in-progress**)
 
 Eh, I'm not really planning on doing much else at this stage? Some things I'm considering...
 
 - Clean up all the includes - system includes via system.h, etc.
+- General code clean-up, it's a mess... :')
 - Add support for Valve .map format
+- Support for Valve WAD3 format in addition to TXL
 
 ## License
 

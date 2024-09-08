@@ -20,7 +20,6 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <cassert>
-#include <cmath>
 
 #include "MATHLIB.H"
 #include "POLY.H"
@@ -31,8 +30,6 @@
 #include "TEXTURE.H"
 #include "Fill.h"
 #include "BRUSH2.H"
-
-#include "VEC3D.H"
 #include "RAM.H"
 
 #define USE_VOLUMES
