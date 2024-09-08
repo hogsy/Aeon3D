@@ -22,9 +22,7 @@
 #ifndef LEAF_H
 #define LEAF_H
 
-#include <Windows.h>
-
-#include "BSP.h"
+#include "BSP.H"
 
 #define MAX_LEAF_SIDES	64000*2
 

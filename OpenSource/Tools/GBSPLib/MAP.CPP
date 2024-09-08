@@ -19,21 +19,18 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
+#include "MAP.H"
+#include "GBSPFILE.H"
+#include "TEXTURE.H"
+#include "BSP.H"
+#include <cstdio>
+#include <cmath>
+#include "BRUSH2.H"
+#include "MATHLIB.H"
 
-#include "Map.h"
-#include "GBSPFile.h"
-#include "Texture.h"
-#include "BSP.h"
-#include "Stdio.h"
-#include "Math.h"
-#include "Brush2.h"
-#include "Poly.h"
-#include "Mathlib.h"
-
-#include "Motion.h"				// From Genesis (in include path)
+#include "motion.h"				// From Genesis (in include path)
 #include "Errorlog.h"
-#include "Ram.h"
+#include "RAM.H"
 
 int32		NumEntities;
 MAP_Entity	Entities[MAX_MAP_ENTITIES];
@@ -494,13 +491,10 @@ geBoolean LoadBrushFile(char *FileName)
 {
 	MAP_BrushFileHeader	Header;
 	int32				i;
-	char				TempName[256];
 	geVFile				*VFile;
 
 	memset(Entities, 0, sizeof(Entities));
 
-	GetCurrentDirectory(sizeof(TempName), TempName);
-	
 	VFile = geVFile_OpenNewSystem(NULL,
 								   GE_VFILE_TYPE_DOS,
 								   FileName,

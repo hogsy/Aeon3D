@@ -38,8 +38,8 @@
 
 #define GBSP_FASTCALL	__fastcall
 #else
-#define DllImport	extern "C" __declspec( dllimport )
-#define DllExport	extern "C" __declspec( dllexport )
+#define DllImport
+#define DllExport	__attribute__( ( visibility( "default" ) ) )
 
 #define GBSP_FASTCALL	__attribute__((fastcall))
 #endif

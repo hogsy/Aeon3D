@@ -49,6 +49,10 @@ extern "C"
 
 #include <stdint.h>
 #include <stddef.h>
+#if !defined(__WIN32)
+#include <unistd.h>
+#include <limits.h>
+#endif
 
 	typedef signed int geBoolean;
 #define GE_FALSE ( 0 )
@@ -173,6 +177,12 @@ extern "C"
 #define GE_FLOAT_ISZERO( x )    GE_FLOATS_EQUAL( x, 0.0f )
 
 #define GE_PI ( ( geFloat ) 3.14159265358979323846f )
+
+#if defined( _WIN32 )
+#define GE_MAX_PATH MAX_PATH
+#else
+#define GE_PATH_MAX PATH_MAX
+#endif
 
 	/****************************************************/
 

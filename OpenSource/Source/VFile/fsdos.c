@@ -130,7 +130,7 @@ static	void *	GENESISCC FSDos_FinderCreate(
 	DosFinder *		Finder;
 	DosFile *		File;
 	char *			NamePtr;
-	char			Buff[_MAX_PATH];
+	char			Buff[GE_PATH_MAX];
 
 	assert(FileSpec != NULL);
 
@@ -279,7 +279,7 @@ static	void *	GENESISCC FSDos_Open(
 {
 	DosFile *	DosFS;
 	DosFile *	NewFile;
-	char		Buff[_MAX_PATH];
+	char		Buff[GE_PATH_MAX];
 	int			Length;
 	char *		NamePtr;
 
@@ -846,7 +846,7 @@ static	geBoolean	GENESISCC FSDos_Disperse(
 static	geBoolean	GENESISCC FSDos_DeleteFile(geVFile *FS, void *Handle, const char *Name)
 {
 	DosFile *	File;
-	char		Buff[_MAX_PATH];
+	char		Buff[GE_PATH_MAX];
 
 	File = Handle;
 

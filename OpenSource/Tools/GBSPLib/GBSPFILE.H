@@ -22,10 +22,7 @@
 #ifndef GBSPFILE_H
 #define GBSPFILE_H
 
-#include <cstdio>
-
 #include "Dcommon.h"
-#include "MathLib.h"
 #include "vfile.h"
 #include "motion.h"
 #include "VEC3D.H"

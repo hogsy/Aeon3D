@@ -33,10 +33,6 @@
 #include "QKFrame.h"
 #include "VEC3D.H"
 
-#define min(aa,bb)  (( (aa)>(bb) ) ? (bb) : (aa) )
-#define max(aa,bb)  (( (aa)>(bb) ) ? (aa) : (bb) )
-
-
 #define gePath_TimeType geFloat
 
 typedef int8 Bool8;

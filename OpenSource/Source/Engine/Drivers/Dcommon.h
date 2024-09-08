@@ -112,12 +112,17 @@ typedef void *HINSTANCE;
 #	define DRIVERCC//__attribute__( ( fastcall ) )
 #endif
 
+#if defined( _MSC_VER )
 #ifndef __cplusplus
 	#define DllImport	__declspec( dllimport )
 	#define DllExport	__declspec( dllexport )
 #else
 	#define DllImport	extern "C" __declspec( dllimport )
 	#define DllExport	extern "C" __declspec( dllexport )
+#endif
+#else
+#define DllImport
+#define DllExport	extern "C" __attribute__( ( visibility( "default" ) ) )
 #endif
 
 #define DRV_VERSION_MAJOR		100			// Genesis 1.0

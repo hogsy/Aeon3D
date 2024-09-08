@@ -19,23 +19,22 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Stdio.h>
-#include <Assert.h>
+#include <cstdio>
+#include <cassert>
 
-#include "Math.h"
-#include "MathLib.h"
-#include "GBSPFile.h"
-#include "Light.h"
-#include "Map.h"
-#include "Texture.h"
+#include "math.h"
+#include "MATHLIB.H"
+#include "GBSPFILE.H"
+#include "LIGHT.H"
+#include "MAP.H"
+#include "TEXTURE.H"
 #include "Utils.h"
-#include "BSP.h"
+#include "BSP.H"
 
-#include "Vec3d.h"
-#include "XForm3d.h"
+#include "VEC3D.H"
+#include "XFORM3D.H"
 
-#include "Ram.h"
+#include "RAM.H"
 
 float		LightScale		= 1.00f;
 float		EntityScale		= 1.00f;
@@ -120,8 +119,8 @@ int32				NumDirectLights = 0;
 geBoolean LightGBSPFile(char *FileName, LightParms *Parms)
 {
 	geVFile	*f;
-	char	PalFile[MAX_PATH];
-	char	RecFile[MAX_PATH];
+	char	PalFile[GE_PATH_MAX];
+	char	RecFile[GE_PATH_MAX];
 
 	f = NULL;
 

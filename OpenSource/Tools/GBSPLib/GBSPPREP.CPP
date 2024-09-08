@@ -19,21 +19,19 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <stdio.h>
+#include <cstdio>
 
-
-#include "GBSPPrep.h"
-#include "GBSPFile.h"
-#include "Poly.h"		// For Planes, and NumPlanes
-#include "BSP.h"
-#include "Map.h"		// For texture
-#include "Texture.h"
-#include "Portals.h"
+#include "GBSPPREP.H"
+#include "GBSPFILE.H"
+#include "POLY.H"		// For Planes, and NumPlanes
+#include "BSP.H"
+#include "MAP.H"		// For texture
+#include "TEXTURE.H"
+#include "PORTALS.H"
 #include "Leaf.h"
 
-#include "VFile.h"
-#include "Ram.h"
+#include "vfile.h"
+#include "RAM.H"
 
 geBoolean	SaveGFXModelData(geVFile *f);
 geBoolean	SaveGFXNodes(geVFile *f);

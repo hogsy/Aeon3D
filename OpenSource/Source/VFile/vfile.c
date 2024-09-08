@@ -591,8 +591,9 @@ GENESISAPI geBoolean GENESISCC geVFile_FinderGetProperties(const geVFile_Finder 
 	return Finder->APIs->FinderGetProperties(Finder->Data, Properties);
 }
 
-
+#ifdef _INC_WINDOWS
 GENESISAPI void GENESISCC geVFile_TimeToWin32FileTime(const geVFile_Time *Time, LPFILETIME Win32FileTime)
 {
 	*Win32FileTime = *(LPFILETIME)Time;
 }
+#endif

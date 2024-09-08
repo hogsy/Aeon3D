@@ -19,18 +19,17 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Stdio.h>
+#include <cstdio>
 
-#include "Ram.h"
-#include "Portals.h"
-#include "GBSPFile.h"
-#include "BSP.h"
-#include "Poly.h"
+#include "RAM.H"
+#include "PORTALS.H"
+#include "GBSPFILE.H"
+#include "BSP.H"
+#include "POLY.H"
 #include "Leaf.h"
-#include "Brush2.h"
+#include "BRUSH2.H"
 
-#include "Vec3d.h"
+#include "VEC3D.H"
 
 int32		 NumLeafClusters;
 
