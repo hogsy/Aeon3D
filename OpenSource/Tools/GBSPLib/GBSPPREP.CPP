@@ -88,7 +88,7 @@ geBoolean ConvertGBSPToFile(char *FileName)
 	}
 
 	strcpy(GBSPHeader.TAG, "GBSP");
-	GBSPHeader.TAG[4] = NULL;
+	GBSPHeader.TAG[4] = '\0';
 
 	GBSPHeader.Version = GBSP_VERSION;
 

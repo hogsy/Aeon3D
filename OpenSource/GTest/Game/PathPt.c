@@ -265,10 +265,7 @@ geBoolean PathPt_Startup(geWorld *World, geVFile *Fs)
 
 	Entity = NULL;
 
-	{
-		void Track_LinkTracks(geWorld *World);
-		Track_LinkTracks(World);
-	}
+	Track_LinkTracks(World);
 
 	if (Fs)
 	{

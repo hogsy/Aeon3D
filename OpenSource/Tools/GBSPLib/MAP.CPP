@@ -41,19 +41,20 @@ MAP_Entity	Entities[MAX_MAP_ENTITIES];
 //=====================================================================================
 //	Entity parsing stuff
 //=====================================================================================
-char *ValueForKey (MAP_Entity *Ent, char *Key)
+char *ValueForKey (MAP_Entity *Ent, const char *Key)
 {
 	MAP_Epair	*Ep;
 	
 	for (Ep=Ent->Epairs ; Ep ; Ep=Ep->Next)
 		if (!stricmp (Ep->Key, Key) )
 			return Ep->Value;
-	return "";
+
+	return nullptr;
 }
 
 //=====================================================================================
 //=====================================================================================
-void SetKeyValue (MAP_Entity *Ent, char *Key, char *Value)
+void SetKeyValue (MAP_Entity *Ent, const char *Key, char *Value)
 {
 	MAP_Epair	*Ep;
 	
@@ -76,22 +77,35 @@ void SetKeyValue (MAP_Entity *Ent, char *Key, char *Value)
 
 //=====================================================================================
 //=====================================================================================
-float FloatForKey (MAP_Entity *Ent, char *Key)
+float FloatForKey (MAP_Entity *Ent, const char *Key)
 {
 	char	*k;
 	
 	k = ValueForKey (Ent, Key);
+	//TODO: take default, pass that instead...
+	if ( k == nullptr )
+	{
+		return 0.0f;
+	}
+
 	return (float)atof(k);
 }
 
 //=====================================================================================
 //=====================================================================================
-void GetVectorForKey (MAP_Entity *Ent, char *Key, geVec3d *Vec)
+void GetVectorForKey (MAP_Entity *Ent, const char *Key, geVec3d *Vec)
 {
 	char	*k;
 	double	v1, v2, v3;
 
 	k = ValueForKey (Ent, Key);
+	if ( k == nullptr )
+	{
+		//TODO: take default, pass that instead...
+		Vec->X = Vec->Y = Vec->Z = 0.0f;
+		return;
+	}
+
 	v1 = v2 = v3 = 0;
 
 	sscanf (k, "%lf %lf %lf", &v1, &v2, &v3);
@@ -103,7 +117,7 @@ void GetVectorForKey (MAP_Entity *Ent, char *Key, geVec3d *Vec)
 
 //=====================================================================================
 //=====================================================================================
-geBoolean GetVectorForKey2 (MAP_Entity *Ent, char *Key, geVec3d *Vec)
+geBoolean GetVectorForKey2 (MAP_Entity *Ent, const char *Key, geVec3d *Vec)
 {
 	char	*k;
 	double	v1, v2, v3;
@@ -129,12 +143,19 @@ geBoolean GetVectorForKey2 (MAP_Entity *Ent, char *Key, geVec3d *Vec)
 
 //=====================================================================================
 //=====================================================================================
-void GetColorForKey (MAP_Entity *Ent, char *Key, geVec3d *Vec)
+void GetColorForKey (MAP_Entity *Ent, const char *Key, geVec3d *Vec)
 {
 	char	*k;
 	double	v1, v2, v3;
 
 	k = ValueForKey (Ent, Key);
+	if ( k == nullptr )
+	{
+		//TODO: take default, pass that instead...
+		Vec->X = Vec->Y = Vec->Z = 0.0f;
+		return;
+	}
+
 	v1 = v2 = v3 = 0;
 
 	sscanf (k, "%lf %lf %lf", &v1, &v2, &v3);
@@ -146,7 +167,7 @@ void GetColorForKey (MAP_Entity *Ent, char *Key, geVec3d *Vec)
 
 //============================================================================
 //============================================================================
-char *NewString(char *Str)
+char *NewString(const char *Str)
 {
 	char *NewStr = GE_RAM_ALLOCATE_ARRAY(char, strlen(Str)+1);
 

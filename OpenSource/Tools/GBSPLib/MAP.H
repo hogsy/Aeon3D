@@ -99,13 +99,13 @@ extern	MAP_Entity	Entities[MAX_MAP_ENTITIES];
 //=====================================================================================
 //	Entity parsing functions
 //=====================================================================================
-char		*ValueForKey(MAP_Entity *Ent, char *Key);
-void		SetKeyValue(MAP_Entity *Ent, char *Key, char *Value);
-float		FloatForKey(MAP_Entity *Ent, char *Key);
-void		GetVectorForKey(MAP_Entity *Ent, char *Key, geVec3d *Vec);
-geBoolean	GetVectorForKey2(MAP_Entity *Ent, char *Key, geVec3d *Vec);
-void		GetColorForKey(MAP_Entity *Ent, char *Key, geVec3d *Vec);
-char		*NewString(char *Str);
+char		*ValueForKey(MAP_Entity *Ent, const char *Key);
+void		SetKeyValue(MAP_Entity *Ent, const char *Key, char *Value);
+float		FloatForKey(MAP_Entity *Ent, const char *Key);
+void		GetVectorForKey(MAP_Entity *Ent, const char *Key, geVec3d *Vec);
+geBoolean	GetVectorForKey2(MAP_Entity *Ent, const char *Key, geVec3d *Vec);
+void		GetColorForKey(MAP_Entity *Ent, const char *Key, geVec3d *Vec);
+char		*NewString(const char *Str);
 
 //=====================================================================================
 //	Misc functions

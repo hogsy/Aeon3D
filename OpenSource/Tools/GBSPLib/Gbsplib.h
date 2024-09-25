@@ -44,8 +44,8 @@
 #define GBSP_FASTCALL	__attribute__((fastcall))
 #endif
 
-typedef void ERROR_CB(char *String, ...);
-typedef void PRINTF_CB(char *String, ...);
+typedef void ERROR_CB(const char *String, ...);
+typedef void PRINTF_CB(const char *String, ...);
 
 typedef struct
 {

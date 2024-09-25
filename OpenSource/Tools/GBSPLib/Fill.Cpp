@@ -277,7 +277,7 @@ void LeafCenter(GBSP_Node *Node, geVec3d *PortalMid)
 //=====================================================================================
 //	WriteLeakFile
 //=====================================================================================
-geBoolean WriteLeakFile (char *FileName, GBSP_Node *Start, GBSP_Node *Outside)
+static geBoolean WriteLeakFile (const char *FileName, GBSP_Node *Start, GBSP_Node *Outside)
 {
 	geVec3d		Mid;
 	FILE		*PntFile;
