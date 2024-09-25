@@ -81,7 +81,7 @@ geBoolean InsertModelNumbers(void)
 //========================================================================================
 //	CreateBSP
 //========================================================================================
-geBoolean CreateBSP(char *FileName, BspParms *Parms)
+geBoolean CreateBSP(const char *FileName, BspParms *Parms)
 {
 	OriginalVerbose = Verbose = Parms->Verbose;
 	EntityVerbose = Parms->EntityVerbose;
@@ -117,7 +117,7 @@ geBoolean CreateBSP(char *FileName, BspParms *Parms)
 //	UpdateEntities
 //	Updates the entities only...
 //========================================================================================
-geBoolean UpdateEntities(char *MapName, char *BSPName)
+geBoolean UpdateEntities(const char *MapName, const char *BSPName)
 {
 	GHook.Printf("--- Update Entities --- \n");
 

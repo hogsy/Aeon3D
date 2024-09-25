@@ -81,7 +81,7 @@ typedef struct
 extern LInfo	*Lightmaps;
 extern FInfo	*FaceInfo;
 
-geBoolean LightGBSPFile(char *FileName, LightParms *Parms);
+geBoolean LightGBSPFile(const char *FileName, LightParms *Parms);
 
 void CleanupLight(void);
 

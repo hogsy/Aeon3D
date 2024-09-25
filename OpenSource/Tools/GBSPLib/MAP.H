@@ -29,12 +29,15 @@
 #define MAX_MAP_TEXINFO				8192
 #define MAX_MAP_TEXTURES			1024
 
+#define MAP_MAGIC   0x4642434e
+#define MAP_VERSION 1
+
 #pragma pack(1)
 
 typedef struct
 {
 	int32		Version;
-	char		TAG[4];
+	int32		TAG;
 	int32		NumEntities;
 } MAP_BrushFileHeader;
 
@@ -115,6 +118,6 @@ geBoolean	LoadEntityData(geVFile *VFile);
 geBoolean	ConvertGFXEntDataToEntities(void);
 geBoolean	ConvertEntitiesToGFXEntData(void);
 void		FreeAllEntities(void);
-geBoolean	LoadBrushFile(char *FileName);
+geBoolean	LoadBrushFile(const char *FileName);
 
 #endif

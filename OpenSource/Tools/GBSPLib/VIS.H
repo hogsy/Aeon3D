@@ -59,7 +59,7 @@ typedef struct
 	GBSP_Poly	*Pass;
 } VIS_PStack;
 
-geBoolean VisGBSPFile(char *FileName, VisParms *Parms);
+geBoolean VisGBSPFile(const char *FileName, VisParms *Parms);
 
 void CleanupVis(void);
 

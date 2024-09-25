@@ -60,7 +60,7 @@ geBoolean CalcPortalInfo(VIS_Portal *Portal);
 //=======================================================================================
 //	VisGBSPFile
 //=======================================================================================
-geBoolean VisGBSPFile(char *FileName, VisParms *Parms)
+geBoolean VisGBSPFile(const char *FileName, VisParms *Parms)
 {
 	char	PFile[200];
 	geVFile	*f;

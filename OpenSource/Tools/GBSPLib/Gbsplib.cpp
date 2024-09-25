@@ -30,20 +30,20 @@
 
 GBSP_Hook GHook;
 
-GBSP_RETVAL GBSP_CreateBSP(char *FileName);
-GBSP_RETVAL GBSP_SaveGBSPFile(char *FileName);
+GBSP_RETVAL GBSP_CreateBSP(const char *FileName);
+GBSP_RETVAL GBSP_SaveGBSPFile(const char *FileName);
 void GBSP_FreeBSP(void);
-GBSP_RETVAL GBSP_VisGBSPFile(char *FileName);
-GBSP_RETVAL GBSP_LightGBSPFile(char *FileName, LightParms *Parms);
+GBSP_RETVAL GBSP_VisGBSPFile(const char *FileName);
+GBSP_RETVAL GBSP_LightGBSPFile(const char *FileName, LightParms *Parms);
 geBoolean GBSP_Cancel(void);
-geBoolean GBSP_UpdateEntities(char *MapName, char *BSPName);
+geBoolean GBSP_UpdateEntities( const char *MapName, const char *BSPName);
 
 geBoolean	CancelRequest;
 
 //========================================================================================
 //	GBSP_CreateBSP
 //========================================================================================
-GBSP_RETVAL GBSP_CreateBSP(char *FileName, BspParms *Parms)
+GBSP_RETVAL GBSP_CreateBSP(const char *FileName, BspParms *Parms)
 {
 	CancelRequest = GE_FALSE;
 
@@ -87,7 +87,7 @@ GBSP_RETVAL GBSP_CreateBSP(char *FileName, BspParms *Parms)
 //========================================================================================
 //	GBSP_UpdateEntities
 //========================================================================================
-geBoolean GBSP_UpdateEntities(char *MapName, char *BSPName)
+geBoolean GBSP_UpdateEntities(const char *MapName, const char *BSPName)
 {
 	if (!UpdateEntities(MapName, BSPName))
 	{
@@ -103,7 +103,7 @@ geBoolean GBSP_UpdateEntities(char *MapName, char *BSPName)
 //========================================================================================
 // GBSP_SaveGBSPFile
 //========================================================================================
-GBSP_RETVAL GBSP_SaveGBSPFile(char *FileName)
+GBSP_RETVAL GBSP_SaveGBSPFile(const char *FileName)
 {
 	CancelRequest = GE_FALSE;
 
@@ -164,7 +164,7 @@ void GBSP_FreeBSP(void)
 //========================================================================================
 //	GBSP_VisGBSPFile
 //========================================================================================
-GBSP_RETVAL GBSP_VisGBSPFile(char *FileName, VisParms *Parms)
+GBSP_RETVAL GBSP_VisGBSPFile(const char *FileName, VisParms *Parms)
 {
 	CancelRequest = GE_FALSE;
 
@@ -203,7 +203,7 @@ GBSP_RETVAL GBSP_VisGBSPFile(char *FileName, VisParms *Parms)
 //========================================================================================
 //	GBSP_LightGBSPFile
 //========================================================================================
-GBSP_RETVAL GBSP_LightGBSPFile(char *FileName, LightParms *Parms)
+GBSP_RETVAL GBSP_LightGBSPFile(const char *FileName, LightParms *Parms)
 {
 	CancelRequest = GE_FALSE;
 

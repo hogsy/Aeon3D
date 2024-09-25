@@ -511,7 +511,7 @@ geBoolean CopyBrush2ToEntity(MAP_Brush *Brush, MAP_Entity *Entity, int32 Content
 //================================================================================
 //	LoadBrushFile
 //================================================================================
-geBoolean LoadBrushFile(char *FileName)
+geBoolean LoadBrushFile(const char *FileName)
 {
 	MAP_BrushFileHeader	Header;
 	int32				i;
@@ -540,6 +540,14 @@ geBoolean LoadBrushFile(char *FileName)
 	{
 		geVFile_Close(VFile);
 		GHook.Error("LoadBrushFile:  There was an error loading the header.\n");
+		return GE_FALSE;
+	}
+
+	// validate it's actually something we can build from
+	if ( Header.TAG != MAP_MAGIC || Header.Version != MAP_VERSION )
+	{
+		geVFile_Close( VFile );
+		GHook.Error( "LoadBrushFile:  Is not a valid MAP file!\n" );
 		return GE_FALSE;
 	}
 

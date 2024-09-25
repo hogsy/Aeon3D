@@ -117,7 +117,7 @@ int32				NumDirectLights = 0;
 //====================================================================================
 //	LightGBSPFile
 //====================================================================================
-geBoolean LightGBSPFile(char *FileName, LightParms *Parms)
+geBoolean LightGBSPFile(const char *FileName, LightParms *Parms)
 {
 	geVFile	*f;
 	char	PalFile[MAX_PATH];
