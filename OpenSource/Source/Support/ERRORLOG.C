@@ -108,11 +108,9 @@ GENESISAPI void geErrorLog_AddExplicit( unsigned int Error,
 		strncat( SDst, " ", MAX_USER_NAME_LEN );
 	}
 
-	{
-		char Number[ 20 ];
-		snprintf( Number, sizeof( Number ), "%d", LineNumber );
-		strncat( SDst, Number, MAX_USER_NAME_LEN );
-	}
+	char Number[ 20 ];
+	snprintf( Number, sizeof( Number ), "%d", LineNumber );
+	strncat( SDst, Number, MAX_USER_NAME_LEN );
 
 	if ( UserString != NULL )
 	{

@@ -44,6 +44,7 @@
 #include "bitmap._h"
 #include "WORLD.H"
 #include "log.h"
+#include "Core/System.h"
 
 //#define DO_ADDREMOVE_MESSAGES
 
@@ -441,8 +442,10 @@ Sys_DriverInfo *DrvInfo;
 	// Shutdown the driver
 	DrvInfo->RDriver->Shutdown();
 
-	if (!FreeLibrary(DrvInfo->DriverHandle) )
+	if ( !geSystem_FreeLibrary( DrvInfo->DriverHandle ) )
+	{
 		return GE_FALSE;
+	}
 
 	DrvInfo->Active = GE_FALSE;
 	DrvInfo->RDriver = NULL;
@@ -1372,15 +1375,17 @@ static geBoolean Engine_InitDriver(	geEngine *Engine,
 		return GE_FALSE;
 	}
 
-	#ifdef LINK_STATIC_DRIVER
+#ifdef LINK_STATIC_DRIVER
 	{
-		extern BOOL DriverHook(DRV_Driver **Driver);
-		Hook = (DRV_Hook*)DriverHook;
+		extern BOOL DriverHook( DRV_Driver * *Driver );
+		Hook = ( DRV_Hook * ) DriverHook;
 	}
-	#else
-	Hook = (DRV_Hook*)GetProcAddress(DrvInfo->DriverHandle, "DriverHook");
-	#endif
-	
+#else
+
+	Hook = ( DRV_Hook * ) geSystem_GetProcAddress( DrvInfo->DriverHandle, "DriverHook" );
+
+#endif
+
 	if (!Hook)
 	{
 		geErrorLog_Add(GE_ERR_INVALID_DRIVER, NULL);
@@ -1596,8 +1601,8 @@ extern int32	NumGetContents;
 //===================================================================================
 GENESISAPI geBoolean geEngine_EndFrame(geEngine *Engine)
 {
-	LARGE_INTEGER		NowTic, DeltaTic;
-	float				Fps;
+	LARGE_INTEGER NowTic, DeltaTic;
+	float Fps;
 	//DRV_Debug			*Debug;
 
 	assert(Engine != NULL);
@@ -1632,7 +1637,7 @@ GENESISAPI geBoolean geEngine_EndFrame(geEngine *Engine)
 
 	if (DeltaTic.LowPart > 0)
 		Fps =  (float)Engine->CPUInfo.Freq / (float)DeltaTic.LowPart;
-	else 
+	else
 		Fps = 100.0f;
 
 	if (Engine->DisplayFrameRateCounter == GE_TRUE)			// Dieplay debug info

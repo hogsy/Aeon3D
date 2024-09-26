@@ -6,20 +6,23 @@
 /****************************************************************************/
 #include <stdlib.h>
 #include <math.h>
-#include <Assert.h>
+#include <assert.h>
 #include <ctype.h>
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>	// for dll stuff
+#if defined( _WIN32 )
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>// for dll stuff
+#endif
 
-#include "Genesis.h"
-#include "Ram.h"
+#include "GENESIS.H"
+#include "RAM.H"
 #include "Errorlog.h"
 #include "stdio.h"
-#include "String.h"
+#include "string.h"
 
-#include "ProcEng.h"
-#include "Procedural.h"
+#include "proceng.h"
+#include "procedural.h"
+#include "Core/System.h"
 
 // at the end of this file :
 typedef Procedural_Table * (*GetProceduralFunc)(void);
@@ -34,10 +37,10 @@ extern int NumGetProceduralFunctions;
 //====================================================================================
 typedef struct ProcEng_PTable
 {
-	char				DllName[_MAX_PATH];
-	HINSTANCE			DllHandle;
-	Procedural_Table	*Table;
-	int					Uses;
+	char              DllName[ GE_PATH_MAX ];
+	geSystemLibrary   DllHandle;
+	Procedural_Table *Table;
+	int               Uses;
 } ProcEng_PTable;
 
 typedef struct ProcEng_Proc
@@ -137,11 +140,11 @@ ProcEng *ProcEng_Create(geVFile *CfgFile, geWorld *World)
 
 		while( geVFile_FinderGetNextFile(Finder) )
 		{
-		GetProceduralFunc GetProcFunc;
-		HMODULE TheDll;
-		geVFile_Properties Properties;
-		char DLLName[_MAX_PATH];
-		Procedural_Table * pTable;
+			GetProceduralFunc  GetProcFunc;
+			geSystemLibrary    TheDll;
+			geVFile_Properties Properties;
+			char               DLLName[ GE_PATH_MAX ];
+			Procedural_Table * pTable;
 		
 			geVFile_FinderGetProperties(Finder,&Properties);
 
@@ -149,7 +152,7 @@ ProcEng *ProcEng_Create(geVFile *CfgFile, geWorld *World)
 			strcat(DLLName,"\\");
 			strcat(DLLName,Properties.Name);
 
-			TheDll = LoadLibrary(DLLName);
+			TheDll = geSystem_LoadLibrary(DLLName);
 			if ( ! TheDll )
 			{
 				#if 0
@@ -174,24 +177,23 @@ ProcEng *ProcEng_Create(geVFile *CfgFile, geWorld *World)
 				continue;
 			}
 
-			GetProcFunc = (GetProceduralFunc) GetProcAddress(TheDll,"GetProceduralTable");
-			
-			if ( ! GetProcFunc )
+			GetProcFunc = ( GetProceduralFunc ) geSystem_GetProcAddress( TheDll, "GetProceduralTable" );
+			if ( !GetProcFunc )
 			{
-			//char ErrStr[_MAX_PATH+1024];
-			//	sprintf(ErrStr,"ProcEng_Create : no GetProceduralTable in DLL : %s : non-fatal",DLLName);
-			//	geErrorLog_AddString(-1,ErrStr);
-				FreeLibrary(TheDll);
+				//char ErrStr[_MAX_PATH+1024];
+				//	sprintf(ErrStr,"ProcEng_Create : no GetProceduralTable in DLL : %s : non-fatal",DLLName);
+				//	geErrorLog_AddString(-1,ErrStr);
+				geSystem_FreeLibrary( TheDll );
 				continue;
 			}
 
 			pTable = GetProcFunc();
 			if ( !pTable || pTable->Tag != Procedurals_Tag || pTable->Version != Procedurals_Version )
 			{
-			//char ErrStr[1024];
-			//	sprintf(ErrStr,"ProcEng_Create : found procedural : %s : but ignored because of version mismatch",pTable == NULL ? "null!" : pTable->Name);
-			//	geErrorLog_AddString(-1,ErrStr);
-				FreeLibrary(TheDll);
+				//char ErrStr[1024];
+				//	sprintf(ErrStr,"ProcEng_Create : found procedural : %s : but ignored because of version mismatch",pTable == NULL ? "null!" : pTable->Name);
+				//	geErrorLog_AddString(-1,ErrStr);
+				geSystem_FreeLibrary( TheDll );
 				continue;
 			}
 
@@ -348,7 +350,7 @@ void ProcEng_Destroy(ProcEng **pPEng)
 	{
 		if ( pTable->DllHandle )
 		{
-			FreeLibrary(pTable->DllHandle);
+			geSystem_FreeLibrary(pTable->DllHandle);
 		}
 		memset(pTable, 0, sizeof(*pTable));
 	}
@@ -382,7 +384,7 @@ ProcEng_PTable	*pTableLast;
 		{
 			if ( pTable->DllHandle )
 			{
-				FreeLibrary(pTable->DllHandle);
+				geSystem_FreeLibrary(pTable->DllHandle);
 			}
 			*pTable = *pTableLast;
 			pTableLast--;

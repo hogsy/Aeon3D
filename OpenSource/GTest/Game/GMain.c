@@ -12,9 +12,11 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
+#if defined( _WIN32 )
 #include <Windows.h>
-#include <Assert.h>
-#include <Math.h>
+#endif
+#include <assert.h>
+#include <math.h>
 
 #include "GMain.h"
 

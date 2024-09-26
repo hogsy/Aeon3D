@@ -17,13 +17,13 @@
 #include <stdio.h>
 #include <direct.h>
 
-#include "Ram.h"
+#include "RAM.H"
 #include "Errorlog.h"
 
-#include "GameMgr.h"
+#include "Gamemgr.h"
 
-#include "Procedurals\gebmutil.h"
-#include "procedurals/ProcEng.h"
+#include "Procedurals/gebmutil.h"
+#include "Procedurals/proceng.h"
 
 
 extern void	GenVS_Error(const char *Msg, ...);
@@ -123,8 +123,8 @@ void GameMgr_FreeAllObjects(GameMgr *GMgr)
 //====================================================================================
 GameMgr *GameMgr_Create(HINSTANCE hInstance, int32 Width, int32 Height, const char *AppName)
 {
-	GameMgr	*GMgr;
-	char	PathBuf[_MAX_PATH];
+	GameMgr *GMgr;
+	char     PathBuf[ GE_PATH_MAX ];
 
 	assert(AppName);
 

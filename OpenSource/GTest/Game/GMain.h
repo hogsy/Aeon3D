@@ -15,7 +15,9 @@
 #ifndef GMAIN_H
 #define GMAIN_H
 
-#include <Windows.h>
+#if defined( _WIN32 )
+#	include <Windows.h>
+#endif
 
 #include "Game.h"
 

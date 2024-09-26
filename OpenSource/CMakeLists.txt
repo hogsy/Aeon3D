@@ -18,6 +18,8 @@ foreach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${OUTPUT_DIR})
 endforeach (OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
 
+include_directories(Public)
+
 add_subdirectory(Source)
 add_subdirectory(GTest)
 #add_subdirectory(GDemo)

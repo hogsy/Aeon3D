@@ -1,24 +1,29 @@
-/****************************************************************************************/
-/*  System.c                                                                            */
-/*                                                                                      */
-/*  Author: John Pollard                                                                */
-/*  Description: Friend of engine.c.  Takes care of some of the driver work.            */
-/*                                                                                      */
-/*  The contents of this file are subject to the Genesis3D Public License               */
-/*  Version 1.01 (the "License"); you may not use this file except in                   */
-/*  compliance with the License. You may obtain a copy of the License at                */
-/*  http://www.genesis3d.com                                                            */
-/*                                                                                      */
-/*  Software distributed under the License is distributed on an "AS IS"                 */
-/*  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See                */
-/*  the License for the specific language governing rights and limitations              */
-/*  under the License.                                                                  */
-/*                                                                                      */
-/*  The Original Code is Genesis3D, released March 25, 1999.                            */
-/*Genesis3D Version 1.1 released November 15, 1999                            */
-/*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
-/*                                                                                      */
-/****************************************************************************************/
+/*******************************************************************************
+Copyright © 1999 WildTangent, Inc. All Rights Reserved
+Copyright © 2024 Mark E. Sowden <hogsy@oldtimes-software.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*******************************************************************************/
+
+#if defined( __unix__ )
+#	include <dlfcn.h>
+#endif
 
 #include "BASETYPE.H"
 #include "System.h"
@@ -26,9 +31,47 @@
 #include "engine.h"
 #include "list.h"
 #include "geAssert.h"
+#include "Core/System.h"
 
 //#define SKY_HACK
 //extern BOOL GlobalReset;
+
+geSystemLibrary geSystem_LoadLibrary( const char *path )
+{
+#if defined( _WIN32 )
+
+	return LoadLibrary( path );
+
+#else
+
+	return dlopen( path, RTLD_LAZY );
+
+#endif
+}
+
+geBoolean geSystem_FreeLibrary( geSystemLibrary library )
+{
+#if defined( _WIN32 )
+
+	return FreeLibrary( library );
+
+#else
+
+	return ( dlclose( library ) == 0 );
+
+#endif
+}
+
+void *geSystem_GetProcAddress( geSystemLibrary library, const char *name )
+{
+#if defined( _WIN32 )
+
+#else
+
+	return dlsym( library, name );
+
+#endif
+}
 
 //=====================================================================================
 //	Implementation of Win32 functions for other platforms
@@ -37,21 +80,6 @@
 
 #	include <dlfcn.h>
 #	include <time.h>
-
-void *LoadLibrary( const char *path )
-{
-	return dlopen( path, RTLD_LAZY );
-}
-
-geBoolean FreeLibrary( void *handle )
-{
-	return ( dlclose( handle ) == 0 );
-}
-
-void *GetProcAddress( void *handle, const char *name )
-{
-	return dlsym( handle, name );
-}
 
 geBoolean QueryPerformanceCounter( LARGE_INTEGER *performanceCount )
 {
@@ -461,66 +489,65 @@ static BOOL EnumModesCB(S32 ModeId, char *Name, S32 Width, S32 Height, void *Con
 //===================================================================================
 //	EnumSubDrivers
 //===================================================================================
-static geBoolean EnumSubDrivers(Sys_DriverInfo *DriverInfo, const char *DriverDirectory)
+static geBoolean EnumSubDrivers( Sys_DriverInfo *DriverInfo, const char *DriverDirectory )
 {
-	int32		i;
-	DRV_Hook	*DriverHook;
-	HINSTANCE	Handle;
-	DRV_Driver	*RDriver;
-	geBoolean	GlideFound;
+	int32       i;
+	DRV_Hook   *DriverHook;
+	HINSTANCE   Handle;
+	DRV_Driver *RDriver;
+	geBoolean   GlideFound;
 
 	DriverInfo->NumSubDrivers = 0;
 
 	GlideFound = GE_FALSE;
 
-	for (i=0; DriverFileNames[i][0]!=0; i++)
+	for ( i = 0; DriverFileNames[ i ][ 0 ] != 0; i++ )
 	{
-		if (!strcmp(DriverFileNames[i], "D3DDrv.dll") && GlideFound)
-			continue;			// Skip D3D if we found a glidedrv
+		if ( !strcmp( DriverFileNames[ i ], "D3DDrv.dll" ) && GlideFound )
+			continue;// Skip D3D if we found a glidedrv
 
-		Handle = geEngine_LoadLibrary(DriverFileNames[i], DriverDirectory);
+		Handle = geEngine_LoadLibrary( DriverFileNames[ i ], DriverDirectory );
 
-		if (!Handle)
+		if ( !Handle )
 			continue;
 
-		DriverInfo->CurFileName = DriverFileNames[i];
+		DriverInfo->CurFileName = DriverFileNames[ i ];
 
-		DriverHook = (DRV_Hook*)GetProcAddress(Handle, "DriverHook");
-
-		if (!DriverHook)
+		DriverHook = ( DRV_Hook * ) geSystem_GetProcAddress( Handle, "DriverHook" );
+		if ( !DriverHook )
 		{
-			FreeLibrary(Handle);
-			continue;
-		}
-
-		if (!DriverHook(&RDriver))
-		{
-			FreeLibrary(Handle);
+			geSystem_FreeLibrary( Handle );
 			continue;
 		}
 
-		if (RDriver->VersionMajor != DRV_VERSION_MAJOR || RDriver->VersionMinor != DRV_VERSION_MINOR)
+		if ( !DriverHook( &RDriver ) )
 		{
-			FreeLibrary(Handle);
-			geErrorLog_AddString(-1,"EnumSubDrivers : found driver of different version; ignoring; non-fatal",DriverFileNames[i]);
+			geSystem_FreeLibrary( Handle );
+			continue;
+		}
+
+		if ( RDriver->VersionMajor != DRV_VERSION_MAJOR || RDriver->VersionMinor != DRV_VERSION_MINOR )
+		{
+			geSystem_FreeLibrary( Handle );
+			geErrorLog_AddString( -1, "EnumSubDrivers : found driver of different version; ignoring; non-fatal", DriverFileNames[ i ] );
 			continue;
 		}
 
 		DriverInfo->RDriver = RDriver;
 
-		if (!RDriver->EnumSubDrivers(EnumSubDriversCB, (void*)DriverInfo))
+		if ( !RDriver->EnumSubDrivers( EnumSubDriversCB, ( void * ) DriverInfo ) )
 		{
-			FreeLibrary(Handle);
-			continue;		// Should we return FALSE, or just continue?
+			geSystem_FreeLibrary( Handle );
+			continue;// Should we return FALSE, or just continue?
 		}
 
-		FreeLibrary(Handle);
+		geSystem_FreeLibrary( Handle );
 
-		if (!strcmp(DriverFileNames[i], "GlideDrv.dll"))
+		if ( !strcmp( DriverFileNames[ i ], "GlideDrv.dll" ) )
 			GlideFound = GE_TRUE;
 	}
 
-	DriverInfo->RDriver = NULL;	// Reset this
+	DriverInfo->RDriver = NULL;// Reset this
 
 	return GE_TRUE;
 }

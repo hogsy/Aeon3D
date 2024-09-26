@@ -89,7 +89,7 @@ extern	geFloat	EffectScale;
 
 static	int32 NumUpdates = 0;		// For status bar updating...
 
-#ifdef _DEBUG
+#if !defined( NDEBUG )
 	Fx_Player *PLAYER_TO_FXPLAYER(Client_Client *Client, GPlayer *Player)
 	{
 		uint32 Index;

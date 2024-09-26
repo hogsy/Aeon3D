@@ -52,7 +52,6 @@ add_library(Core STATIC
         Support/log.c
         Support/mempool.c
         Support/RAM.C
-        Support/ramdll.c
 
         Physics/matrix33.c
         Physics/PhysicsJoint.c
