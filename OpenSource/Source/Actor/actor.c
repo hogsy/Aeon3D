@@ -1828,3 +1828,26 @@ GENESISAPI geBoolean GENESISCC geActor_SetMaterial(geActor *A, int MaterialIndex
 
 	return gePuppet_SetMaterial(A->Puppet,MaterialIndex, Bitmap, Red, Green, Blue );
 }
+
+GENESISAPI void GENESISCC geActor_GetNonWorldExtBox( const geActor *A, geExtBox *ExtBox )
+{
+	assert( geActor_IsValid( A ) != GE_FALSE );
+	assert( ExtBox != NULL );
+
+	geVec3d_Copy( &( A->BoundingBoxMinCorner ), &( ExtBox->Min ) );
+	geVec3d_Copy( &( A->BoundingBoxMaxCorner ), &( ExtBox->Max ) );
+}
+
+GENESISAPI void GENESISCC geActor_GetPosition( const geActor *A, geVec3d *Pos )
+{
+	geXForm3d Transform;
+
+	assert( geActor_IsValid( A ) != GE_FALSE );
+	assert( Pos != NULL );
+
+	gePose_GetJointTransform( A->Pose,
+	                          A->BoundingBoxCenterBoneIndex,
+	                          &Transform );
+	assert( geXForm3d_IsOrthonormal( &Transform ) != GE_FALSE );
+	geVec3d_Copy( &( Transform.Translation ), Pos );
+}

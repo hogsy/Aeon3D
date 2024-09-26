@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
-project(HG3D
+project(Aeon3D
         DESCRIPTION "3D game engine forked from Genesis3D."
 )
 
@@ -33,3 +33,4 @@ endif ()
 
 # Tools
 add_subdirectory(Tools/GBSPLib)
+add_subdirectory(Tools/GBSPCmd)

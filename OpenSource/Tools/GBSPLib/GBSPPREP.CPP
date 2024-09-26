@@ -53,7 +53,7 @@ char	VisFile[300];
 
 int32 NumSolidLeafs;
 
-geBoolean ConvertGBSPToFile(char *FileName)
+geBoolean ConvertGBSPToFile(const char *FileName)
 {
 	geVFile		*f;
 	GBSP_Chunk	Chunk;
@@ -86,7 +86,7 @@ geBoolean ConvertGBSPToFile(char *FileName)
 	}
 
 	strcpy(GBSPHeader.TAG, "GBSP");
-	GBSPHeader.TAG[4] = NULL;
+	GBSPHeader.TAG[4] = '\0';
 
 	GBSPHeader.Version = GBSP_VERSION;
 

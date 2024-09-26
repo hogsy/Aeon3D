@@ -27,6 +27,6 @@
 void		BeginGBSPModels(void);
 geBoolean	PrepGBSPModel(GBSP_Model *Model, geBoolean SaveVis);
 geBoolean	PrepAllGBSPModels(void);
-geBoolean	ConvertGBSPToFile(char *FileName);
+geBoolean	ConvertGBSPToFile(const char *FileName);
 
 #endif

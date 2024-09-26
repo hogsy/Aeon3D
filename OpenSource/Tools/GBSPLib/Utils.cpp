@@ -29,7 +29,7 @@
 //====================================================================================
 //	DefaultExtension
 //====================================================================================
-void DefaultExtension (char *Path, char *Ext)
+void DefaultExtension (char *Path, const char *Ext)
 {
 	char    *Src;
 

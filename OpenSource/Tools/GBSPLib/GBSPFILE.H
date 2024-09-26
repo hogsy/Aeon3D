@@ -338,8 +338,8 @@ extern int32		NumGFXPortals;
 
 extern int32		NumGFXMotionBytes;
 
-geBoolean LoadGBSPFile(char *FileName);
-geBoolean SaveGBSPFile(char *FileName);
+geBoolean LoadGBSPFile(const char *FileName);
+geBoolean SaveGBSPFile(const char *FileName);
 geBoolean FreeGBSPFile(void);
 geBoolean WriteChunk(GBSP_Chunk *Chunk, void *Data, geVFile *f);
 

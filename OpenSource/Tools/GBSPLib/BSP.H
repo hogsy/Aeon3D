@@ -234,8 +234,8 @@ geBoolean			FixModelTJunctions(void);
 //====================================================================================
 //	Global functions
 //====================================================================================
-geBoolean	CreateBSP(char *FileName, BspParms *Parms);	
-geBoolean	UpdateEntities(char *MapName, char *BSPName);
+geBoolean	CreateBSP(const char *FileName, BspParms *Parms);
+geBoolean	UpdateEntities(const char *MapName, const char *BSPName);
 
 GBSP_Node	*AllocNode(void);
 void		FreeNode(GBSP_Node *Node);

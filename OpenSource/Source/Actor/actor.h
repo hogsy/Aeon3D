@@ -277,6 +277,28 @@ GENESISAPI void *GENESISCC geActor_GetUserData(const geActor *A);
 	// Sets the actors user data pointer to the given value.  For clients only.
 GENESISAPI void GENESISCC geActor_SetUserData(geActor *A, void *UserData);
 
+/**
+ * @brief Retrieves the non-world extended bounding box of an actor.
+ *
+ * This function copies the minimum and maximum corner values of the actor's bounding box
+ * to the provided geExtBox structure.
+ *
+ * @param A			The geActor object whose bounding box is being retrieved.
+ * @param ExtBox	Pointer to a geExtBox structure where the bounding box values will be copied.
+ */
+GENESISAPI void GENESISCC geActor_GetNonWorldExtBox( const geActor *A, geExtBox *ExtBox );
+
+/**
+ * @brief Retrieves the position of an actor.
+ *
+ * This function retrieves the position of an actor by computing the transformation of
+ * the bounding box center bone using the actor's pose. The position is then copied
+ * to the provided geVec3d structure.
+ *
+ * @param A		The actor from which to retrieve the position.
+ * @param Pos	The geVec3d structure where the position will be stored.
+ */
+GENESISAPI void GENESISCC geActor_GetPosition( const geActor *A, geVec3d *Pos );
 
 //--------------------------------------------------------------------------------
 //   Posing and Rendering

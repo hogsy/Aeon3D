@@ -29,7 +29,7 @@
 //
 //	File name manipulation
 //
-void DefaultExtension (char *Path, char *Ext);
+void DefaultExtension (char *Path, const char *Ext);
 void StripFilename (char *Path);
 void StripExtension (char *Path);
 void ExtractFilePath (char *Path, char *Dest);

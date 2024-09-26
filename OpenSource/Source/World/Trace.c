@@ -1311,7 +1311,7 @@ geBoolean Trace_ModelCollisionBBox(geWorld			*World,
 									const geVec3d	*In,
 									geVec3d			*ImpactPoint)
 {
-	geVec3d		NewFront, NewBack, Original;
+	geVec3d		NewFront, NewBack;
 
 	assert(World != NULL);
 	assert(Model != NULL);
@@ -1327,8 +1327,6 @@ geBoolean Trace_ModelCollisionBBox(geWorld			*World,
 	assert(MiscPlanes != NULL);
 	assert(MiscLeafs != NULL);
 	assert(MiscSides != NULL);
-
-	Original = *In;		// Save original
 
 	GMins1 = *Mins;
 	GMaxs1 = *Maxs;
@@ -1360,10 +1358,9 @@ geBoolean Trace_ModelCollisionBBox(geWorld			*World,
 		geXForm3d_Rotate(DXForm, &GlobalPlane.Normal, &GlobalPlane.Normal);
 			
 		// Rotate the impact point
-		geVec3d_Subtract(&GlobalI, &Model->Pivot, &NewFront);
-		geXForm3d_Transform(DXForm, &NewFront, &GlobalI);
-		geVec3d_Add(&GlobalI, &Model->Pivot, &NewFront);
-		GlobalI = NewFront;
+		geVec3d_Subtract(&GlobalI, &Model->Pivot, &GlobalI);
+		geXForm3d_Transform(DXForm, &GlobalI, &NewFront);
+		geVec3d_Add(&NewFront, &Model->Pivot, &GlobalI);
 
 		// Find the new plane distance based on the new impact point with the new plane
 		GlobalPlane.Dist = geVec3d_DotProduct(&GlobalPlane.Normal, &GlobalI);
@@ -1381,58 +1378,76 @@ geBoolean Trace_ModelCollisionBBox(geWorld			*World,
 //=====================================================================================
 //	Trace_ModelCollision
 //=====================================================================================
-geBoolean Trace_ModelCollision(geWorld			*World, 
-								geWorld_Model	*Model, 
-								const geXForm3d	*DXForm,
-								GE_Collision	*Collision,
-								geVec3d			*ImpactPoint)
+geBoolean Trace_ModelCollision( geWorld         *World,
+                                geWorld_Model   *Model,
+                                const geXForm3d *DXForm,
+                                GE_Collision    *Collision,
+                                geVec3d         *ImpactPoint )
 {
 	geExtBox ExtBox;
-	geVec3d	Pos;
+	geVec3d  Pos;
 #ifdef MESHES
-	Mesh_RenderQ *				CollidableMesh;
-	Mesh_CollidableMeshIterator	Iter;
+	Mesh_RenderQ               *CollidableMesh;
+	Mesh_CollidableMeshIterator Iter;
 #endif
-	memset(Collision, 0, sizeof(GE_Collision));
+	memset( Collision, 0, sizeof( GE_Collision ) );
 
 	// Fixed bug that mike pointed out.  I was using 0, instead of 0xffffffff
-#ifdef	MESHES
-	CollidableMesh = Mesh_FirstCollidableMesh(World, &Iter, 0xffffffff);
-	while	(CollidableMesh)
+#ifdef MESHES
+	CollidableMesh = Mesh_FirstCollidableMesh( World, &Iter, 0xffffffff );
+	while ( CollidableMesh )
 	{
-		Mesh_MeshGetBox(World, CollidableMesh->MeshDef, &Mins, &Maxs);
-		Mesh_MeshGetPosition(CollidableMesh, &Pos);
-		if	(Trace_ModelCollisionBBox(World, Model, DXForm, &Mins, &Maxs, &Pos, ImpactPoint))
+		Mesh_MeshGetBox( World, CollidableMesh->MeshDef, &Mins, &Maxs );
+		Mesh_MeshGetPosition( CollidableMesh, &Pos );
+		if ( Trace_ModelCollisionBBox( World, Model, DXForm, &Mins, &Maxs, &Pos, ImpactPoint ) )
 		{
-			Collision->Mesh = (geMesh *)CollidableMesh;
+			Collision->Mesh = ( geMesh * ) CollidableMesh;
 			return GE_TRUE;
 		}
-		CollidableMesh = Mesh_NextCollidableMesh(&Iter, 0xffffffff);
+		CollidableMesh = Mesh_NextCollidableMesh( &Iter, 0xffffffff );
 	}
 #endif
 
 	{
-		int i,Count;
+		int          i, Count;
 		World_Actor *WA;
-			
-		Count = World->ActorCount;
-		WA = &(World->ActorArray[0]);
 
-		for (i=0; i<Count; i++, WA++)
+		geActor *BestActor;
+		geFloat  BestActorDist;
+		geVec3d  PossibleImpactPoint;
+		BestActor = NULL;
+		BestActorDist = 9999.0f;
+
+		Count = World->ActorCount;
+		WA = &( World->ActorArray[ 0 ] );
+
+		for ( i = 0; i < Count; i++, WA++ )
+		{
+			// if it's active	(ignore userflags?)
+			if ( ( WA->Flags & GE_ACTOR_COLLIDE ) )
 			{
-				// if it's active	(ignore userflags?)
-				if ( (WA->Flags & GE_ACTOR_COLLIDE) )	
+				geActor_GetNonWorldExtBox( WA->Actor, &ExtBox );
+				geActor_GetPosition( WA->Actor, &Pos );
+				if ( Trace_ModelCollisionBBox( World, Model, DXForm, &( ExtBox.Min ), &( ExtBox.Max ), &Pos, &PossibleImpactPoint ) )
+				{
+					if ( GlobalPlane.Dist < BestActorDist )
 					{
-						if (geActor_GetExtBox(WA->Actor,&ExtBox)!=GE_FALSE)
-							{
-								if (Trace_ModelCollisionBBox(World, Model, DXForm, &(ExtBox.Min), &(ExtBox.Max), &Pos, ImpactPoint))
-								{
-									Collision->Actor = WA->Actor;
-									return GE_TRUE;
-								}
-							}
+						BestActorDist = GlobalPlane.Dist;
+						BestActor = WA->Actor;
+						( *ImpactPoint ) = PossibleImpactPoint;
+						Collision->Plane.Normal = GlobalPlane.Normal;
+						Collision->Plane.Dist = GlobalPlane.Dist;
+						Collision->Ratio = geVec3d_DistanceBetween( &DXForm->Translation, &Model->XForm.Translation );
 					}
+				}
 			}
+		}
+
+		if ( BestActor )
+		{
+			Collision->Actor = BestActor;
+			return GE_TRUE;
+		}
 	}
 
 	return GE_FALSE;

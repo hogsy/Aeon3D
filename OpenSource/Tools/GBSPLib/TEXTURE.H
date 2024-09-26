@@ -22,7 +22,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "MAP.H"
+#include "Map.h"
 #include "Dcommon.h"
 #include "GBSPFILE.H"
 #include "vfile.h"

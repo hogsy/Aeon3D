@@ -61,7 +61,7 @@ int32		NumGFXNodes;
 int32		NumGFXBNodes;
 int32		NumGFXLeafs;
 int32		NumGFXClusters;		// CHANGE: CLUSTER
-int32		NumGFXAreas;	
+int32		NumGFXAreas;
 int32		NumGFXAreaPortals;
 int32		NumGFXPlanes;
 int32		NumGFXFaces;
@@ -422,7 +422,7 @@ geBoolean ReadChunk(GBSP_Chunk *Chunk, geVFile *f)
 //========================================================================================
 //	LoadGBSPFile
 //========================================================================================
-geBoolean LoadGBSPFile(char *FileName)
+geBoolean LoadGBSPFile(const char *FileName)
 {
 	geVFile		*f;
 	GBSP_Chunk	Chunk;
@@ -436,7 +436,7 @@ geBoolean LoadGBSPFile(char *FileName)
 	{
 		if (!ReadChunk(&Chunk, f))
 			return GE_FALSE;
-		
+
 		if (Chunk.Type == GBSP_CHUNK_END)
 			break;
 	}
@@ -508,7 +508,7 @@ geBoolean FreeGBSPFile(void)
 	GFXVertIndexList = NULL;
 	GFXRGBVerts = NULL;
 	GFXEntData = NULL;
-	
+
 	GFXTextures = NULL;
 	GFXTexInfo = NULL;
 	GFXTexData = NULL;
@@ -571,7 +571,7 @@ geBoolean WriteChunks(GBSP_ChunkData *Data, int32 NumChunkData, geVFile *f)
 //================================================================================
 //	SaveGBSPFile
 //================================================================================
-geBoolean SaveGBSPFile(char *FileName)
+geBoolean SaveGBSPFile(const char *FileName)
 {
 	GBSP_ChunkData	CurrentChunkData[] = {
 		{ GBSP_CHUNK_HEADER			, sizeof(GBSP_Header)	,1					, &GBSPHeader},
