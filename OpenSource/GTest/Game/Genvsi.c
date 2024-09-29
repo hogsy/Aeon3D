@@ -12,14 +12,11 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Assert.h>
+#include <assert.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 #include "GenVSI.h"
-
-#include "Genesis.h"
-
 
 //=====================================================================================
 // Loading/Prep functions (Authoritive Server side ONLY)

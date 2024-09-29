@@ -13,16 +13,15 @@
 /*                                                                                      */
 /****************************************************************************************/
 
+#if defined( _WIN32 )
+#	include <windows.h>
+#endif
+
 #include <stdlib.h>// qsort
 #include <assert.h>
-#include <Windows.h>
-
 
 #include "AutoSelect.h"
-
 #include "ErrorLog.h"
-#include "Ram.h"
-
 
 static int AutoSelect_Compare( const void *arg1, const void *arg2 )
 {

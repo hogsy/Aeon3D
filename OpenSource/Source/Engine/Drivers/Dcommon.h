@@ -22,9 +22,6 @@
 #ifndef DCOMMON_H
 #define DCOMMON_H
 
-//#include <Windows.h>	// {} CB commented out windows
-// If you include Windows it MUST be before dcommon!
-
 // FIXME:  What should we do with these?
 #include "XFORM3D.H"
 #include "VEC3D.H"

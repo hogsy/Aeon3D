@@ -12,11 +12,9 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
 #include <Assert.h>
 
 #include "GMain.h"
-#include "Quatern.h"
 
 geBoolean		Client_Control(GenVSI *VSI, void *PlayerData, float Time);
 void			*GetDMSpawn(GenVSI *VSI);

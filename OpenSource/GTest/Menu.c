@@ -18,11 +18,11 @@
 #pragma warning ( default : 4201 4214 )
 #include <string.h>
 #include <assert.h>
+
 #include "Genesis.h"
 #include "Ram.h"
 #include "Text.h"
 #include "MenuItem.h"
-
 
 #define MENU_ITEMCHECKED_ACTIVE_STRING ("x ")
 #define MENU_SELECTED_BORDER (24)		// selected menu item will stay in a box that the menu height, trimmed 

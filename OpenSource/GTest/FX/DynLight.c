@@ -1,13 +1,10 @@
-#define	WIN32_LEAN_AND_MEAN
-#include	<windows.h>
 
-#include	<math.h>
-#include	<stdlib.h>
-#include	<assert.h>
+#include <math.h>
+#include <assert.h>
 
-#define	BUILD_DYNLIGHT
-#include	"Dynlight.h"
-#include	"errorlog.h"
+#define BUILD_DYNLIGHT
+#include "Dynlight.h"
+#include "errorlog.h"
 
 static geBoolean DynLight_SetWorld(geWorld *World, geVFile *Context);
 

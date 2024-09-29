@@ -21,17 +21,9 @@
 /****************************************************************************************/
 #include <assert.h>
 
-#ifdef _DEBUG
-#include <windows.h>
-#include <stdio.h>
-#endif
-
 #include "BitmapList.h"
-#include "Dcommon.h"
-#include "bitmap.h"
 #include "bitmap._h"
 #include "list.h"
-#include "mempool.h"
 #include "Errorlog.h"
 #include "RAM.H"
 //#include "tsc.h"

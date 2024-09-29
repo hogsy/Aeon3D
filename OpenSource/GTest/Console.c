@@ -12,19 +12,13 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
 #include <Assert.h>
 #include <stdio.h>
 
 #include "Console.h"
-
-#include "Genesis.h"
 #include "ErrorLog.h"
 #include "Ram.h"
-
 #include "Server.h"
-
-extern Server_Server *GServer;
 
 static geBoolean SetupConsole(Console_Console *Console);
 static void PrintHeaderText(Console_Console *Console, float Time);
@@ -333,14 +327,6 @@ geBoolean Console_ParseTokens(Console_Console *Console)
 
 	Console_Printf(Console, "*** Command not recognized ***\n");
 	return GE_TRUE;
-
-	//TokenFuncs[0].Func();
-	
-//	if (GServer)
-//		Server_SetWorld(GServer, "Levels\\cool1.bsp");
-//	else
-//		Console_Printf(Console, "*** Cannot set world in client mode ***\n");
-		
 }
 
 //================================================================================

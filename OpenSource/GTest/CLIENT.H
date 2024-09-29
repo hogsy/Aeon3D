@@ -15,7 +15,6 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
-//#include <Windows.h>
 #include <stdio.h>
 
 #include "VidMode.h"

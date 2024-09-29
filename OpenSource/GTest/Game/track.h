@@ -1,9 +1,9 @@
 #ifndef	TRACK_H
 #define	TRACK_H
 
-#include	"genesis.h"
-#include    "bit.h"
-#include	"genvsi.h"
+#include "GENESIS.H"
+#include "bit.h"
+#include "Genvsi.h"
 
 // For ease of development these are set up as static sized arrays 
 // Can be changed later if needed 
@@ -13,6 +13,7 @@
 #define MAX_TRACK_VIS 20
 
 typedef struct Track Track;
+typedef struct Stack Stack;
 
 typedef struct 
     {

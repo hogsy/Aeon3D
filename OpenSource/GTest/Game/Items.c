@@ -12,7 +12,6 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
 #include <Assert.h>
 #include <Math.h>
 
@@ -21,12 +20,10 @@ extern void GenVS_Error(const char *Msg, ...);
 //=====================================================================================
 //	Item_TriggerHealth
 //=====================================================================================
-static geBoolean Item_TriggerHealth(GenVSI *VSI, void *PlayerData, void *TargetData, void* data)
+static geBoolean Item_TriggerHealth(GenVSI *VSI, void *PlayerData, GPlayer *Target, void* data)
 {
-	GPlayer			*Player, *Target;
-
+	GPlayer			*Player;
 	Player = (GPlayer*)PlayerData;
-	Target = (GPlayer*)TargetData;
 
 	if (GenVSI_GetTime(VSI) < Player->NextThinkTime)
 		return GE_TRUE;
@@ -49,11 +46,8 @@ static geBoolean Item_TriggerHealth(GenVSI *VSI, void *PlayerData, void *TargetD
 	GenVSI_PlaySound(VSI, SOUND_INDEX_PICKUP_HEALTH, &Player->XForm.Translation);
 
 	// Send the info to the client machine that is attached to this player
-	if (Target->ClientHandle != CLIENT_NULL_HANDLE)
-	{
-		GenVSI_SetClientHealth(VSI, Target->ClientHandle, Target->Health);
-		GenVSI_ConsoleHeaderPrintf(VSI, Target->ClientHandle, GE_FALSE, "You get 25 health");
-	}
+	GenVSI_SetClientHealth( VSI, Target->ClientHandle, Target->Health );
+	GenVSI_ConsoleHeaderPrintf( VSI, Target->ClientHandle, GE_FALSE, "You get 25 health" );
 
 	return GE_TRUE;
 }
@@ -61,12 +55,10 @@ static geBoolean Item_TriggerHealth(GenVSI *VSI, void *PlayerData, void *TargetD
 //=====================================================================================
 //	Item_TriggerArmor
 //=====================================================================================
-static geBoolean Item_TriggerArmor(GenVSI *VSI, void *PlayerData, void *TargetData, void* data)
+static geBoolean Item_TriggerArmor(GenVSI *VSI, void *PlayerData, GPlayer *Target, void* data)
 {
-	GPlayer			*Player, *Target;
-
+	GPlayer			*Player;
 	Player = (GPlayer*)PlayerData;
-	Target = (GPlayer*)TargetData;
 
 	if (GenVSI_GetTime(VSI) < Player->NextThinkTime)
 		return GE_TRUE;
@@ -104,12 +96,10 @@ static geBoolean Item_TriggerArmor(GenVSI *VSI, void *PlayerData, void *TargetDa
 //=====================================================================================
 //	Item_TriggerRocket
 //=====================================================================================
-static geBoolean Item_TriggerRocket(GenVSI *VSI, void *PlayerData, void *TargetData, void* data)
+static geBoolean Item_TriggerRocket(GenVSI *VSI, void *PlayerData, GPlayer *Target, void* data)
 {
-	GPlayer	*Player, *Target;
-
+	GPlayer	*Player;
 	Player = (GPlayer*)PlayerData;
-	Target = (GPlayer*)TargetData;
 
 	if (GenVSI_GetTime(VSI) < Player->NextThinkTime)
 		return GE_TRUE;
@@ -150,12 +140,10 @@ static geBoolean Item_TriggerRocket(GenVSI *VSI, void *PlayerData, void *TargetD
 //=====================================================================================
 //	Item_TriggerRocketAmmo
 //=====================================================================================
-static geBoolean Item_TriggerRocketAmmo(GenVSI *VSI, void *PlayerData, void *TargetData, void* data)
+static geBoolean Item_TriggerRocketAmmo(GenVSI *VSI, void *PlayerData, GPlayer *Target, void* data)
 {
-	GPlayer	*Player, *Target;
-
+	GPlayer	*Player;
 	Player = (GPlayer*)PlayerData;
-	Target = (GPlayer*)TargetData;
 
 	if (GenVSI_GetTime(VSI) < Player->NextThinkTime)
 		return GE_TRUE;
@@ -191,12 +179,10 @@ static geBoolean Item_TriggerRocketAmmo(GenVSI *VSI, void *PlayerData, void *Tar
 //=====================================================================================
 //	Item_TriggerGrenade
 //=====================================================================================
-static geBoolean Item_TriggerGrenade(GenVSI *VSI, void *PlayerData, void *TargetData, void* data)
+static geBoolean Item_TriggerGrenade(GenVSI *VSI, void *PlayerData, GPlayer *Target, void* data)
 {
-	GPlayer	*Player, *Target;
-
+	GPlayer	*Player;
 	Player = (GPlayer*)PlayerData;
-	Target = (GPlayer*)TargetData;
 
 	if (GenVSI_GetTime(VSI) < Player->NextThinkTime)
 		return GE_TRUE;
@@ -286,12 +272,10 @@ static geBoolean Item_ControlShredderAmmo(GenVSI *VSI, void *PlayerData, float T
 //=====================================================================================
 //	Item_TriggerShredder
 //=====================================================================================
-static geBoolean Item_TriggerShredder(GenVSI *VSI, void *PlayerData, void *TargetData, void* data)
+static geBoolean Item_TriggerShredder(GenVSI *VSI, void *PlayerData, GPlayer *Target, void* data)
 {
-	GPlayer			*Player, *Target;
-
+	GPlayer			*Player;
 	Player = (GPlayer*)PlayerData;
-	Target = (GPlayer*)TargetData;
 
 	if (GenVSI_GetTime(VSI) < Player->NextThinkTime)
 		return GE_TRUE;
@@ -329,12 +313,10 @@ static geBoolean Item_TriggerShredder(GenVSI *VSI, void *PlayerData, void *Targe
 //=====================================================================================
 //	Item_TriggerShredderAmmo
 //=====================================================================================
-static geBoolean Item_TriggerShredderAmmo(GenVSI *VSI, void *PlayerData, void *TargetData, void* data)
+static geBoolean Item_TriggerShredderAmmo(GenVSI *VSI, void *PlayerData, GPlayer *Target, void* data)
 {
-	GPlayer	*Player, *Target;
-
+	GPlayer	*Player;
 	Player = (GPlayer*)PlayerData;
-	Target = (GPlayer*)TargetData;
 
 	if (GenVSI_GetTime(VSI) < Player->NextThinkTime)
 		return GE_TRUE;
@@ -370,7 +352,7 @@ static geBoolean Item_TriggerShredderAmmo(GenVSI *VSI, void *PlayerData, void *T
 //=====================================================================================
 //	Item_TriggerGrenadeAmmo
 //=====================================================================================
-static geBoolean Item_TriggerGrenadeAmmo(GenVSI *VSI, void *PlayerData, void *TargetData, void* data)
+static geBoolean Item_TriggerGrenadeAmmo(GenVSI *VSI, void *PlayerData, GPlayer *TargetData, void* data)
 {
 	GPlayer	*Player, *Target;
 

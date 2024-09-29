@@ -19,22 +19,9 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#if defined( _WIN32 )
-#define WIN32_LEAN_AND_MEAN
-#pragma warning(disable : 4201 4214 4115)
-#include <windows.h>
-#include <mmsystem.h> //timeGetTime
-#pragma warning(default : 4201 4214 4115)
-#endif
 
-#include	<math.h>
-
-#include	"GENESIS.H"
-#include	"engine.h"
-#include	"bitmap.h"
-#include	"pixelformat.h"
-#include	"Errorlog.h"
-#include	"electric.h"
+#include "GENESIS.H"
+#include "engine.h"
 
 extern	unsigned char	LogoActor_act[];
 extern	int				LogoActor_act_Length;

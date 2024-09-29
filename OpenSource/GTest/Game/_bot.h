@@ -11,9 +11,8 @@ int32 RandomRange(int32 range);
 
 void VectorRotateY(geVec3d *vec, float delta_ang, geVec3d *result);
 
-#define M_PI (3.14159f)
-#define PI_2 (M_PI*2.0f)
-#define M_PI2 (PI_2)
+#define PI_2  ( ( ( float ) M_PI ) * 2.0f )
+#define M_PI2 ( PI_2 )
 
 //#define MAX_STACK_SIZE MAX_TRACKS
 typedef struct Stack

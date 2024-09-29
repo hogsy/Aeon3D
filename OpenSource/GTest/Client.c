@@ -12,18 +12,14 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#if defined( _WIN32 )
-#include <Windows.h>
-#endif
+
 #include <assert.h>
 #include <math.h>
 
 #include "CLIENT.H"
-
 #include "Buffer.h"
 #include "GMenu.h"
 #include "cd.H"
-//#include "System.h"
 
 static LARGE_INTEGER			g_Freq, g_OldTick, g_CurTick;
 
@@ -57,33 +53,35 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 #endif
 }
 
-#define BEGIN_TIMER()		QueryPerformanceCounter(&g_OldTick)
-				
-#define END_TIMER(g)											\
-				{												\
-					LARGE_INTEGER	DeltaTick;					\
-					float			ElapsedTime, Total;			\
-					int32			i;							\
-																\
-					QueryPerformanceCounter(&g_CurTick);		\
-					SubLarge(&g_OldTick, &g_CurTick, &DeltaTick);	\
-																\
-					if (DeltaTick.LowPart > 0)					\
-						ElapsedTime =  1.0f / (((float)g_Freq.LowPart / (float)DeltaTick.LowPart));		\
-					else										\
-						ElapsedTime = 0.001f;					\
-																\
-					AvgTime[CurAvg] = ElapsedTime;				\
-					CurAvg++;									\
-					CurAvg %= NUM_AVG;							\
-																\
-					for (Total = 0.0f, i=0; i< NUM_AVG; i++)	\
-						Total += AvgTime[i];					\
-																\
-					Total *= (1.0f/ NUM_AVG);					\
-																\
-					geEngine_Printf(GameMgr_GetEngine(g), 1, 50, "Timer ms: %2.3f/%2.3f", ElapsedTime, Total);	\
-				}
+#if 0
+#	define BEGIN_TIMER() QueryPerformanceCounter( &g_OldTick )
+#	define END_TIMER( g )                                                                                 \
+		{                                                                                                  \
+			LARGE_INTEGER DeltaTick;                                                                       \
+			float         ElapsedTime, Total;                                                              \
+			int32         i;                                                                               \
+                                                                                                           \
+			QueryPerformanceCounter( &g_CurTick );                                                         \
+			SubLarge( &g_OldTick, &g_CurTick, &DeltaTick );                                                \
+                                                                                                           \
+			if ( DeltaTick.LowPart > 0 )                                                                   \
+				ElapsedTime = 1.0f / ( ( ( float ) g_Freq.LowPart / ( float ) DeltaTick.LowPart ) );       \
+			else                                                                                           \
+				ElapsedTime = 0.001f;                                                                      \
+                                                                                                           \
+			AvgTime[ CurAvg ] = ElapsedTime;                                                               \
+			CurAvg++;                                                                                      \
+			CurAvg %= NUM_AVG;                                                                             \
+                                                                                                           \
+			for ( Total = 0.0f, i = 0; i < NUM_AVG; i++ )                                                  \
+				Total += AvgTime[ i ];                                                                     \
+                                                                                                           \
+			Total *= ( 1.0f / NUM_AVG );                                                                   \
+                                                                                                           \
+			geEngine_Printf( GameMgr_GetEngine( g ), 1, 50, "Timer ms: %2.3f/%2.3f", ElapsedTime, Total ); \
+		}
+#endif
+
 extern	geVFile *MainFS;
 extern	geFloat	EffectScale;
 

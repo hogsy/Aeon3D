@@ -12,17 +12,15 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#define	WIN32_LEAN_AND_MEAN
-#include	<windows.h>
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<assert.h>
 
-#include	"genesis.h"
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <assert.h>
 
-#include	"resource.h"
+#include "genesis.h"
+
+#include "resource.h"
 #include "DrvList.h"
-
 
 #define DRVLIST_OK		1
 #define DRVLIST_CANCEL	2

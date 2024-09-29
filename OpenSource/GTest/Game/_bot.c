@@ -1,9 +1,7 @@
 /****************************************************************************/
 /*    FILE: _bot.c	- Misc bot utilities & support							*/
 /****************************************************************************/
-#if defined( _WIN32 )
-#	include <Windows.h>
-#endif
+
 #include <assert.h>
 #include <math.h>
 #include <time.h>

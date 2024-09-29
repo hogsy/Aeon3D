@@ -19,17 +19,12 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <math.h>
+#include <cmath>
 
 #include "BSP.h"
 #include "Mathlib.h"
-#include "Map.h"
 #include "Poly.h"
 #include "Texture.h"
-#include "GBSPFile.h"
-#include "Light.h"
-
 #include "Ram.h"
 
 int32		NumSubdivides;

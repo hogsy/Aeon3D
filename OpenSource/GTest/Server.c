@@ -12,7 +12,6 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
 #include <Assert.h>
 #include <Time.h>
 
@@ -2010,47 +2009,51 @@ static	void	DrawFace(geWorld *World, const geVec3d **Verts)
 	geWorld_AddPolyOnce(World, &LVerts[0], 4, NULL, GE_GOURAUD_POLY, GE_RENDER_DO_NOT_OCCLUDE_OTHERS, 1.0f);
 }
 
-void	DrawBoundBox(geWorld *World, const geVec3d *Pos, const geVec3d *Min, const geVec3d *Max)
+void DrawBoundBox( geWorld *World, const geVec3d *Pos, const geVec3d *Min, const geVec3d *Max )
 {
-	geFloat	dx;
-	geFloat	dy;
-	geFloat	dz;
-static	geVec3d		Verts[8];
-static	geVec3d *	Faces[6][4] =
-{
-	{ &Verts[0], &Verts[1], &Verts[2], &Verts[3] },	//Top
-	{ &Verts[4], &Verts[5], &Verts[6], &Verts[7] },	//Bottom
-	{ &Verts[3], &Verts[2], &Verts[6], &Verts[7] }, //Side
-	{ &Verts[1], &Verts[0], &Verts[4], &Verts[5] }, //Side
-	{ &Verts[0], &Verts[3], &Verts[7], &Verts[4] }, //Front
-	{ &Verts[2], &Verts[1], &Verts[5], &Verts[6] }, //Back
-};
-	int			i;
+	geFloat               dx;
+	geFloat               dy;
+	geFloat               dz;
+	static geVec3d        Verts[ 8 ];
+	static const geVec3d *Faces[ 6 ][ 4 ] =
+	        {
+	                {&Verts[ 0 ], &Verts[ 1 ], &Verts[ 2 ], &Verts[ 3 ]}, //Top
+	                {&Verts[ 4 ], &Verts[ 5 ], &Verts[ 6 ], &Verts[ 7 ]}, //Bottom
+	                {&Verts[ 3 ], &Verts[ 2 ], &Verts[ 6 ], &Verts[ 7 ]}, //Side
+	                {&Verts[ 1 ], &Verts[ 0 ], &Verts[ 4 ], &Verts[ 5 ]}, //Side
+	                {&Verts[ 0 ], &Verts[ 3 ], &Verts[ 7 ], &Verts[ 4 ]}, //Front
+	                {&Verts[ 2 ], &Verts[ 1 ], &Verts[ 5 ], &Verts[ 6 ]}, //Back
+    };
+	int i;
 
-	for	(i = 0; i < 8; i++)
-		geVec3d_Add(Pos, Min, &Verts[i]);
+	for ( i = 0; i < 8; i++ )
+	{
+		geVec3d_Add( Pos, Min, &Verts[ i ] );
+	}
 
 	dx = Max->X - Min->X;
 	dy = Max->Y - Min->Y;
 	dz = Max->Z - Min->Z;
 
-	Verts[0].Y += dy;
-	Verts[3].Y += dy;
-	Verts[3].X += dx;
-	Verts[7].X += dx;
+	Verts[ 0 ].Y += dy;
+	Verts[ 3 ].Y += dy;
+	Verts[ 3 ].X += dx;
+	Verts[ 7 ].X += dx;
 
-	Verts[1].Y += dy;
-	Verts[1].Z += dz;
-	Verts[5].Z += dz;
-	Verts[6].Z += dz;
-	Verts[6].X += dx;
+	Verts[ 1 ].Y += dy;
+	Verts[ 1 ].Z += dz;
+	Verts[ 5 ].Z += dz;
+	Verts[ 6 ].Z += dz;
+	Verts[ 6 ].X += dx;
 
-	Verts[2].X += dx;
-	Verts[2].Y += dy;
-	Verts[2].Z += dz;
+	Verts[ 2 ].X += dx;
+	Verts[ 2 ].Y += dy;
+	Verts[ 2 ].Z += dz;
 
-	for	(i = 0; i < 6; i++)
-		DrawFace(World, &Faces[i][0]);
+	for ( i = 0; i < 6; i++ )
+	{
+		DrawFace( World, &Faces[ i ][ 0 ] );
+	}
 }
 
 //=====================================================================================

@@ -19,17 +19,13 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#if defined( _WIN32 )
-#	include	<windows.h>
-#endif
-#include	<math.h>
-#include	<assert.h>
 
-#include	"GENESIS.H"
-#include	"Errorlog.h"
+#include <math.h>
+#include <assert.h>
 
-#include	"electric.h"
-#include	"RAM.H"
+#include "GENESIS.H"
+#include "electric.h"
+#include "RAM.H"
 
 static	int		logBase2(int n)
 {

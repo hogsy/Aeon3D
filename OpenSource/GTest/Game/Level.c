@@ -12,14 +12,14 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
 #include <Assert.h>
 #include <stdio.h>
 
 #include "GMain.h"
-
 #include "PathPt.h"
+
 extern void GenVS_Error(const char *Msg, ...);
+
 //=====================================================================================
 //	SetupWorldCB
 //	Callback function called everytime a new world is set.  This functions is passed
@@ -101,7 +101,7 @@ geBoolean ShutdownWorldCB(GenVSI *VSI)
 //=====================================================================================
 //	ChangeLevel_Trigger
 //=====================================================================================
-static geBoolean ChangeLevel_Trigger(GenVSI *VSI, void *PlayerData, void *TargetData, void *Context)
+static geBoolean ChangeLevel_Trigger(GenVSI *VSI, void *PlayerData, GPlayer *TargetData, void *Context)
 {
 	ChangeLevel		*Cl;
 	GPlayer			*Player;
@@ -123,42 +123,42 @@ static geBoolean ChangeLevel_Trigger(GenVSI *VSI, void *PlayerData, void *Target
 //=====================================================================================
 //	ChangeLevel_Spawn
 //=====================================================================================
-geBoolean ChangeLevel_Spawn(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName)
+geBoolean ChangeLevel_Spawn( GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName )
 {
-	ChangeLevel		*Cl;
-	GPlayer			*Player;
+	ChangeLevel *Cl;
+	GPlayer     *Player;
 
-	Player = (GPlayer*)PlayerData;
+	Player = ( GPlayer * ) PlayerData;
 
-	Player->Control = NULL;
-	Player->Trigger = ChangeLevel_Trigger;
-	Player->Blocked = NULL;
-	Player->Time = 0.0f;
+	Player->Control   = NULL;
+	Player->Trigger   = ChangeLevel_Trigger;
+	Player->Blocked   = NULL;
+	Player->Time      = 0.0f;
 	Player->ViewFlags = VIEW_TYPE_NONE | VIEW_TYPE_LOCAL | VIEW_TYPE_STANDON;
 
-	if (ClassData == NULL)
-		{
-			GenVS_Error("ChangeLevel_Spawn: entity missing class data ('%s')\n",EntityName);
-		}
-	Cl = (ChangeLevel*)ClassData;
+	if ( ClassData == NULL )
+	{
+		GenVS_Error( "ChangeLevel_Spawn: entity missing class data ('%s')\n", EntityName );
+	}
+	Cl = ( ChangeLevel * ) ClassData;
 
-	if (Cl->LevelName == NULL)
-		{
-			GenVS_Error("ChangeLevel_Spawn: entity missing LevelName ('%s')\n",EntityName);
-		}
-	if (Cl->Model == NULL)
-		{
-			GenVS_Error("ChangeLevel_Spawn: entity missing model ('%s')\n",EntityName);
-		}
+	if ( Cl->LevelName == NULL )
+	{
+		GenVS_Error( "ChangeLevel_Spawn: entity missing LevelName ('%s')\n", EntityName );
+	}
+	if ( Cl->Model == NULL )
+	{
+		GenVS_Error( "ChangeLevel_Spawn: entity missing model ('%s')\n", EntityName );
+	}
 
 
-	geXForm3d_SetIdentity(&Player->XForm);
-	geXForm3d_SetTranslation(&Player->XForm, Cl->Origin.X, Cl->Origin.Y, Cl->Origin.Z);
+	geXForm3d_SetIdentity( &Player->XForm );
+	geXForm3d_SetTranslation( &Player->XForm, Cl->Origin.X, Cl->Origin.Y, Cl->Origin.Z );
 
 	Player->VPos = Player->XForm.Translation;
 
 
-	GenVSI_RegisterPlayerModel(VSI, Player, Cl->Model);
+	GenVSI_RegisterPlayerModel( VSI, Player, Cl->Model );
 
 
 	return GE_TRUE;

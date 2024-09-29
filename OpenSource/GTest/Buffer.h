@@ -15,11 +15,7 @@
 #ifndef __BUFFER_H__
 #define __BUFFER_H__
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#endif
-
-#include "GENESIS.H"
+#include "Genesis.h"
 
 #ifdef __cplusplus
 extern "C" {

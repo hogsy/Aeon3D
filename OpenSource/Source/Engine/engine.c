@@ -23,12 +23,7 @@
 
 #define DONT_DO_SPLASH // CB hack
 
-#if defined( _WIN32 )
-#	define WIN32_LEAN_AND_MEAN
-#	include <windows.h>
-#	include <mmsystem.h>//timeGetTime
-#	include <direct.h>  // getcwd
-#else
+#if !defined( _WIN32 )
 #	include <unistd.h>
 #	include <dlfcn.h>
 #endif
@@ -36,13 +31,8 @@
 #include <stdlib.h> // _MAX_PATH
 
 #include "engine.h"
-
-#include "Errorlog.h"
-#include "Dcommon.h"
 #include "BitmapList.h"
-#include "bitmap.h"
 #include "bitmap._h"
-#include "WORLD.H"
 #include "log.h"
 #include "Core/System.h"
 

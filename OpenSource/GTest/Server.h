@@ -15,18 +15,16 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include <Windows.h>
-
 #include "Genesis.h"
 #include "Errorlog.h"
 #include "Ram.h"
 
 #include "Game\Game.h"
-#include "Game\GPlayer.h"
-#include "Game\GenVSI.h"
+#include "Game\Gplayer.h"
+#include "Game\Genvsi.h"
 
 #include "Client.h"
-#include "GameMgr.h"
+#include "Gamemgr.h"
 #include "NetMgr.h"
 #include "Buffer.h"
 
@@ -72,10 +70,6 @@ typedef struct
 	int32			NumBytesToSend;
 	int32			TotalBytesSent;
 } Server_NetStat;
-
-typedef geBoolean Server_Control(Server_Server *Server, GPlayer *Player, float Time);
-typedef geBoolean Server_Trigger(Server_Server *Server, GPlayer *Player, GPlayer *Target);
-typedef geBoolean Server_Blocked(Server_Server *Server, GPlayer *Player, GPlayer *Target);
 
 typedef struct Server_Client
 {
@@ -173,23 +167,12 @@ geBoolean		Server_ClientConnect(Server_Server *Server, const geCSNetMgr_NetClien
 Server_Client	*Server_BotConnect(Server_Server *Server, const char *BotName);
 geBoolean		Server_ClientDisconnect(Server_Server *Server, geCSNetMgr_NetID Id, const char *Name);
 geBoolean		Server_ClientDisconnectByHandle(Server_Server *Server, GenVSI_CHandle);
-GPlayer			*Server_CreatePlayer2(Server_Server *Server, const char *ClassName, int32 Mode);
 GPlayer			*Server_CreatePlayer(Server_Server *Server, const char *ClassName);
 void			Server_DestroyPlayer(Server_Server *Server, GPlayer *Player);
 geBoolean		Server_FreeWorldData(Server_Server *Server);
 geBoolean		Server_NewWorldDefaults(Server_Server *Server);
 geBoolean		Server_SpawnWorld(Server_Server *Server);
-geBoolean		Server_StartupWorld(Server_Server *Server);
 geBoolean		Server_Frame(Server_Server *Server, GameMgr *GMgr, float Time);
-
-void			Server_ProcessClientMove(	Server_Server *Server, 
-											Server_Client *Client, 
-											float ForwardSpeed, 
-											float Pitch,
-											float Yaw,
-											uint16 ButtonBits, 
-											uint16 Weapon,
-											float Time);
 
 #ifdef __cplusplus
 }

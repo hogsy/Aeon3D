@@ -15,11 +15,7 @@
 #ifndef FXFX_H
 #define FXFX_H
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#endif
-
-#include "GENESIS.H"
+#include "Genesis.h"
 
 #include "../Console.h"
 
