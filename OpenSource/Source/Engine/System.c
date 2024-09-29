@@ -66,6 +66,8 @@ void *geSystem_GetProcAddress( geSystemLibrary library, const char *name )
 {
 #if defined( _WIN32 )
 
+	return GetProcAddress( library, name );
+
 #else
 
 	return dlsym( library, name );
@@ -111,61 +113,61 @@ static const char DriverFileNames[][ 200 ] = {
 //	local static function prototypes
 //=====================================================================================
 
-static geBoolean EnumSubDrivers(Sys_DriverInfo *DriverInfo, const char *DriverDirectory);
+static geBoolean EnumSubDrivers( Sys_DriverInfo *DriverInfo, const char *DriverDirectory );
 
-static BOOL EnumSubDriversCB(S32 DriverId, char *Name, void *Context);
-static BOOL EnumModesCB(S32 ModeId, char *Name, S32 Width, S32 Height, void *Context);
+static BOOL EnumSubDriversCB( S32 DriverId, char *Name, void *Context );
+static BOOL EnumModesCB( S32 ModeId, char *Name, S32 Width, S32 Height, void *Context );
 
 //=====================================================================================
 //	geDriver_SystemGetNextDriver
 //=====================================================================================
-GENESISAPI geDriver *geDriver_SystemGetNextDriver(geDriver_System *DriverSystem, geDriver *Start)
+GENESISAPI geDriver *geDriver_SystemGetNextDriver( geDriver_System *DriverSystem, geDriver *Start )
 {
-	Sys_DriverInfo	*DriverInfo;
-	geDriver		*Last;
+	Sys_DriverInfo *DriverInfo;
+	geDriver       *Last;
 
-	assert(DriverSystem != NULL);
+	assert( DriverSystem != NULL );
 
-	DriverInfo = (Sys_DriverInfo*)DriverSystem;
+	DriverInfo = ( Sys_DriverInfo * ) DriverSystem;
 
-	if (!DriverInfo->NumSubDrivers)
+	if ( !DriverInfo->NumSubDrivers )
 		return NULL;
 
-	Last = &DriverInfo->SubDrivers[DriverInfo->NumSubDrivers-1];
+	Last = &DriverInfo->SubDrivers[ DriverInfo->NumSubDrivers - 1 ];
 
-	if (Start)							// If they have a driver, return the next one
+	if ( Start )// If they have a driver, return the next one
 		Start++;
 	else
-		Start = DriverInfo->SubDrivers;	// Else, return the first one...
+		Start = DriverInfo->SubDrivers;// Else, return the first one...
 
-	if (Start > Last)					// No more drivers left
+	if ( Start > Last )// No more drivers left
 		return NULL;
 
 	// This must be true!!!
-	assert(Start >= DriverInfo->SubDrivers && Start <= Last);
+	assert( Start >= DriverInfo->SubDrivers && Start <= Last );
 
-	return Start;	 // This is it...
+	return Start;// This is it...
 }
 
 //=====================================================================================
 //	geDriver_GetNextMode
 //=====================================================================================
-GENESISAPI geDriver_Mode *geDriver_GetNextMode(geDriver *Driver, geDriver_Mode *Start)
+GENESISAPI geDriver_Mode *geDriver_GetNextMode( geDriver *Driver, geDriver_Mode *Start )
 {
-	geDriver_Mode	*Last;
+	geDriver_Mode *Last;
 
-	Last = &Driver->Modes[Driver->NumModes-1];
+	Last = &Driver->Modes[ Driver->NumModes - 1 ];
 
-	if (Start)						// If there is a start, return the next one
+	if ( Start )// If there is a start, return the next one
 		Start++;
 	else
-		Start = Driver->Modes;		// Else, return the first
+		Start = Driver->Modes;// Else, return the first
 
-	if (Start > Last)				// No more Modes left
+	if ( Start > Last )// No more Modes left
 		return NULL;
 
 	// This must be true...
-	assert(Start >= Driver->Modes && Start <= Last);
+	assert( Start >= Driver->Modes && Start <= Last );
 
 	return Start;
 }
@@ -173,10 +175,10 @@ GENESISAPI geDriver_Mode *geDriver_GetNextMode(geDriver *Driver, geDriver_Mode *
 //=====================================================================================
 //	geDriver_GetName
 //=====================================================================================
-GENESISAPI geBoolean geDriver_GetName(geDriver *Driver, const char **Name)
+GENESISAPI geBoolean geDriver_GetName( geDriver *Driver, const char **Name )
 {
-	assert(Driver);
-	assert(Name);
+	assert( Driver );
+	assert( Name );
 
 	*Name = Driver->Name;
 
@@ -186,10 +188,10 @@ GENESISAPI geBoolean geDriver_GetName(geDriver *Driver, const char **Name)
 //=====================================================================================
 //	geDriver_ModeGetName
 //=====================================================================================
-GENESISAPI geBoolean geDriver_ModeGetName(geDriver_Mode *Mode, const char **Name)
+GENESISAPI geBoolean geDriver_ModeGetName( geDriver_Mode *Mode, const char **Name )
 {
-	assert(Mode);
-	assert(Name);
+	assert( Mode );
+	assert( Name );
 
 	*Name = Mode->Name;
 
@@ -199,13 +201,13 @@ GENESISAPI geBoolean geDriver_ModeGetName(geDriver_Mode *Mode, const char **Name
 //=====================================================================================
 //	geDriver_ModeGetWidthHeight
 //=====================================================================================
-GENESISAPI geBoolean geDriver_ModeGetWidthHeight(geDriver_Mode *Mode, int32 *Width, int32 *Height)
+GENESISAPI geBoolean geDriver_ModeGetWidthHeight( geDriver_Mode *Mode, int32 *Width, int32 *Height )
 {
-	assert(Mode);
-	assert(Width);
-	assert(Height);
+	assert( Mode );
+	assert( Width );
+	assert( Height );
 
-	*Width = Mode->Width;
+	*Width  = Mode->Width;
 	*Height = Mode->Height;
 
 	return GE_TRUE;
@@ -218,113 +220,113 @@ GENESISAPI geBoolean geDriver_ModeGetWidthHeight(geDriver_Mode *Mode, int32 *Wid
 
 const uint32 geEngine_Version = GE_VERSION;
 const uint32 geEngine_Version_OldestSupported =
-	( (GE_VERSION_MAJOR << GE_VERSION_MAJOR_SHIFT) + GE_VERSION_MINOR_MIN );
+        ( ( GE_VERSION_MAJOR << GE_VERSION_MAJOR_SHIFT ) + GE_VERSION_MINOR_MIN );
 
-geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDirectory, uint32 Version)
+geEngine *Sys_EngineCreate( HWND hWnd, const char *AppName, const char *DriverDirectory, uint32 Version )
 {
-	int32			i;
-	geEngine		*NewEngine;
+	int32     i;
+	geEngine *NewEngine;
 
-	if ( (Version & GE_VERSION_MAJOR_MASK) != (geEngine_Version & GE_VERSION_MAJOR_MASK) )
+	if ( ( Version & GE_VERSION_MAJOR_MASK ) != ( geEngine_Version & GE_VERSION_MAJOR_MASK ) )
 	{
-		geErrorLog_AddString(-1,"Genesis Engine has wrong major version!", NULL);
+		geErrorLog_AddString( -1, "Genesis Engine has wrong major version!", NULL );
 		return NULL;
 	}
 
 	if ( Version > geEngine_Version )
 	{
-	char str[1024];
-		sprintf(str,"%d - %d",Version,geEngine_Version);
-		geErrorLog_AddString(-1,"Genesis Engine is older than application; aborting!", str);
+		char str[ 1024 ];
+		sprintf( str, "%d - %d", Version, geEngine_Version );
+		geErrorLog_AddString( -1, "Genesis Engine is older than application; aborting!", str );
 		return NULL;
 	}
 
 	if ( Version < geEngine_Version_OldestSupported )
 	{
-	char str[1024];
-		sprintf(str,"%d - %d",Version,geEngine_Version);
-		geErrorLog_AddString(-1,"Genesis Engine does not support the old version!", str);
+		char str[ 1024 ];
+		sprintf( str, "%d - %d", Version, geEngine_Version );
+		geErrorLog_AddString( -1, "Genesis Engine does not support the old version!", str );
 		return NULL;
 	}
 
 	//	Attempt to create a new engine object
-	NewEngine = GE_RAM_ALLOCATE_STRUCT(geEngine);
+	NewEngine = GE_RAM_ALLOCATE_STRUCT( geEngine );
 
-	if (!NewEngine)
+	if ( !NewEngine )
 	{
-		geErrorLog_Add(GE_ERR_OUT_OF_MEMORY, NULL);
+		geErrorLog_Add( GE_ERR_OUT_OF_MEMORY, NULL );
 		goto ExitWithError;
 	}
 
 	// Clear the engine structure...
-	memset(NewEngine, 0, sizeof(geEngine));
+	memset( NewEngine, 0, sizeof( geEngine ) );
 
-	if ( ! List_Start() )
+	if ( !List_Start() )
 	{
-		geErrorLog_Add(GE_ERR_OUT_OF_MEMORY, NULL);
+		geErrorLog_Add( GE_ERR_OUT_OF_MEMORY, NULL );
 		goto ExitWithError;
 	}
 
-	size_t Length = strlen(DriverDirectory) + 1;
-	NewEngine->DriverDirectory = geRam_Allocate(Length);
+	size_t Length              = strlen( DriverDirectory ) + 1;
+	NewEngine->DriverDirectory = geRam_Allocate( Length );
 
-	if (!NewEngine->DriverDirectory)
+	if ( !NewEngine->DriverDirectory )
 		goto ExitWithError;
 
-	memcpy(NewEngine->DriverDirectory, DriverDirectory, Length);
+	memcpy( NewEngine->DriverDirectory, DriverDirectory, Length );
 
 	NewEngine->hWnd = hWnd;
-	strcpy(NewEngine->AppName, AppName);
+	strcpy( NewEngine->AppName, AppName );
 
 	// Get cpu info
-	if (!Sys_GetCPUFreq(&NewEngine->CPUInfo))
+	if ( !Sys_GetCPUFreq( &NewEngine->CPUInfo ) )
 		goto ExitWithError;
 
 	// Build the wavetable
-	for (i = 0; i < 20; i++)
-		NewEngine->WaveTable[i] = ((i * 65)%200) + 50;
+	for ( i = 0; i < 20; i++ )
+		NewEngine->WaveTable[ i ] = ( ( i * 65 ) % 200 ) + 50;
 
-	if (!EnumSubDrivers(&NewEngine->DriverInfo, DriverDirectory))
+	if ( !EnumSubDrivers( &NewEngine->DriverInfo, DriverDirectory ) )
 		goto ExitWithError;
 
-	if (!geEngine_BitmapListInit(NewEngine))
+	if ( !geEngine_BitmapListInit( NewEngine ) )
 		goto ExitWithError;
 
-	if (!Light_EngineInit(NewEngine))
+	if ( !Light_EngineInit( NewEngine ) )
 		goto ExitWithError;
 
-	if (!User_EngineInit(NewEngine))
+	if ( !User_EngineInit( NewEngine ) )
 		goto ExitWithError;
 
-	if (!geEngine_InitFonts(NewEngine))		// must be after BitmapList
+	if ( !geEngine_InitFonts( NewEngine ) )// must be after BitmapList
 		goto ExitWithError;
 
-	NewEngine->Changed = GE_TRUE;			// Force a first time driver upload
+	NewEngine->Changed = GE_TRUE;// Force a first time driver upload
 
-	NewEngine->DisplayFrameRateCounter = GE_TRUE;	// Default to showing the FPS counter
+	NewEngine->DisplayFrameRateCounter = GE_TRUE;// Default to showing the FPS counter
 
 	geAssert_SetCriticalShutdownCallback( ( geAssert_CriticalShutdownCallback ) geEngine_ShutdownDriver, NewEngine );
 
 	NewEngine->CurrentGamma = 1.0f;
 
 	//geEngine_SetFogEnable(NewEngine, GE_TRUE, 255.0f, 0.0f, 0.0f, 250.0f, 1000.0f);
-	geEngine_SetFogEnable(NewEngine, GE_FALSE, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+	geEngine_SetFogEnable( NewEngine, GE_FALSE, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f );
 
 	return NewEngine;
 
-	// Error cleanup
-	ExitWithError:
+// Error cleanup
+ExitWithError:
+{
+	if ( NewEngine )
 	{
-		if (NewEngine)
-		{
-			if (NewEngine->DriverDirectory)
-				geRam_Free(NewEngine->DriverDirectory);
+		if ( NewEngine->DriverDirectory )
+			geRam_Free( NewEngine->DriverDirectory );
 
-			geRam_Free(NewEngine);
-		}
-
-		return NULL;
+		geRam_Free( NewEngine );
 	}
+
+	return NULL;
+}
 }
 
 
@@ -332,51 +334,51 @@ geEngine *Sys_EngineCreate(HWND hWnd, const char *AppName, const char *DriverDir
 //	Sys_EngineFree
 //	<> geEngine_Destroy()
 //=====================================================================================
-void Sys_EngineFree(geEngine *Engine)
+void Sys_EngineFree( geEngine *Engine )
 {
-	geBoolean		Ret;
+	geBoolean Ret;
 
-	assert(Engine != NULL);
+	assert( Engine != NULL );
 
-	if (!Engine)
+	if ( !Engine )
 		return;
 
-	Ret = geEngine_RemoveAllWorlds(Engine);
-	assert(Ret);
+	Ret = geEngine_RemoveAllWorlds( Engine );
+	assert( Ret );
 
 	// Call upon modules to free allocated data in the engine
-	Light_EngineShutdown(Engine);
-	User_EngineShutdown(Engine);
+	Light_EngineShutdown( Engine );
+	User_EngineShutdown( Engine );
 
-	Ret = geEngine_ShutdownFonts(Engine);
-	assert(Ret == GE_TRUE);
+	Ret = geEngine_ShutdownFonts( Engine );
+	assert( Ret == GE_TRUE );
 
-	Ret = geEngine_ShutdownDriver(Engine);
-	assert(Ret == GE_TRUE);
+	Ret = geEngine_ShutdownDriver( Engine );
+	assert( Ret == GE_TRUE );
 
-	Ret = geEngine_BitmapListShutdown(Engine);
-	assert(Ret == GE_TRUE);
+	Ret = geEngine_BitmapListShutdown( Engine );
+	assert( Ret == GE_TRUE );
 
-	geRam_Free(Engine->DriverDirectory);
+	geRam_Free( Engine->DriverDirectory );
 
 	List_Stop();
 
-	geRam_Free(Engine);
+	geRam_Free( Engine );
 }
 
 //=====================================================================================
 //	SysGetCPUFreq
 //=====================================================================================
-geBoolean Sys_GetCPUFreq(Sys_CPUInfo *Info)
+geBoolean Sys_GetCPUFreq( Sys_CPUInfo *Info )
 {
-	assert(Info != NULL);
+	assert( Info != NULL );
 
 #if defined( _WIN32 )
 
 	LARGE_INTEGER Freq;
-	if (!QueryPerformanceFrequency(&Freq))
+	if ( !QueryPerformanceFrequency( &Freq ) )
 	{
-		geErrorLog_Add(GE_ERR_NO_PERF_FREQ, NULL);
+		geErrorLog_Add( GE_ERR_NO_PERF_FREQ, NULL );
 		return GE_FALSE;
 	}
 
@@ -391,20 +393,20 @@ geBoolean Sys_GetCPUFreq(Sys_CPUInfo *Info)
 	return GE_TRUE;
 }
 
-#ifdef	MESHES
+#ifdef MESHES
 //===================================================================================
 //	Sys_WorldCreateMesh
 //	Create a mesh definition object
 //===================================================================================
-Mesh_MeshDef *Sys_WorldCreateMesh(geWorld *World, const char *BitmapPath, const char *FileName)
+Mesh_MeshDef *Sys_WorldCreateMesh( geWorld *World, const char *BitmapPath, const char *FileName )
 {
-	Mesh_MeshDef	*MeshDef;
+	Mesh_MeshDef *MeshDef;
 
-	assert(World != NULL);
-	assert(BitmapPath != NULL);
-	assert(FileName != NULL);
+	assert( World != NULL );
+	assert( BitmapPath != NULL );
+	assert( FileName != NULL );
 
-	MeshDef = Mesh_WorldCreateMesh(World, BitmapPath, FileName);
+	MeshDef = Mesh_WorldCreateMesh( World, BitmapPath, FileName );
 
 	return MeshDef;
 }
@@ -412,42 +414,42 @@ Mesh_MeshDef *Sys_WorldCreateMesh(geWorld *World, const char *BitmapPath, const 
 //===================================================================================
 //	Sys_WorldFreeMesh
 //===================================================================================
-void Sys_WorldFreeMesh(geWorld *World, Mesh_MeshDef *MeshDef)
+void Sys_WorldFreeMesh( geWorld *World, Mesh_MeshDef *MeshDef )
 {
-	assert(World != NULL);
-	assert(MeshDef != NULL);
+	assert( World != NULL );
+	assert( MeshDef != NULL );
 
-	Mesh_WorldFreeMesh(World, MeshDef);
+	Mesh_WorldFreeMesh( World, MeshDef );
 }
 #endif
 
 //===================================================================================
 //	EnumSubDriversCB
 //===================================================================================
-static BOOL EnumSubDriversCB(S32 DriverId, char *Name, void *Context)
+static BOOL EnumSubDriversCB( S32 DriverId, char *Name, void *Context )
 {
-	Sys_DriverInfo	*DriverInfo = (Sys_DriverInfo*)Context;
-	DRV_Driver		*RDriver;
-	geDriver		*Driver;
+	Sys_DriverInfo *DriverInfo = ( Sys_DriverInfo * ) Context;
+	DRV_Driver     *RDriver;
+	geDriver       *Driver;
 
-	if (strlen(Name) >=	DRV_STR_SIZE)
-		return TRUE;		// Ignore
+	if ( strlen( Name ) >= DRV_STR_SIZE )
+		return TRUE;// Ignore
 
-	if (DriverInfo->NumSubDrivers+1 >= MAX_SUB_DRIVERS)
-		return FALSE;		// Stop when no more driver slots available
+	if ( DriverInfo->NumSubDrivers + 1 >= MAX_SUB_DRIVERS )
+		return FALSE;// Stop when no more driver slots available
 
-	Driver = &DriverInfo->SubDrivers[DriverInfo->NumSubDrivers];
+	Driver = &DriverInfo->SubDrivers[ DriverInfo->NumSubDrivers ];
 
 	Driver->Id = DriverId;
-	strcpy(Driver->Name, Name);
-	strcpy(Driver->FileName, DriverInfo->CurFileName);
+	strcpy( Driver->Name, Name );
+	strcpy( Driver->FileName, DriverInfo->CurFileName );
 
 	RDriver = DriverInfo->RDriver;
 
 	// Store this, so enum modes know what driver we are working on...
 	DriverInfo->CurDriver = Driver;
 
-	if (!RDriver->EnumModes(Driver->Id, Driver->Name, EnumModesCB, (void*)DriverInfo))
+	if ( !RDriver->EnumModes( Driver->Id, Driver->Name, EnumModesCB, ( void * ) DriverInfo ) )
 		return FALSE;
 
 	DriverInfo->NumSubDrivers++;
@@ -458,27 +460,27 @@ static BOOL EnumSubDriversCB(S32 DriverId, char *Name, void *Context)
 //===================================================================================
 //	EnumModesCB
 //===================================================================================
-static BOOL EnumModesCB(S32 ModeId, char *Name, S32 Width, S32 Height, void *Context)
+static BOOL EnumModesCB( S32 ModeId, char *Name, S32 Width, S32 Height, void *Context )
 {
-	Sys_DriverInfo	*DriverInfo;
-	geDriver		*Driver;
-	geDriver_Mode	*Mode;
+	Sys_DriverInfo *DriverInfo;
+	geDriver       *Driver;
+	geDriver_Mode  *Mode;
 
-	if (strlen(Name) >=	DRV_MODE_STR_SIZE)
-		return TRUE;		// Ignore
+	if ( strlen( Name ) >= DRV_MODE_STR_SIZE )
+		return TRUE;// Ignore
 
-	DriverInfo = (Sys_DriverInfo*)Context;
+	DriverInfo = ( Sys_DriverInfo * ) Context;
 
 	Driver = DriverInfo->CurDriver;
 
-	if (Driver->NumModes+1 >= MAX_DRIVER_MODES)
+	if ( Driver->NumModes + 1 >= MAX_DRIVER_MODES )
 		return FALSE;
 
-	Mode = &Driver->Modes[Driver->NumModes];
+	Mode = &Driver->Modes[ Driver->NumModes ];
 
 	Mode->Id = ModeId;
-	strcpy(Mode->Name, Name);
-	Mode->Width = Width;
+	strcpy( Mode->Name, Name );
+	Mode->Width  = Width;
 	Mode->Height = Height;
 
 	Driver->NumModes++;

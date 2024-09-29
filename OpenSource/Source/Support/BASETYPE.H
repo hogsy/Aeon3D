@@ -179,9 +179,12 @@ extern "C"
 #define GE_PI ( ( geFloat ) 3.14159265358979323846f )
 
 #if defined( _WIN32 )
-#define GE_MAX_PATH MAX_PATH
+#	if !defined( MAX_PATH )
+#		define MAX_PATH 260
+#	endif
+#	define GE_PATH_MAX MAX_PATH
 #else
-#define GE_PATH_MAX PATH_MAX
+#	define GE_PATH_MAX PATH_MAX
 #endif
 
 	/****************************************************/

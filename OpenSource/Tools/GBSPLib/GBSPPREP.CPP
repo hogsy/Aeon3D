@@ -19,7 +19,10 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <cstdio>
+
+#if defined( _WIN32 )
+#	include <windows.h>
+#endif
 
 #include "GBSPPREP.H"
 #include "GBSPFILE.H"
