@@ -5,15 +5,14 @@
 /*                                                                          */
 /****************************************************************************/
 
-#include	<windows.h>
-#include	<math.h>
-#include	<assert.h>
+#include <math.h>
+#include <assert.h>
 
-#include	"genesis.h"
-#include	"ErrorLog.h"
+#include "genesis.h"
+#include "ErrorLog.h"
 
-#include	"Electric.h"
-#include	"..\\Procedurals\\gebmutil.h"
+#include "Electric.h"
+#include "..\\Procedurals\\gebmutil.h"
 
 extern	geFloat		EffectScale;
 

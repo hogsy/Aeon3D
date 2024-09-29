@@ -12,11 +12,10 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
-#include <Assert.h>
 #include <Math.h>
 
 #include "GMain.h"
+
 extern void GenVS_Error(const char *Msg, ...);
 typedef struct 
 {

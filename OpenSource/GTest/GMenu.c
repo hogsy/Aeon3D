@@ -12,12 +12,17 @@
 //	Peter Siamidis	07/08/98	Created.
 //
 ////////////////////////////////////////////////////////////////////////////////////////
-#define	WIN32_LEAN_AND_MEAN
-#pragma warning ( disable : 4201 4214 )
-#include <windows.h>
-#pragma warning ( default : 4201 4214 )
+
+#if defined( _WIN32 )
+#	define WIN32_LEAN_AND_MEAN
+#	pragma warning( disable : 4201 4214 )
+#	include <windows.h>
+#	pragma warning( default : 4201 4214 )
+#endif
+
 #include <assert.h>
 #include <string.h>
+
 #include "GMenu.h"
 #include "Menu.h"
 #include "ipaddr.h"

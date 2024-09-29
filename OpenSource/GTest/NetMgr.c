@@ -14,7 +14,6 @@
 /****************************************************************************************/
 #include <Windows.h>
 #include <Assert.h>
-#include <stdio.h>
 
 #include "Genesis.h"
 #include "Errorlog.h"

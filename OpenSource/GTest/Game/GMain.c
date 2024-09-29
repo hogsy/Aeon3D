@@ -12,17 +12,13 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#if defined( _WIN32 )
-#include <Windows.h>
-#endif
+
 #include <assert.h>
 #include <math.h>
 
 #include "GMain.h"
 
 #include "quatern.h"
-
-#define INCHES_PER_METER (39.37007874016f)
 
 void		GenVS_Error(const char *Msg, ...);  //oh, dear.
 

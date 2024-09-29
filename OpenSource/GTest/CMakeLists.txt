@@ -29,7 +29,6 @@ add_executable(GTest WIN32
         Procedurals/Water.c
         AutoSelect.c
         Buffer.c
-        cd.c
         Client.c
         Console.c
         GameMgr.c

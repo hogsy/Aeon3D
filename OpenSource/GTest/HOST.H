@@ -15,9 +15,6 @@
 #ifndef __HOST_H__
 #define __HOST_H__
 
-#include <Windows.h>
-#include <stdio.h>
-
 #include "Genesis.h"
 #include "Errorlog.h"
 #include "Ram.h"

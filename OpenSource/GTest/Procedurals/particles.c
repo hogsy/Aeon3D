@@ -9,7 +9,7 @@
 #include "errorlog.h"
 #include "procutil.h"
 #include "gebmutil.h"
-#include "vec3d.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>

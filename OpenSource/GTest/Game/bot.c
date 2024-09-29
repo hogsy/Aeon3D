@@ -1,7 +1,7 @@
 /****************************************************************************/
 /*    FILE: Bot.c														*/
 /****************************************************************************/
-#include <Windows.h>
+
 #include <Assert.h>
 #include <Math.h>
 
@@ -87,7 +87,7 @@ Track *Bot_FindTrack(GenVSI *VSI, void *PlayerData, int32 TrackArr[]);
 
 GPlayer *GetBotMatchSpawn(GenVSI *VSI);
 BotActorStart *Bot_GetActorStart(GenVSI *VSI, void *PlayerData);
-geBoolean BlockActor_Spawn(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName);
+void BlockActor_Spawn(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName);
 geBoolean Bot_ActionGetHealth(GenVSI *VSI, void *PlayerData, float Range, float Time);
 geBoolean Bot_ActionGetWeapon(GenVSI *VSI, void *PlayerData, float Range, float Time);
 GPlayer *Bot_FindRandomItem(GenVSI *VSI, geVec3d *Pos, char *ClassList[]);
@@ -319,7 +319,7 @@ CONTROLp Bot_ModeAction[MODE_MAX] =
 	};
 
 
-RankTable[3][3] = 
+int RankTable[3][3] =
 {//close    med     long
 	{0,		2,		4},		//weak
 	{5,     6,      7},		//med
@@ -1290,7 +1290,7 @@ geBoolean Bot_ModeThinkUnstick(GenVSI *VSI, void *PlayerData, float Time)
 //=====================================================================================
 //	Bot_Destroy
 //=====================================================================================
-geBoolean Bot_Destroy(GenVSI *VSI, void *PlayerData, void *ClassData)
+static void Bot_Destroy(GenVSI *VSI, void *PlayerData, void *ClassData)
 {
 	GPlayer			*Player,*Hit;
 	Bot_Var			*DBot,*HBot;
@@ -1342,8 +1342,6 @@ geBoolean Bot_Destroy(GenVSI *VSI, void *PlayerData, void *ClassData)
 
 	geRam_Free(Player->userData);
 	Player->userData = NULL;
-
-	return GE_TRUE;
 }
 
 
@@ -4564,7 +4562,7 @@ geBoolean Bot_Main(GenVSI *VSI, const char *LevelName)
 //=====================================================================================
 //	BotMatch_Spawn
 //=====================================================================================
-geBoolean Bot_MatchStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName)
+void Bot_MatchStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName)
 {
 	BotMatchStart	*Ps;
 	GPlayer			*Player;
@@ -4587,8 +4585,6 @@ geBoolean Bot_MatchStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *E
 	geXForm3d_SetTranslation(&Player->XForm, Ps->origin.X, Ps->origin.Y, Ps->origin.Z);
 
 	Player->VPos = Player->XForm.Translation;
-
-	return GE_TRUE;
 }
 
 
@@ -4852,7 +4848,7 @@ BotActorStart *Bot_GetActorStart(GenVSI *VSI, void *PlayerData)
 //=====================================================================================
 //	Bot_ActorStart
 //=====================================================================================
-geBoolean Bot_ActorStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName)
+void Bot_ActorStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName)
 {
 	int32			i;
 	GPlayer			*Player;
@@ -4928,15 +4924,13 @@ geBoolean Bot_ActorStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *E
 	//GenVSI_SetClientInventory(VSI, Player->ClientHandle, ITEM_SHREDDER, 0, GE_FALSE);
 
 	Player->NextWeaponTime = 0.0f;
-
-	return GE_TRUE;
 }
 
 
 //=====================================================================================
 //	BlockActor_Trigger
 //=====================================================================================
-geBoolean BlockActor_Trigger(GenVSI *VSI, void *PlayerData, void *TargetData, void *Data)
+static geBoolean BlockActor_Trigger(GenVSI *VSI, void *PlayerData, GPlayer *TargetData, void *Data)
 {
 	GPlayer *Player = (GPlayer*)PlayerData;
 
@@ -4950,7 +4944,7 @@ geBoolean BlockActor_Trigger(GenVSI *VSI, void *PlayerData, void *TargetData, vo
 //=====================================================================================
 //	BlockActor_Spawn
 //=====================================================================================
-geBoolean BlockActor_Spawn(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName)
+void BlockActor_Spawn(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName)
 {
 	BlockActor		*Ba;
 	GPlayer			*Player;
@@ -4976,8 +4970,6 @@ geBoolean BlockActor_Spawn(GenVSI *VSI, void *PlayerData, void *ClassData, char 
 	Player->VPos = Player->XForm.Translation;
 
 	GenVSI_RegisterPlayerModel(VSI, Player, Ba->Model);
-
-	return GE_TRUE;
 }
 
 //=====================================================================================

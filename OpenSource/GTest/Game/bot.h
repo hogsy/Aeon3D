@@ -19,8 +19,8 @@ GenVSI_CMove *Bot_AI_Control(void);
 geBoolean CheckPlayer(GenVSI *VSI, void *PlayerData);
 void SetupPlayerXForm(GenVSI *VSI, void *PlayerData, float Time);
 
-geBoolean Bot_MatchStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName);
-geBoolean Bot_ActorStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName);
+void Bot_MatchStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName);
+void Bot_ActorStart(GenVSI *VSI, void *PlayerData, void *ClassData, char *EntityName);
 
 
 // Function

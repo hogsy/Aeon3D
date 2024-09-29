@@ -5,12 +5,10 @@
 //#define DO_TIMER
 
 #include "Plasma.h"
-#include "genesis.h"
 #include "ram.h"
-#include "gebmutil.h"
 #include "errorlog.h"
-#include "proceng.h"
 #include "procutil.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>

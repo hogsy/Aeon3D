@@ -4,20 +4,13 @@
 /*    Copyright (c) 1999, Wild Tangent, Inc.; All rights reserved.       */
 /*                                                                          */
 /****************************************************************************/
-#include <stdlib.h>
-#include <math.h>
+
 #include <assert.h>
 #include <ctype.h>
-
-#if defined( _WIN32 )
-#	define WIN32_LEAN_AND_MEAN
-#	include <windows.h>// for dll stuff
-#endif
 
 #include "GENESIS.H"
 #include "RAM.H"
 #include "Errorlog.h"
-#include "stdio.h"
 #include "string.h"
 
 #include "proceng.h"

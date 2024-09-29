@@ -13,14 +13,7 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <stdio.h>
-#if defined( _WIN32 )
-#	include <Dos.h>
-#endif
 #include <math.h>
-#if defined( _WIN32 )
-#	include <Windows.H>
-#	include <MMSystem.H>
-#endif
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>

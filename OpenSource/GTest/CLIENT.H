@@ -210,34 +210,34 @@ Client_Client		*Client_Create(	geEngine	*Engine,
 									const char	*DemoName,
 									geBoolean	MultiPlayer);
 
-void				Client_Destroy(Client_Client *Client);
-geBoolean			Client_IsValid(const Client_Client *Client);
-geBoolean			Client_CreateStatusBar(Client_Client *Client, VidMode VidMode);
-void				Client_DestroyStatusBar(Client_Client *Client);
-void				Client_DestroyALLPlayers(Client_Client *Client);
-void				Client_FreeALLResources(Client_Client *Client);
-void				Client_FreeResourcesForNewWorld(Client_Client *Client);
-void				Client_NewWorldDefaults(Client_Client *Client);
-geBoolean			Client_Frame(Client_Client *Client, float Time);
-geBoolean			Client_RenderFrame(Client_Client *Client, float Time);
-					
-Client_Move			*Client_PeekMove(Client_Client *Client);
-void				Client_RemoveFirstMove(Client_Client *Client);
+void      Client_Destroy( Client_Client *Client );
+geBoolean Client_IsValid( const Client_Client *Client );
+geBoolean Client_CreateStatusBar( Client_Client *Client, VidMode VidMode );
+void      Client_DestroyStatusBar( Client_Client *Client );
+void      Client_DestroyALLPlayers( Client_Client *Client );
+void      Client_FreeALLResources( Client_Client *Client );
+void      Client_FreeResourcesForNewWorld( Client_Client *Client );
+void      Client_NewWorldDefaults( Client_Client *Client );
+geBoolean Client_Frame( Client_Client *Client, float Time );
+geBoolean Client_RenderFrame( Client_Client *Client, float Time );
 
-geBoolean			Client_SendMove(Client_Client *Client, float Time);
+Client_Move *Client_PeekMove( Client_Client *Client );
+void         Client_RemoveFirstMove( Client_Client *Client );
 
-geBoolean			Client_UpdateSinglePlayer(Client_Client *Client, GPlayer *Player, float Ratio, float Time, geBoolean TempPlayer);
-GPlayer				*Client_ParsePlayerData(Client_Client *Client, Buffer_Data *Buffer, GPlayer *FakePlayer);
+geBoolean Client_SendMove( Client_Client *Client, float Time );
 
-geBoolean			Client_ChangeNetState(Client_Client *Client, NetMgr_NetState NewNetState);
+geBoolean Client_UpdateSinglePlayer( Client_Client *Client, GPlayer *Player, float Ratio, float Time, geBoolean TempPlayer );
+GPlayer  *Client_ParsePlayerData( Client_Client *Client, Buffer_Data *Buffer, GPlayer *FakePlayer );
 
-geBoolean			Client_SetDemo(Client_Client *Client, int32 DemoNum);
-geBoolean			Client_ReadServerMessages(Client_Client *Client, Buffer_Data *Buffer);
-geBoolean			Client_SetupDemos(Client_Client *Client, int32 Mode, const char *DemoFile);
-void				Client_RefreshStatusBar(int32 NumPages);
+geBoolean Client_ChangeNetState( Client_Client *Client, NetMgr_NetState NewNetState );
 
-void				Client_DestroyTempPlayer(Client_Client *Client, GPlayer *Player);
-GPlayer				*Client_GetPlayer(Client_Client *Client, int32 Index);
+geBoolean Client_SetDemo( Client_Client *Client, int32 DemoNum );
+geBoolean Client_ReadServerMessages( Client_Client *Client, Buffer_Data *Buffer );
+geBoolean Client_SetupDemos( Client_Client *Client, int32 Mode, const char *DemoFile );
+void      Client_RefreshStatusBar( int32 NumPages );
+
+void     Client_DestroyTempPlayer( void *data, void *playerData );
+GPlayer *Client_GetPlayer( Client_Client *Client, int32 Index );
 
 #ifdef __cplusplus
 }

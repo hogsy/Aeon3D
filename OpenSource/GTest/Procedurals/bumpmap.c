@@ -1,7 +1,6 @@
 
 #include "bumpmap.h"
 #include "genesis.h"
-#include "bitmap.h"
 #include "ram.h"
 #include <math.h>
 #include <Assert.h>

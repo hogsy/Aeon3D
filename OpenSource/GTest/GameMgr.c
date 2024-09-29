@@ -12,9 +12,8 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
+
 #include <Assert.h>
-#include <stdio.h>
 #include <direct.h>
 
 #include "RAM.H"

@@ -12,7 +12,6 @@
 /*  or FITNESS FOR ANY PURPOSE.  Refer to LICENSE.TXT for more details.                 */
 /*                                                                                      */
 /****************************************************************************************/
-#include <Windows.h>
 #include <Assert.h>
 
 #include "Host.h"
@@ -20,11 +19,7 @@
 #include "Server.h"
 #include "Client.h"
 
-#include "GMenu.h"
-
 #include "Game\Game.h"
-
-#include "cd.H"
 
 extern int32			CWidth;
 extern int32			CHeight;
