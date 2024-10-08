@@ -28,6 +28,7 @@
 #include "WORLD.H"
 #include "bitmap.h"
 #include "BitmapList.h"
+#include "Core/System.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,7 +81,7 @@ geBoolean geEngine_InitFonts(geEngine *Engine);
 geBoolean geEngine_ShutdownFonts(geEngine *Engine);
 
 //-------- engine drivers
-HINSTANCE geEngine_LoadLibrary( const char * lpLibFileName, const char *DriverDirectory);
+geSystemLibrary             geEngine_LoadLibrary( const char * lpLibFileName, const char *DriverDirectory);
 geBoolean geEngine_ResetDriver(geEngine *Engine);
 GENESISAPI geDriver_System *geEngine_GetDriverSystem(geEngine *Engine);
 

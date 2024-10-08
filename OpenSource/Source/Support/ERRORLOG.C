@@ -19,10 +19,7 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#if defined( _WIN32 )
-#	define WIN32_LEAN_AND_MEAN
-#	include <windows.h>
-#endif
+
 #include <stdio.h>
 #include <assert.h>// assert()
 #include <stdlib.h>
@@ -137,21 +134,8 @@ GENESISAPI void geErrorLog_AddExplicit( unsigned int Error,
 
 	geErrorLog_Locals.ErrorCount++;
 
-#if defined( _WIN32 )
-#	ifndef NDEBUG
-#		pragma message( "Clean up the OutputDebugStrings in geErrorLog_AddExplicit" )
-	{
-		char buff[ 100 ];
-		sprintf( buff, "ErrorLog: %d -", Error );
-		OutputDebugString( buff );
-		OutputDebugString( SDst );
-		OutputDebugString( "\r\n" );
-	}
-#	endif
-#else
-
-	printf( "%s", SDst );
-
+#ifndef NDEBUG
+	printf( "ErrorLog: %d - %s\r\n", Error, SDst );
 #endif
 }
 
@@ -187,7 +171,7 @@ GENESISAPI geBoolean geErrorLog_Report( int history, geErrorLog_ErrorClassType *
 	}
 
 
-	*error = ( geErrorLog_ErrorClassType ) geErrorLog_Locals.ErrorList[ history ].ErrorID;
+	*error      = ( geErrorLog_ErrorClassType ) geErrorLog_Locals.ErrorList[ history ].ErrorID;
 	*UserString = geErrorLog_Locals.ErrorList[ history ].String;
 	return GE_TRUE;
 }

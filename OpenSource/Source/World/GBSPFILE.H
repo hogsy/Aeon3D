@@ -25,13 +25,8 @@
 #include <stdio.h>
 
 #include "BASETYPE.H"
-#include "VEC3D.H"
-
-#if defined( _WIN32 )
-#	include <windows.h>
-#endif
-
 #include "Dcommon.h"
+#include "VEC3D.H"
 #include "vfile.h"
 #include "motion.h"
 
@@ -156,11 +151,23 @@ typedef struct
 	void				*Data;
 } GBSP_ChunkData;
 
+typedef struct GBSP_Time
+{
+	uint16 year;
+	uint16 month;
+	uint16 dayOfWeek;
+	uint16 day;
+	uint16 hour;
+	uint16 minute;
+	uint16 second;
+	uint16 ms;
+} GBSP_Time;
+
 typedef struct
 {
 	char				TAG[5];						// 'G','B','S','P','0'
 	int32				Version;
-	SYSTEMTIME			BSPTime;
+	GBSP_Time			BSPTime;
 } GBSP_Header;
 
 typedef struct
@@ -292,6 +299,8 @@ typedef struct
 	geVec3d			Origin;						// Center of portal
 	int32			LeafTo;						// Leaf looking into
 } GFX_Portal;
+
+struct DRV_Palette;
 
 typedef struct
 {

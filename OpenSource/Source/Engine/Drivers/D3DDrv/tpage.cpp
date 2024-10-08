@@ -24,6 +24,7 @@
 #include <stdio.h>
 
 #include "BaseType.h"
+#include "Dcommon.h"
 #include "TPage.h"
 
 // These must be a power of 2!!!

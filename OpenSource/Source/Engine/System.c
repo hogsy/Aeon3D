@@ -23,6 +23,8 @@ SOFTWARE.
 
 #if defined( __unix__ )
 #	include <dlfcn.h>
+#elif defined( _WIN32 )
+#	include <windows.h>
 #endif
 
 #include "BASETYPE.H"

@@ -24,9 +24,6 @@
 
 #include "Errorlog.h"
 #include "GENESIS.H"
-#if defined( _WIN32 )
-#	include <windows.h>
-#endif
 #include "Dcommon.h"
 #include "Camera.h"
 #include "PTRTYPES.H"

@@ -24,15 +24,10 @@
 
 #include <assert.h>
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#endif
-
 #include "GENESIS.H"
 #include "BASETYPE.H"
 #include "VEC3D.H"
 #include "WORLD.H"
-//#include "System.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -140,11 +140,23 @@ typedef struct
 	void			*Data;
 } GBSP_ChunkData;
 
+typedef struct GBSP_Time
+{
+	uint16 year;
+	uint16 month;
+	uint16 dayOfWeek;
+	uint16 day;
+	uint16 hour;
+	uint16 minute;
+	uint16 second;
+	uint16 ms;
+} GBSP_Time;
+
 typedef struct
 {
-	char			TAG[5];						// 'G','B','S','P','0'
-	int32			Version;
-	SYSTEMTIME		BSPTime;					// Time at which the BSP data was created...
+	char				TAG[5];						// 'G','B','S','P','0'
+	int32				Version;
+	GBSP_Time			BSPTime;
 } GBSP_Header;
 
 typedef struct

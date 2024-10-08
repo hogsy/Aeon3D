@@ -19,12 +19,11 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+
 #if defined( _WIN32 )
-#	include <windows.h>
 #	include <dsound.h>
 #endif
-#include	<stdio.h>
-#include	<assert.h>
+#include <assert.h>
 
 #include "BASETYPE.H"
 #include "Errorlog.h"

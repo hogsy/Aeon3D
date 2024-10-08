@@ -23,8 +23,17 @@ SOFTWARE.
 
 #pragma once
 
-typedef void *geSystemLibrary;
+#if defined( __cplusplus )
+extern "C"
+{
+#endif
 
-geSystemLibrary geSystem_LoadLibrary( const char *path );
-geBoolean       geSystem_FreeLibrary( geSystemLibrary library );
-void           *geSystem_GetProcAddress( geSystemLibrary library, const char *name );
+	typedef void *geSystemLibrary;
+
+	geSystemLibrary geSystem_LoadLibrary( const char *path );
+	geBoolean       geSystem_FreeLibrary( geSystemLibrary library );
+	void           *geSystem_GetProcAddress( geSystemLibrary library, const char *name );
+
+#if defined( __cplusplus )
+}
+#endif

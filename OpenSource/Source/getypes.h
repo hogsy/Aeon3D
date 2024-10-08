@@ -25,72 +25,82 @@
 
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 //
 //	Collision defines (for geWorld_Collision)
 //
-#define GE_COLLIDE_MESHES			(1<<0)
-#define GE_COLLIDE_MODELS			(1<<1)
-#define GE_COLLIDE_ACTORS			(1<<2)
-#define GE_COLLIDE_NO_SUB_MODELS	(1<<3)
-#define GE_COLLIDE_ALL				(GE_COLLIDE_MESHES | GE_COLLIDE_MODELS | GE_COLLIDE_ACTORS)
+#define GE_COLLIDE_MESHES        ( 1 << 0 )
+#define GE_COLLIDE_MODELS        ( 1 << 1 )
+#define GE_COLLIDE_ACTORS        ( 1 << 2 )
+#define GE_COLLIDE_NO_SUB_MODELS ( 1 << 3 )
+#define GE_COLLIDE_ALL           ( GE_COLLIDE_MESHES | GE_COLLIDE_MODELS | GE_COLLIDE_ACTORS )
 
 //
 // Actor flags (geWorld_AddActor)
 //
-#define GE_ACTOR_RENDER_NORMAL			(1<<0)		// Render in normal views
-#define GE_ACTOR_RENDER_MIRRORS			(1<<1)		// Render in mirror views
-#define GE_ACTOR_RENDER_ALWAYS			(1<<2)		// Render always, skipping all visibility tests
-#define GE_ACTOR_COLLIDE				(1<<3)		// Collide when calling geWorld_Collision
+#define GE_ACTOR_RENDER_NORMAL  ( 1 << 0 )// Render in normal views
+#define GE_ACTOR_RENDER_MIRRORS ( 1 << 1 )// Render in mirror views
+#define GE_ACTOR_RENDER_ALWAYS  ( 1 << 2 )// Render always, skipping all visibility tests
+#define GE_ACTOR_COLLIDE        ( 1 << 3 )// Collide when calling geWorld_Collision
 
 //
 //	Model flags (geWorld_ModelSetFlags)
 //
-#define GE_MODEL_RENDER_NORMAL			(1<<0)		// Render in normal views
-#define GE_MODEL_RENDER_MIRRORS			(1<<1)		// Render in mirror views
-#define GE_MODEL_RENDER_ALWAYS			(1<<2)		// Render always, skipping all visibility tests
-#define GE_MODEL_COLLIDE				(1<<3)		// Collide when calling geWorld_Collision
+#define GE_MODEL_RENDER_NORMAL  ( 1 << 0 )// Render in normal views
+#define GE_MODEL_RENDER_MIRRORS ( 1 << 1 )// Render in mirror views
+#define GE_MODEL_RENDER_ALWAYS  ( 1 << 2 )// Render always, skipping all visibility tests
+#define GE_MODEL_COLLIDE        ( 1 << 3 )// Collide when calling geWorld_Collision
 
-typedef struct
-{
-	float r, g, b, a;
-} GE_RGBA;
+	typedef struct
+	{
+		float r, g, b, a;
+	} GE_RGBA;
 
-typedef struct
-{
-	int32	Left;
-	int32	Right;
-	int32	Top;
-	int32	Bottom;
-} GE_Rect;
+	typedef struct
+	{
+		int32 Left;
+		int32 Right;
+		int32 Top;
+		int32 Bottom;
+	} GE_Rect;
 
-typedef struct
-{
-	geFloat MinX,MaxX;
-	geFloat MinY,MaxY;
-} geFloatRect;
+	// compatible replacement for win32 RECT
+	typedef struct geWinRect
+	{
+		int32 left;
+		int32 top;
+		int32 right;
+		int32 bottom;
+	} geWinRect;
 
-// Lit vertex
-typedef struct
-{
-	// FIXME:  Convert 3d X,Y,Z to geVec3d
-	float X, Y, Z;									// 3d vertex
-	float u, v;										// Uv's
-	// FIXME:  Convert r,g,b,a to GE_RGBA
-	float r, g, b, a;								// color
-} GE_LVertex;
+	typedef struct
+	{
+		geFloat MinX, MaxX;
+		geFloat MinY, MaxY;
+	} geFloatRect;
 
-// Transformed Lit vertex
-typedef struct
-{
-	float x, y, z;									// screen points
-	float u, v;										// Uv's
-	float r, g, b, a;								// color
-} GE_TLVertex;
+	// Lit vertex
+	typedef struct
+	{
+		// FIXME:  Convert 3d X,Y,Z to geVec3d
+		float X, Y, Z;// 3d vertex
+		float u, v;   // Uv's
+		// FIXME:  Convert r,g,b,a to GE_RGBA
+		float r, g, b, a;// color
+	} GE_LVertex;
 
-typedef GE_Rect geRect;
+	// Transformed Lit vertex
+	typedef struct
+	{
+		float x, y, z;   // screen points
+		float u, v;      // Uv's
+		float r, g, b, a;// color
+	} GE_TLVertex;
+
+	typedef GE_Rect geRect;
 
 #ifdef __cplusplus
 }

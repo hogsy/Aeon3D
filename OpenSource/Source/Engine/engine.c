@@ -21,14 +21,17 @@
 /*                                                                                      */
 /****************************************************************************************/
 
-#define DONT_DO_SPLASH // CB hack
+#define DONT_DO_SPLASH// CB hack
 
 #if !defined( _WIN32 )
 #	include <unistd.h>
 #	include <dlfcn.h>
+#else
+#	include <windef.h>
+#	include <profileapi.h>
 #endif
 
-#include <stdlib.h> // _MAX_PATH
+#include <stdlib.h>// _MAX_PATH
 
 #include "engine.h"
 #include "BitmapList.h"
@@ -39,42 +42,42 @@
 //#define DO_ADDREMOVE_MESSAGES
 
 #ifndef _DEBUG
-#undef DO_ADDREMOVE_MESSAGES
+#	undef DO_ADDREMOVE_MESSAGES
 #endif
 
-extern	geBoolean	DoSplashScreen(geEngine *Engine, geDriver_Mode *Mode);
+extern geBoolean DoSplashScreen( geEngine *Engine, geDriver_Mode *Mode );
 
 //============================
 //	Internal Protos
 //============================
 
-static geBoolean Engine_InitDriver(	geEngine *Engine, 
-									geDriver *Driver,
-									geDriver_Mode *DriverMode);
+static geBoolean Engine_InitDriver( geEngine      *Engine,
+                                    geDriver      *Driver,
+                                    geDriver_Mode *DriverMode );
 
-static void Engine_DrawFontBuffer(geEngine *Engine);
-static void Engine_Tick(geEngine *Engine);
+static void Engine_DrawFontBuffer( geEngine *Engine );
+static void Engine_Tick( geEngine *Engine );
 
-static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta);
+static void SubLarge( LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta );
 
-#define ABS(xx)	( (xx) < 0 ? (-(xx)) : (xx) )
+#define ABS( xx ) ( ( xx ) < 0 ? ( -( xx ) ) : ( xx ) )
 
 //=====================================================================================
 //	geEngine_SetGamma
 //=====================================================================================
-GENESISAPI geBoolean geEngine_SetGamma(geEngine *Engine, float Gamma)
+GENESISAPI geBoolean geEngine_SetGamma( geEngine *Engine, float Gamma )
 {
-	assert(Engine);
+	assert( Engine );
 
 	if ( Gamma < 0.01f )
-		Gamma  = 0.01f;
+		Gamma = 0.01f;
 
-	if ( ABS( Engine->CurrentGamma - Gamma) < 0.01f )
+	if ( ABS( Engine->CurrentGamma - Gamma ) < 0.01f )
 		return GE_TRUE;
 
 	Engine->CurrentGamma = Gamma;
 
-	geEngine_UpdateGamma(Engine);
+	geEngine_UpdateGamma( Engine );
 
 	return GE_TRUE;
 }
@@ -82,10 +85,10 @@ GENESISAPI geBoolean geEngine_SetGamma(geEngine *Engine, float Gamma)
 //=====================================================================================
 //	geEngine_GetGamma
 //=====================================================================================
-GENESISAPI geBoolean geEngine_GetGamma(geEngine *Engine, float *Gamma)
+GENESISAPI geBoolean geEngine_GetGamma( geEngine *Engine, float *Gamma )
 {
-	assert(Engine);
-	assert(Gamma);
+	assert( Engine );
+	assert( Gamma );
 
 	*Gamma = Engine->CurrentGamma;
 
@@ -95,16 +98,16 @@ GENESISAPI geBoolean geEngine_GetGamma(geEngine *Engine, float *Gamma)
 //=====================================================================================
 //	geEngine_UpdateFogEnable
 //=====================================================================================
-static geBoolean geEngine_UpdateFogEnable(geEngine *Engine)
+static geBoolean geEngine_UpdateFogEnable( geEngine *Engine )
 {
-	if (Engine->DriverInfo.RDriver)
+	if ( Engine->DriverInfo.RDriver )
 	{
-		return Engine->DriverInfo.RDriver->SetFogEnable(Engine->FogEnable, 
-														Engine->FogR, 
-														Engine->FogG, 
-														Engine->FogB, 
-														Engine->FogStart, 
-														Engine->FogEnd);
+		return Engine->DriverInfo.RDriver->SetFogEnable( Engine->FogEnable,
+		                                                 Engine->FogR,
+		                                                 Engine->FogG,
+		                                                 Engine->FogB,
+		                                                 Engine->FogStart,
+		                                                 Engine->FogEnd );
 	}
 
 	return GE_TRUE;
@@ -113,34 +116,34 @@ static geBoolean geEngine_UpdateFogEnable(geEngine *Engine)
 //=====================================================================================
 //	geEngine_SetFogEnable
 //=====================================================================================
-GENESISAPI geBoolean geEngine_SetFogEnable(geEngine *Engine, geBoolean Enable, float r, float g, float b, float Start, float End)
+GENESISAPI geBoolean geEngine_SetFogEnable( geEngine *Engine, geBoolean Enable, float r, float g, float b, float Start, float End )
 {
 	Engine->FogEnable = Enable;
-	
+
 	Engine->FogR = r;
 	Engine->FogG = g;
 	Engine->FogB = b;
 
 	Engine->FogStart = Start;
-	Engine->FogEnd = End;
+	Engine->FogEnd   = End;
 
-	return geEngine_UpdateFogEnable(Engine);
+	return geEngine_UpdateFogEnable( Engine );
 }
 
-void geEngine_UpdateGamma(geEngine *Engine)
+void geEngine_UpdateGamma( geEngine *Engine )
 {
-DRV_Driver * RDriver;
-geFloat LastBitmapGamma;
+	DRV_Driver *RDriver;
+	geFloat     LastBitmapGamma;
 
-	assert(Engine);
+	assert( Engine );
 
 	RDriver = Engine->DriverInfo.RDriver;
 
 	LastBitmapGamma = Engine->BitmapGamma;
 
-	if ( RDriver && (RDriver->EngineSettings->CanSupportFlags & DRV_SUPPORT_GAMMA) )
+	if ( RDriver && ( RDriver->EngineSettings->CanSupportFlags & DRV_SUPPORT_GAMMA ) )
 	{
-		if ( RDriver->SetGamma(Engine->CurrentGamma) )
+		if ( RDriver->SetGamma( Engine->CurrentGamma ) )
 			Engine->BitmapGamma = 1.0f;
 		else
 			Engine->BitmapGamma = Engine->CurrentGamma;
@@ -150,47 +153,46 @@ geFloat LastBitmapGamma;
 		Engine->BitmapGamma = Engine->CurrentGamma;
 	}
 
-	if ( ABS(Engine->BitmapGamma - LastBitmapGamma) < 0.1f )
+	if ( ABS( Engine->BitmapGamma - LastBitmapGamma ) < 0.1f )
 	{
 		Engine->BitmapGamma = LastBitmapGamma;
 	}
 	else
 	{
-	int i;
+		int i;
 
 		// Attach all the bitmaps for the engine
-		if (!BitmapList_SetGamma(Engine->AttachedBitmaps, Engine->BitmapGamma))
+		if ( !BitmapList_SetGamma( Engine->AttachedBitmaps, Engine->BitmapGamma ) )
 		{
-			geErrorLog_AddString(-1, "geEngine_UpdateGamma:  BitmapList_SetGamma for Engine failed", NULL);
+			geErrorLog_AddString( -1, "geEngine_UpdateGamma:  BitmapList_SetGamma for Engine failed", NULL );
 		}
 
-		for (i=0; i< Engine->NumWorlds; i++)
+		for ( i = 0; i < Engine->NumWorlds; i++ )
 		{
 			// <> sleazy to peak into World like this
-			if (!BitmapList_SetGamma(Engine->Worlds[i]->AttachedBitmaps, Engine->BitmapGamma ))
+			if ( !BitmapList_SetGamma( Engine->Worlds[ i ]->AttachedBitmaps, Engine->BitmapGamma ) )
 			{
-				geErrorLog_AddString(-1, "geEngine_UpdateGamma:  BitmapList_SetGamma for World failed", NULL);
+				geErrorLog_AddString( -1, "geEngine_UpdateGamma:  BitmapList_SetGamma for World failed", NULL );
 			}
 		}
 	}
-
 }
 
 //================================================================================
 //	geEngine_BitmapListInit
 //	Initializes the engine bitmaplist
 //================================================================================
-geBoolean geEngine_BitmapListInit(geEngine *Engine)
+geBoolean geEngine_BitmapListInit( geEngine *Engine )
 {
-	assert(Engine);
-	assert(Engine->AttachedBitmaps == NULL);
+	assert( Engine );
+	assert( Engine->AttachedBitmaps == NULL );
 
 	if ( Engine->AttachedBitmaps == NULL )
 	{
 		Engine->AttachedBitmaps = BitmapList_Create();
-		if ( ! Engine->AttachedBitmaps )
+		if ( !Engine->AttachedBitmaps )
 		{
-			geErrorLog_AddString(-1, "geEngine_BitmapListInit:  BitmapList_Create failed...", NULL);
+			geErrorLog_AddString( -1, "geEngine_BitmapListInit:  BitmapList_Create failed...", NULL );
 			return GE_FALSE;
 		}
 	}
@@ -200,17 +202,17 @@ geBoolean geEngine_BitmapListInit(geEngine *Engine)
 //================================================================================
 //	geEngine_BitmapListShutdown
 //================================================================================
-geBoolean geEngine_BitmapListShutdown(geEngine *Engine)
+geBoolean geEngine_BitmapListShutdown( geEngine *Engine )
 {
-	assert(Engine);
+	assert( Engine );
 
 	if ( Engine->AttachedBitmaps )
 	{
-		assert(	Engine->DriverInfo.Active || BitmapList_CountMembersAttached(Engine->AttachedBitmaps) == 0 );
+		assert( Engine->DriverInfo.Active || BitmapList_CountMembersAttached( Engine->AttachedBitmaps ) == 0 );
 
 		//BitmapList_DetachAll(Engine->AttachedBitmaps);
 		// Destroy detaches for you!
-		BitmapList_Destroy(Engine->AttachedBitmaps);
+		BitmapList_Destroy( Engine->AttachedBitmaps );
 		Engine->AttachedBitmaps = NULL;
 	}
 
@@ -220,44 +222,44 @@ geBoolean geEngine_BitmapListShutdown(geEngine *Engine)
 //================================================================================
 //	geEngine_AddBitmap
 //================================================================================
-GENESISAPI geBoolean geEngine_AddBitmap(geEngine *Engine, geBitmap *Bitmap)
+GENESISAPI geBoolean geEngine_AddBitmap( geEngine *Engine, geBitmap *Bitmap )
 {
-	assert(Engine);
-	assert(Bitmap);
-	assert(Engine->AttachedBitmaps);
+	assert( Engine );
+	assert( Bitmap );
+	assert( Engine->AttachedBitmaps );
 
-	assert(Engine->FrameState == FrameState_None);
+	assert( Engine->FrameState == FrameState_None );
 
-	if (!Engine->AttachedBitmaps)
+	if ( !Engine->AttachedBitmaps )
 	{
-		geErrorLog_AddString(-1, "geEngine_AddBitmap:  AttachedBitmaps is NULL.", NULL);
+		geErrorLog_AddString( -1, "geEngine_AddBitmap:  AttachedBitmaps is NULL.", NULL );
 		return GE_FALSE;
 	}
 
-	geBitmap_SetDriverFlags(Bitmap,RDRIVER_PF_2D);
+	geBitmap_SetDriverFlags( Bitmap, RDRIVER_PF_2D );
 
 	// Add bitmap to the lit of bitmaps attached to the engine
-	if ( BitmapList_Add(Engine->AttachedBitmaps, (geBitmap *)Bitmap) )
+	if ( BitmapList_Add( Engine->AttachedBitmaps, ( geBitmap * ) Bitmap ) )
 	{
 		Engine->Changed = GE_TRUE;
-		
-		#ifdef DO_ADDREMOVE_MESSAGES	
+
+#ifdef DO_ADDREMOVE_MESSAGES
 		{
-		char str[100];
-			sprintf(str,"Engine_AddBitmap : %08X : new\n",Bitmap);
-			OutputDebugString(str);
+			char str[ 100 ];
+			sprintf( str, "Engine_AddBitmap : %08X : new\n", Bitmap );
+			OutputDebugString( str );
 		}
-		#endif
+#endif
 	}
 	else
 	{
-		#ifdef DO_ADDREMOVE_MESSAGES	
+#ifdef DO_ADDREMOVE_MESSAGES
 		{
-		char str[100];
-			sprintf(str,"Engine_AddBitmap : %08X : old\n",Bitmap);
-			OutputDebugString(str);
+			char str[ 100 ];
+			sprintf( str, "Engine_AddBitmap : %08X : old\n", Bitmap );
+			OutputDebugString( str );
 		}
-		#endif
+#endif
 	}
 
 	return GE_TRUE;
@@ -266,79 +268,78 @@ GENESISAPI geBoolean geEngine_AddBitmap(geEngine *Engine, geBitmap *Bitmap)
 //================================================================================
 //	geEngine_RemoveBitmap
 //================================================================================
-GENESISAPI geBoolean geEngine_RemoveBitmap(geEngine *Engine, geBitmap *Bitmap)
+GENESISAPI geBoolean geEngine_RemoveBitmap( geEngine *Engine, geBitmap *Bitmap )
 {
-	assert(Engine);
-	assert(Bitmap);
-	assert(Engine->AttachedBitmaps);
+	assert( Engine );
+	assert( Bitmap );
+	assert( Engine->AttachedBitmaps );
 
-//	assert(Engine->FrameState == FrameState_None);
+	//	assert(Engine->FrameState == FrameState_None);
 
-	if ( ! Engine->AttachedBitmaps )
+	if ( !Engine->AttachedBitmaps )
 		return GE_FALSE;
 
-	if ( BitmapList_Remove(Engine->AttachedBitmaps,Bitmap) )
+	if ( BitmapList_Remove( Engine->AttachedBitmaps, Bitmap ) )
 	{
 		Engine->Changed = GE_TRUE;
-		
-		if (!geBitmap_DetachDriver(Bitmap, GE_TRUE))
+
+		if ( !geBitmap_DetachDriver( Bitmap, GE_TRUE ) )
 		{
-			geErrorLog_AddString(-1, "geEngine_RemoveBitmap:  geBitmap_DetachDriver failed...", NULL);
+			geErrorLog_AddString( -1, "geEngine_RemoveBitmap:  geBitmap_DetachDriver failed...", NULL );
 			return GE_FALSE;
 		}
 
-		#ifdef DO_ADDREMOVE_MESSAGES	
+#ifdef DO_ADDREMOVE_MESSAGES
 		{
-		char str[100];
-			sprintf(str,"Engine_RemoveBitmap : %08X : removed\n",Bitmap);
-			OutputDebugString(str);
+			char str[ 100 ];
+			sprintf( str, "Engine_RemoveBitmap : %08X : removed\n", Bitmap );
+			OutputDebugString( str );
 		}
-		#endif
+#endif
 	}
 	else
 	{
-		#ifdef DO_ADDREMOVE_MESSAGES	
+#ifdef DO_ADDREMOVE_MESSAGES
 		{
-		char str[100];
-			sprintf(str,"Engine_RemoveBitmap : %08X : left\n",Bitmap);
-			OutputDebugString(str);
+			char str[ 100 ];
+			sprintf( str, "Engine_RemoveBitmap : %08X : left\n", Bitmap );
+			OutputDebugString( str );
 		}
-		#endif
+#endif
 	}
-	
+
 	return GE_TRUE;
 }
 
 //=====================================================================================
 //	geEngine_SetDriverAndMode
 //=====================================================================================
-GENESISAPI geBoolean geEngine_SetDriverAndMode(	geEngine *Engine, 
-												geDriver *Driver, 
-												geDriver_Mode *DriverMode)
+GENESISAPI geBoolean geEngine_SetDriverAndMode( geEngine      *Engine,
+                                                geDriver      *Driver,
+                                                geDriver_Mode *DriverMode )
 {
-	assert(Engine);
-	assert(Driver);
-	assert(DriverMode);
+	assert( Engine );
+	assert( Driver );
+	assert( DriverMode );
 
 	// init calls _Reset and eventually it gets down and Detaches all
 
 	//	Set up the Render Driver
-	if (!Engine_InitDriver(Engine, Driver, DriverMode))
+	if ( !Engine_InitDriver( Engine, Driver, DriverMode ) )
 		return GE_FALSE;
 
 	// Force a Driver update
-	geEngine_SetAllWorldChangedFlag(Engine, GE_TRUE);
+	geEngine_SetAllWorldChangedFlag( Engine, GE_TRUE );
 	Engine->Changed = GE_TRUE;
 
-	geEngine_UpdateGamma(Engine);
-	geEngine_UpdateFogEnable(Engine);
+	geEngine_UpdateGamma( Engine );
+	geEngine_UpdateFogEnable( Engine );
 
 #ifdef DONT_DO_SPLASH
-	#pragma message("Engine :splash screen disabled")
 	Engine = Engine;
 #else
 	// Do the splash screen
-	if	(DoSplashScreen(Engine, DriverMode) == GE_FALSE)
+	if ( DoSplashScreen( Engine, DriverMode ) == GE_FALSE )
 		return GE_FALSE;
 #endif
 
@@ -348,11 +349,11 @@ GENESISAPI geBoolean geEngine_SetDriverAndMode(	geEngine *Engine,
 //=====================================================================================
 //	geEngine_GetDriverSystem
 //=====================================================================================
-GENESISAPI geDriver_System *geEngine_GetDriverSystem(geEngine *Engine)
+GENESISAPI geDriver_System *geEngine_GetDriverSystem( geEngine *Engine )
 {
-	assert(Engine);
+	assert( Engine );
 
-	return (geDriver_System*)&Engine->DriverInfo;
+	return ( geDriver_System * ) &Engine->DriverInfo;
 }
 
 //=====================================================================================
@@ -360,24 +361,24 @@ GENESISAPI geDriver_System *geEngine_GetDriverSystem(geEngine *Engine)
 //		this hits the drivers activation code to manage
 //		surfaces and exclusive modes for devices (WM_ACTIVATEAPP)
 //=====================================================================================
-GENESISAPI geBoolean geEngine_Activate(geEngine *Engine, geBoolean bActive)
+GENESISAPI geBoolean geEngine_Activate( geEngine *Engine, geBoolean bActive )
 {
-	DRV_Driver	*RDriver;
-	
-	assert(Engine);
+	DRV_Driver *RDriver;
 
-	RDriver	=Engine->DriverInfo.RDriver;
+	assert( Engine );
 
-	if(Engine->DriverInfo.Active && RDriver)
+	RDriver = Engine->DriverInfo.RDriver;
+
+	if ( Engine->DriverInfo.Active && RDriver )
 	{
-		// <> this can sometimes be a pain for debugging
-		#if 1
+// <> this can sometimes be a pain for debugging
+#if 1
 		if ( RDriver->SetActive )
-			return RDriver->SetActive(bActive);
-		#endif
+			return RDriver->SetActive( bActive );
+#endif
 	}
 
-	return	GE_TRUE;
+	return GE_TRUE;
 }
 
 //====================================================================================
@@ -385,47 +386,47 @@ GENESISAPI geBoolean geEngine_Activate(geEngine *Engine, geBoolean bActive)
 //		this call updates the drivers with a new rect to blit to
 //		(usually the result of a window move or resize)
 //====================================================================================
-GENESISAPI geBoolean geEngine_UpdateWindow(geEngine *Engine)
+GENESISAPI geBoolean geEngine_UpdateWindow( geEngine *Engine )
 {
-	DRV_Driver	*RDriver;
-		
-	RDriver	= Engine->DriverInfo.RDriver;
+	DRV_Driver *RDriver;
 
-	if(Engine->DriverInfo.Active && RDriver)
+	RDriver = Engine->DriverInfo.RDriver;
+
+	if ( Engine->DriverInfo.Active && RDriver )
 	{
-		if (RDriver->UpdateWindow )
+		if ( RDriver->UpdateWindow )
 			return RDriver->UpdateWindow();
 	}
 
-	return	GE_TRUE;
+	return GE_TRUE;
 }
 
 //=====================================================================================
 //	geEngine_ShutdownDriver
 //=====================================================================================
-GENESISAPI geBoolean geEngine_ShutdownDriver(geEngine *Engine)
+GENESISAPI geBoolean geEngine_ShutdownDriver( geEngine *Engine )
 {
-Sys_DriverInfo *DrvInfo;
+	Sys_DriverInfo *DrvInfo;
 
-	assert(Engine);
+	assert( Engine );
 
-	DrvInfo = &(Engine->DriverInfo);
+	DrvInfo = &( Engine->DriverInfo );
 
-	assert(DrvInfo);
+	assert( DrvInfo );
 
-	if (!DrvInfo->Active)
-		return GE_TRUE;			// Just return true, and don't do nothing
+	if ( !DrvInfo->Active )
+		return GE_TRUE;// Just return true, and don't do nothing
 
-	#if 0 // <>	
-	#ifdef _DEBUG
+#if 0// <>
+#	ifdef _DEBUG
 	OutputDebugString("geEngine_ShutdownDriver\n");
-	#endif
-	#endif
+#	endif
+#endif
 
 	// First, reset the driver
-	if (!geEngine_ResetDriver(Engine))
+	if ( !geEngine_ResetDriver( Engine ) )
 	{
-		geErrorLog_AddString(-1, "geEngine_ShutdownDriver:  geEngine_ResetDriver failed.", NULL);
+		geErrorLog_AddString( -1, "geEngine_ShutdownDriver:  geEngine_ResetDriver failed.", NULL );
 		return GE_FALSE;
 	}
 
@@ -437,7 +438,7 @@ Sys_DriverInfo *DrvInfo;
 		return GE_FALSE;
 	}
 
-	DrvInfo->Active = GE_FALSE;
+	DrvInfo->Active  = GE_FALSE;
 	DrvInfo->RDriver = NULL;
 
 	return GE_TRUE;
@@ -449,146 +450,145 @@ Sys_DriverInfo *DrvInfo;
 //		* stop passing World ?
 //		* cut the Flags parameter and pass in zero ?
 //================================================================================
-GENESISAPI void GENESISCC geEngine_RenderPoly(const geEngine *Engine,
-	const GE_TLVertex *Points, int NumPoints, const geBitmap *Texture, uint32 Flags)
+GENESISAPI void GENESISCC geEngine_RenderPoly( const geEngine    *Engine,
+                                               const GE_TLVertex *Points, int NumPoints, const geBitmap *Texture, uint32 Flags )
 {
-	geBoolean	Ret;
+	geBoolean Ret;
 
-	assert(Engine && Points );
+	assert( Engine && Points );
 
 	if ( Texture )
 	{
-	geRDriver_THandle * TH;
-	
-//		assert(World);
-//		assert(geEngine_HasWorld(Engine, World) == GE_TRUE);
-//		assert(World->AttachedBitmaps);
-//		assert(BitmapList_Has(World->AttachedBitmaps, (geBitmap*)Texture) == GE_TRUE);
+		geRDriver_THandle *TH;
 
-		TH = geBitmap_GetTHandle(Texture);
-		assert(TH);
+		//		assert(World);
+		//		assert(geEngine_HasWorld(Engine, World) == GE_TRUE);
+		//		assert(World->AttachedBitmaps);
+		//		assert(BitmapList_Has(World->AttachedBitmaps, (geBitmap*)Texture) == GE_TRUE);
 
-		Ret = Engine->DriverInfo.RDriver->RenderMiscTexturePoly((DRV_TLVertex *)Points,
-			NumPoints,TH,Flags);
+		TH = geBitmap_GetTHandle( Texture );
+		assert( TH );
+
+		Ret = Engine->DriverInfo.RDriver->RenderMiscTexturePoly( ( DRV_TLVertex * ) Points,
+		                                                         NumPoints, TH, Flags );
 	}
 	else
 	{
-		Ret = Engine->DriverInfo.RDriver->RenderGouraudPoly((DRV_TLVertex *)Points,
-			NumPoints,Flags);
+		Ret = Engine->DriverInfo.RDriver->RenderGouraudPoly( ( DRV_TLVertex * ) Points,
+		                                                     NumPoints, Flags );
 	}
 
-	assert(Ret == GE_TRUE);
+	assert( Ret == GE_TRUE );
 }
 
-GENESISAPI void GENESISCC geEngine_RenderPolyArray(const geEngine *Engine, const GE_TLVertex ** pPoints, int * pNumPoints, int NumPolys, 
-								const geBitmap *Texture, uint32 Flags)
+GENESISAPI void GENESISCC geEngine_RenderPolyArray( const geEngine *Engine, const GE_TLVertex **pPoints, int *pNumPoints, int NumPolys,
+                                                    const geBitmap *Texture, uint32 Flags )
 {
-geBoolean	Ret;
-int pn;
-DRV_Driver * Driver;
+	geBoolean   Ret;
+	int         pn;
+	DRV_Driver *Driver;
 
-	assert(Engine && pPoints && pNumPoints );
+	assert( Engine && pPoints && pNumPoints );
 
 	Driver = Engine->DriverInfo.RDriver;
-	assert(Driver);
+	assert( Driver );
 
 	if ( Texture )
 	{
-	geRDriver_THandle * TH;
-	
-		TH = geBitmap_GetTHandle(Texture);
-		assert(TH);
+		geRDriver_THandle *TH;
 
-		for(pn=0;pn<NumPolys;pn++)
+		TH = geBitmap_GetTHandle( Texture );
+		assert( TH );
+
+		for ( pn = 0; pn < NumPolys; pn++ )
 		{
-			assert(pPoints[pn]);
-			Ret = Driver->RenderMiscTexturePoly((DRV_TLVertex *)pPoints[pn],
-				pNumPoints[pn],TH,Flags);
-			assert(Ret);
+			assert( pPoints[ pn ] );
+			Ret = Driver->RenderMiscTexturePoly( ( DRV_TLVertex * ) pPoints[ pn ],
+			                                     pNumPoints[ pn ], TH, Flags );
+			assert( Ret );
 		}
 	}
 	else
 	{
-		for(pn=0;pn<NumPolys;pn++)
+		for ( pn = 0; pn < NumPolys; pn++ )
 		{
-			assert(pPoints[pn]);
-			Ret = Driver->RenderGouraudPoly((DRV_TLVertex *)pPoints[pn],
-				pNumPoints[pn],Flags);
-			assert(Ret);
+			assert( pPoints[ pn ] );
+			Ret = Driver->RenderGouraudPoly( ( DRV_TLVertex * ) pPoints[ pn ],
+			                                 pNumPoints[ pn ], Flags );
+			assert( Ret );
 		}
 	}
-
 }
 
 //================================================================================
 //	geEngine_DrawBitmap
 //================================================================================
-GENESISAPI geBoolean GENESISCC geEngine_DrawBitmap(const geEngine *Engine,
-	const geBitmap *Bitmap,
-	const geRect * Source, uint32 x, uint32 y)
+GENESISAPI geBoolean GENESISCC geEngine_DrawBitmap( const geEngine *Engine,
+                                                    const geBitmap *Bitmap,
+                                                    const geRect *Source, uint32 x, uint32 y )
 {
-geRDriver_THandle * TH;
-geBoolean Ret;
-	
-	//#pragma message("make geRect the same as RECT, or don't use RECT!?")
-	// The drivers once did not include genesis .h's
-	// (D3D uses RECT so thats why the drivers adopted RECT's...)
-	#pragma message("Engine : Make the drivers use geRect, JP")
+	geRDriver_THandle *TH;
+	geBoolean          Ret;
 
-	assert(Engine);
-	assert(Bitmap);
-	
-	assert(Engine->AttachedBitmaps);
-	assert(BitmapList_Has(Engine->AttachedBitmaps, (geBitmap *)Bitmap) == GE_TRUE);
+//#pragma message("make geRect the same as RECT, or don't use RECT!?")
+// The drivers once did not include genesis .h's
+// (D3D uses RECT so thats why the drivers adopted RECT's...)
+#pragma message( "Engine : Make the drivers use geRect, JP" )
 
-	TH = geBitmap_GetTHandle(Bitmap);
-	assert(TH);
+	assert( Engine );
+	assert( Bitmap );
+
+	assert( Engine->AttachedBitmaps );
+	assert( BitmapList_Has( Engine->AttachedBitmaps, ( geBitmap * ) Bitmap ) == GE_TRUE );
+
+	TH = geBitmap_GetTHandle( Bitmap );
+	assert( TH );
 
 	//Ret = Engine->DriverInfo.RDriver->Drawdecal(TH,(RECT *)Source,x,y);
 
-	if (Source)		// Source CAN be NULL!!!
+	if ( Source )// Source CAN be NULL!!!
 	{
-		RECT rect;
+		geWinRect rect;
 
-		rect.left = Source->Left;
-		rect.top = Source->Top;
-		rect.right = Source->Right;
+		rect.left   = Source->Left;
+		rect.top    = Source->Top;
+		rect.right  = Source->Right;
 		rect.bottom = Source->Bottom;
 
-		Ret = Engine->DriverInfo.RDriver->DrawDecal(TH, &rect, x,y);
+		Ret = Engine->DriverInfo.RDriver->DrawDecal( TH, &rect, x, y );
 	}
 	else
-		Ret = Engine->DriverInfo.RDriver->DrawDecal(TH, NULL, x,y);
+		Ret = Engine->DriverInfo.RDriver->DrawDecal( TH, NULL, x, y );
 
-	if ( ! Ret )
+	if ( !Ret )
 	{
-		geErrorLog_AddString(-1,"geEngine_DrawBitmap : DrawDecal failed", NULL);	
+		geErrorLog_AddString( -1, "geEngine_DrawBitmap : DrawDecal failed", NULL );
 	}
 
-return Ret;
+	return Ret;
 }
 
 //====================================================================================
 //	geEngine_RebuildFastWorldList
 //====================================================================================
-geBoolean geEngine_RebuildFastWorldList(geEngine *Engine)
+geBoolean geEngine_RebuildFastWorldList( geEngine *Engine )
 {
-	int32				i;
-	geEngine_WorldList	*pWorldList;
+	int32               i;
+	geEngine_WorldList *pWorldList;
 
 	Engine->NumWorlds = 0;
 
 	pWorldList = Engine->WorldList;
 
-	for (i=0; i< ENGINE_MAX_WORLDS; i++, pWorldList++)
+	for ( i = 0; i < ENGINE_MAX_WORLDS; i++, pWorldList++ )
 	{
-		if (pWorldList->RefCount > 0)
+		if ( pWorldList->RefCount > 0 )
 		{
-			assert(pWorldList->World);
+			assert( pWorldList->World );
 
-			Engine->Worlds[Engine->NumWorlds++] = pWorldList->World;
+			Engine->Worlds[ Engine->NumWorlds++ ] = pWorldList->World;
 
-			assert(Engine->NumWorlds <= ENGINE_MAX_WORLDS);
+			assert( Engine->NumWorlds <= ENGINE_MAX_WORLDS );
 		}
 	}
 
@@ -598,70 +598,69 @@ geBoolean geEngine_RebuildFastWorldList(geEngine *Engine)
 //====================================================================================
 // geEngine_AddWorld
 //====================================================================================
-GENESISAPI geBoolean geEngine_AddWorld(geEngine *Engine, geWorld *World)
+GENESISAPI geBoolean geEngine_AddWorld( geEngine *Engine, geWorld *World )
 {
-	int32				i;
-	geEngine_WorldList	*pWorldList;
+	int32               i;
+	geEngine_WorldList *pWorldList;
 
-	assert(Engine);
-	assert(World);
+	assert( Engine );
+	assert( World );
 
 	// Try to find it in the list first
 	pWorldList = Engine->WorldList;
-	for (i=0; i< ENGINE_MAX_WORLDS; i++, pWorldList++)
+	for ( i = 0; i < ENGINE_MAX_WORLDS; i++, pWorldList++ )
 	{
-		if (pWorldList->World == World)	// World is allready in list
+		if ( pWorldList->World == World )// World is allready in list
 		{
-			assert(pWorldList->RefCount > 0);		// There should allready be a ref count!!!
+			assert( pWorldList->RefCount > 0 );// There should allready be a ref count!!!
 			pWorldList->RefCount++;
-				
-			#ifdef DO_ADDREMOVE_MESSAGES	
+
+#ifdef DO_ADDREMOVE_MESSAGES
 			{
-			char str[100];
-				sprintf(str,"Engine_AddWorld : %08X : old\n",World);
-				OutputDebugString(str);
+				char str[ 100 ];
+				sprintf( str, "Engine_AddWorld : %08X : old\n", World );
+				OutputDebugString( str );
 			}
-			#endif
+#endif
 
 			return GE_TRUE;
 		}
-
 	}
 
-	#ifdef DO_ADDREMOVE_MESSAGES	
+#ifdef DO_ADDREMOVE_MESSAGES
 	{
-	char str[100];
-		sprintf(str,"Engine_AddWorld : %08X : new\n",World);
-		OutputDebugString(str);
+		char str[ 100 ];
+		sprintf( str, "Engine_AddWorld : %08X : new\n", World );
+		OutputDebugString( str );
 	}
-	#endif
+#endif
 
 	// Not found, add a new one
 	pWorldList = Engine->WorldList;
-	for (i=0; i< ENGINE_MAX_WORLDS; i++, pWorldList++)
+	for ( i = 0; i < ENGINE_MAX_WORLDS; i++, pWorldList++ )
 	{
-		if (!pWorldList->RefCount)
+		if ( !pWorldList->RefCount )
 			break;
 	}
 
-	if (i == ENGINE_MAX_WORLDS)
+	if ( i == ENGINE_MAX_WORLDS )
 	{
-		geErrorLog_AddString(-1, "geEngine_AddWorld:  Out of slots.", NULL);
+		geErrorLog_AddString( -1, "geEngine_AddWorld:  Out of slots.", NULL );
 		return GE_FALSE;
-	}	
+	}
 
 	// Save the info for the first time
-	pWorldList->World = World;
+	pWorldList->World    = World;
 	pWorldList->RefCount = 1;
 
 	// Re-build the fast list of worlds
-	geEngine_RebuildFastWorldList(Engine);
+	geEngine_RebuildFastWorldList( Engine );
 	Engine->Changed = GE_TRUE;
-	World->Changed = GE_TRUE;
+	World->Changed  = GE_TRUE;
 
-	if (!geWorld_CreateRef(World))
+	if ( !geWorld_CreateRef( World ) )
 	{
-		geErrorLog_AddString(-1, "geEngine_AddWorld:  geWorld_CreateRef failed...", NULL);
+		geErrorLog_AddString( -1, "geEngine_AddWorld:  geWorld_CreateRef failed...", NULL );
 		return GE_FALSE;
 	}
 
@@ -671,76 +670,76 @@ GENESISAPI geBoolean geEngine_AddWorld(geEngine *Engine, geWorld *World)
 //====================================================================================
 // geEngine_RemoveWorld
 //====================================================================================
-GENESISAPI geBoolean geEngine_RemoveWorld(geEngine *Engine, geWorld *World)
+GENESISAPI geBoolean geEngine_RemoveWorld( geEngine *Engine, geWorld *World )
 {
-	int32				i;
-	geEngine_WorldList	*pWorldList;
+	int32               i;
+	geEngine_WorldList *pWorldList;
 
-	assert(Engine);
-	assert(World);
+	assert( Engine );
+	assert( World );
 
-	// Try to find it in the list 
+	// Try to find it in the list
 	pWorldList = Engine->WorldList;
-	for (i=0; i< ENGINE_MAX_WORLDS; i++, pWorldList++)
+	for ( i = 0; i < ENGINE_MAX_WORLDS; i++, pWorldList++ )
 	{
-		if (pWorldList->World == World)	
+		if ( pWorldList->World == World )
 			break;
 	}
 
-	if (i == ENGINE_MAX_WORLDS)
+	if ( i == ENGINE_MAX_WORLDS )
 	{
-		geErrorLog_AddString(-1, "geEngine_RemoveWorld:  World not found.", NULL);
+		geErrorLog_AddString( -1, "geEngine_RemoveWorld:  World not found.", NULL );
 		return GE_FALSE;
-	}	
+	}
 
-	assert(pWorldList->RefCount > 0);
+	assert( pWorldList->RefCount > 0 );
 
 	// Decrease the reference count on the worldlist
 	pWorldList->RefCount--;
 
 	// When the ref count gos to zero, remove the world for good
-	if (pWorldList->RefCount == 0)		
+	if ( pWorldList->RefCount == 0 )
 	{
-	
-		#ifdef DO_ADDREMOVE_MESSAGES	
+
+#ifdef DO_ADDREMOVE_MESSAGES
 		{
-		char str[100];
-			sprintf(str,"Engine_RemoveWorld : %08X : removed\n",World);
-			OutputDebugString(str);
+			char str[ 100 ];
+			sprintf( str, "Engine_RemoveWorld : %08X : removed\n", World );
+			OutputDebugString( str );
 		}
-		#endif
+#endif
 
 		// Detach all the bitmaps in the world before finally removing it
-		if (Engine->DriverInfo.Active)
+		if ( Engine->DriverInfo.Active )
 		{
-			if (!geWorld_DetachAll(World))
+			if ( !geWorld_DetachAll( World ) )
 			{
-				geErrorLog_AddString(-1, "geEngine_RemoveWorld:  geWorld_DetachAll failed.", NULL);
+				geErrorLog_AddString( -1, "geEngine_RemoveWorld:  geWorld_DetachAll failed.", NULL );
 				return GE_FALSE;
 			}
 		}
 
 		// Clear this pWorldList slot
-		memset(pWorldList, 0, sizeof(*pWorldList));
-		
+		memset( pWorldList, 0, sizeof( *pWorldList ) );
+
 		// Re-build the fast list of worlds
-		geEngine_RebuildFastWorldList(Engine);
+		geEngine_RebuildFastWorldList( Engine );
 
 		// Force an update
 		Engine->Changed = GE_TRUE;
-		
+
 		// Free the world (decrease it's reference count)
-		geWorld_Free(World);
+		geWorld_Free( World );
 	}
 	else
 	{
-		#ifdef DO_ADDREMOVE_MESSAGES	
+#ifdef DO_ADDREMOVE_MESSAGES
 		{
-		char str[100];
-			sprintf(str,"Engine_RemoveWorld : %08X : left\n",World);
-			OutputDebugString(str);
+			char str[ 100 ];
+			sprintf( str, "Engine_RemoveWorld : %08X : left\n", World );
+			OutputDebugString( str );
 		}
-		#endif
+#endif
 	}
 
 	return GE_TRUE;
@@ -750,28 +749,28 @@ GENESISAPI geBoolean geEngine_RemoveWorld(geEngine *Engine, geWorld *World)
 //====================================================================================
 // geEngine_RemoveAllWorlds
 //====================================================================================
-geBoolean geEngine_RemoveAllWorlds(geEngine *Engine)
+geBoolean geEngine_RemoveAllWorlds( geEngine *Engine )
 {
-	int32				i;
-	geEngine_WorldList	*pWorldList;
-	geWorld				*World;
+	int32               i;
+	geEngine_WorldList *pWorldList;
+	geWorld            *World;
 
-	assert(Engine);
+	assert( Engine );
 
-	// Try to find it in the list 
+	// Try to find it in the list
 	pWorldList = Engine->WorldList;
-	for (i=0; i< ENGINE_MAX_WORLDS; i++, pWorldList++)
+	for ( i = 0; i < ENGINE_MAX_WORLDS; i++, pWorldList++ )
 	{
 		World = pWorldList->World;
 		if ( World )
 		{
-			assert(pWorldList->RefCount > 0);
+			assert( pWorldList->RefCount > 0 );
 
-			if (Engine->DriverInfo.Active)
+			if ( Engine->DriverInfo.Active )
 			{
-				if (!geWorld_DetachAll(World))
+				if ( !geWorld_DetachAll( World ) )
 				{
-					geErrorLog_AddString(-1, "geEngine_RemoveWorld:  geWorld_DetachAll failed.", NULL);
+					geErrorLog_AddString( -1, "geEngine_RemoveWorld:  geWorld_DetachAll failed.", NULL );
 					return GE_FALSE;
 				}
 			}
@@ -779,13 +778,13 @@ geBoolean geEngine_RemoveAllWorlds(geEngine *Engine)
 			assert( World->RefCount >= 1 );
 
 			// Free the world (decrease it's reference count)
-			geWorld_Free(World);
+			geWorld_Free( World );
 		}
-		memset(pWorldList, 0, sizeof(*pWorldList));
+		memset( pWorldList, 0, sizeof( *pWorldList ) );
 	}
-		
+
 	// Force an update
-	geEngine_RebuildFastWorldList(Engine);
+	geEngine_RebuildFastWorldList( Engine );
 	Engine->Changed = GE_TRUE;
 
 	return GE_TRUE;
@@ -794,49 +793,49 @@ geBoolean geEngine_RemoveAllWorlds(geEngine *Engine)
 //=====================================================================================
 //	geEngine_HasWorld
 //=====================================================================================
-geBoolean geEngine_HasWorld(const geEngine *Engine, const geWorld *World)
+geBoolean geEngine_HasWorld( const geEngine *Engine, const geWorld *World )
 {
-	int32						i;
-	const geEngine_WorldList	*pWorldList;
+	int32                     i;
+	const geEngine_WorldList *pWorldList;
 
-	assert(Engine);
-	assert(World);
+	assert( Engine );
+	assert( World );
 
-	// Try to find it in the list 
+	// Try to find it in the list
 	pWorldList = Engine->WorldList;
-	for (i=0; i< ENGINE_MAX_WORLDS; i++, pWorldList++)
+	for ( i = 0; i < ENGINE_MAX_WORLDS; i++, pWorldList++ )
 	{
-		if (pWorldList->World == World)	
+		if ( pWorldList->World == World )
 		{
-			assert(pWorldList->RefCount > 0);
+			assert( pWorldList->RefCount > 0 );
 			return GE_TRUE;
 		}
 	}
-	
+
 	return GE_FALSE;
 }
 
 //=====================================================================================
 //	geEngine_DetachAllWorlds
 //=====================================================================================
-geBoolean geEngine_DetachAllWorlds(geEngine *Engine)
+geBoolean geEngine_DetachAllWorlds( geEngine *Engine )
 {
-	int32		i;
-	geBoolean	Ret;
+	int32     i;
+	geBoolean Ret;
 
 	Ret = GE_TRUE;
 
-	for (i=0; i< Engine->NumWorlds; i++)
+	for ( i = 0; i < Engine->NumWorlds; i++ )
 	{
-		if (!geWorld_DetachAll(Engine->Worlds[i]))
+		if ( !geWorld_DetachAll( Engine->Worlds[ i ] ) )
 		{
-			geErrorLog_AddString(-1, "geEngine_DetachAllWorlds:  geWorld_DetachAll failed.", NULL);
-			Ret =  GE_FALSE;
+			geErrorLog_AddString( -1, "geEngine_DetachAllWorlds:  geWorld_DetachAll failed.", NULL );
+			Ret = GE_FALSE;
 		}
-		
-		if (!geEngine_DestroyWorldLightmapTHandles(Engine, Engine->Worlds[i]))
+
+		if ( !geEngine_DestroyWorldLightmapTHandles( Engine, Engine->Worlds[ i ] ) )
 		{
-			geErrorLog_AddString(-1, "geEngine_DetachAllWorlds:  geEngine_DestroyWorldLightmapTHandles failed.", NULL);
+			geErrorLog_AddString( -1, "geEngine_DetachAllWorlds:  geEngine_DestroyWorldLightmapTHandles failed.", NULL );
 			Ret = GE_FALSE;
 		}
 	}
@@ -847,131 +846,131 @@ geBoolean geEngine_DetachAllWorlds(geEngine *Engine)
 //=====================================================================================
 //	geEngine_CreateWorldLightmapTHandles
 //=====================================================================================
-geBoolean geEngine_CreateWorldLightmapTHandles(geEngine *Engine, geWorld *World)
+geBoolean geEngine_CreateWorldLightmapTHandles( geEngine *Engine, geWorld *World )
 {
-	DRV_Driver			*RDriver;
-	int32				i;
-	World_BSP			*BSP;
-	GBSP_BSPData		*BSPData;
-	#ifdef _DEBUG
-	int	CreatedCount = 0;
-	#endif	
+	DRV_Driver   *RDriver;
+	int32         i;
+	World_BSP    *BSP;
+	GBSP_BSPData *BSPData;
+#ifdef _DEBUG
+	int CreatedCount = 0;
+#endif
 
-	assert(Engine);
-	assert(World);
+	assert( Engine );
+	assert( World );
 
-	BSP = World->CurrentBSP;
+	BSP     = World->CurrentBSP;
 	BSPData = &BSP->BSPData;
 	RDriver = Engine->DriverInfo.RDriver;
 
 	//
 	//	Create all the lightmap thandles
 	//
-	World_SetEngine(Engine);
-	World_SetWorld(World);
-	World_SetGBSP(World->CurrentBSP);
+	World_SetEngine( Engine );
+	World_SetWorld( World );
+	World_SetGBSP( World->CurrentBSP );
 
-	for (i=0; i<BSPData->NumGFXFaces; i++)
+	for ( i = 0; i < BSPData->NumGFXFaces; i++ )
 	{
-		BOOL		D;
-		DRV_LInfo	*pLInfo;
+		BOOL       D;
+		DRV_LInfo *pLInfo;
 
-		pLInfo = &BSP->SurfInfo[i].LInfo;
+		pLInfo = &BSP->SurfInfo[ i ].LInfo;
 
-		if ((pLInfo->Face == -1))
+		if ( ( pLInfo->Face == -1 ) )
 			continue;
 
-		if (!(BSP->SurfInfo[i].Flags & SURFINFO_LIGHTMAP))
+		if ( !( BSP->SurfInfo[ i ].Flags & SURFINFO_LIGHTMAP ) )
 			continue;
 
-		assert(!pLInfo->THandle);		// This should be true!!!
-		
-		if (pLInfo->THandle)
+		assert( !pLInfo->THandle );// This should be true!!!
+
+		if ( pLInfo->THandle )
 			continue;
-		
-		Light_SetupLightmap(pLInfo, &D);
+
+		Light_SetupLightmap( pLInfo, &D );
 
 		// {} _LIGHTMAP_
-		pLInfo->THandle = Engine_CreateTHandle(Engine,pLInfo->Width, pLInfo->Height, 1, ENGINE_PF_LIGHTMAP);
+		pLInfo->THandle = Engine_CreateTHandle( Engine, pLInfo->Width, pLInfo->Height, 1, ENGINE_PF_LIGHTMAP );
 
-		if (!pLInfo->THandle)
+		if ( !pLInfo->THandle )
 		{
-			geErrorLog_AddString(-1, RDriver->LastErrorStr, NULL);
-			geErrorLog_AddString(-1, "geEngine_CreateWorldTHandles: Engine_CreateTHandle failed...\n", NULL);
+			geErrorLog_AddString( -1, RDriver->LastErrorStr, NULL );
+			geErrorLog_AddString( -1, "geEngine_CreateWorldTHandles: Engine_CreateTHandle failed...\n", NULL );
 			return GE_FALSE;
-		}	
-		
-		#ifdef _DEBUG
-		CreatedCount ++;
-		#endif	
+		}
+
+#ifdef _DEBUG
+		CreatedCount++;
+#endif
 	}
 
 #ifdef _DEBUG
-	Log_Printf("geEngine_CreateWorldLightmapTHandles:Created %d of %d\n",CreatedCount,BSPData->NumGFXFaces);
+	Log_Printf( "geEngine_CreateWorldLightmapTHandles:Created %d of %d\n", CreatedCount, BSPData->NumGFXFaces );
 #endif
 
-	return GE_TRUE; 
+	return GE_TRUE;
 }
 
 //=====================================================================================
 //	geEngine_DestroyWorldLightmapTHandles
 //=====================================================================================
-geBoolean geEngine_DestroyWorldLightmapTHandles(geEngine *Engine, geWorld *World)
+geBoolean geEngine_DestroyWorldLightmapTHandles( geEngine *Engine, geWorld *World )
 {
-	DRV_Driver			*RDriver;
-	int32				i;
-	World_BSP			*BSP;
-	GBSP_BSPData		*BSPData;
-	geBoolean			Ret;
-	int32				Handle1=1768710981;
-	int32				Handle2=0x21657370;
-	#ifdef _DEBUG
-	int	DestroyedCount = 0;
-	#endif	
+	DRV_Driver   *RDriver;
+	int32         i;
+	World_BSP    *BSP;
+	GBSP_BSPData *BSPData;
+	geBoolean     Ret;
+	int32         Handle1 = 1768710981;
+	int32         Handle2 = 0x21657370;
+#ifdef _DEBUG
+	int DestroyedCount = 0;
+#endif
 
-	assert(Engine);
-	assert(World);
+	assert( Engine );
+	assert( World );
 
 	Ret = GE_TRUE;
 
-	BSP = World->CurrentBSP;
+	BSP     = World->CurrentBSP;
 	BSPData = &BSP->BSPData;
 	RDriver = Engine->DriverInfo.RDriver;
 
 	//
 	//	Create all the lightmap thandles
 	//
-	World_SetEngine(Engine);
-	World_SetWorld(World);
-	World_SetGBSP(World->CurrentBSP);
+	World_SetEngine( Engine );
+	World_SetWorld( World );
+	World_SetGBSP( World->CurrentBSP );
 
-	for (i=0; i<BSPData->NumGFXFaces; i++)
+	for ( i = 0; i < BSPData->NumGFXFaces; i++ )
 	{
-		DRV_LInfo	*pLInfo;
+		DRV_LInfo *pLInfo;
 
-		pLInfo = &BSP->SurfInfo[i].LInfo;
+		pLInfo = &BSP->SurfInfo[ i ].LInfo;
 
-		if ((pLInfo->Face == -1))
+		if ( ( pLInfo->Face == -1 ) )
 			continue;
 
-		if (!(BSP->SurfInfo[i].Flags & SURFINFO_LIGHTMAP))
+		if ( !( BSP->SurfInfo[ i ].Flags & SURFINFO_LIGHTMAP ) )
 			continue;
 
-		if (!pLInfo->THandle)
+		if ( !pLInfo->THandle )
 			continue;
-		
-		if (!RDriver->THandle_Destroy(pLInfo->THandle))
+
+		if ( !RDriver->THandle_Destroy( pLInfo->THandle ) )
 			Ret = GE_FALSE;
 
 		pLInfo->THandle = NULL;
-		
-		#ifdef _DEBUG
-		DestroyedCount ++;
-		#endif	
+
+#ifdef _DEBUG
+		DestroyedCount++;
+#endif
 	}
 
 #ifdef _DEBUG
-	Log_Printf("geEngine_DestroyWorldLightmapTHandles: Freed %d of %d\n",DestroyedCount,BSPData->NumGFXFaces);
+	Log_Printf( "geEngine_DestroyWorldLightmapTHandles: Freed %d of %d\n", DestroyedCount, BSPData->NumGFXFaces );
 #endif
 
 	return Ret;
@@ -980,29 +979,28 @@ geBoolean geEngine_DestroyWorldLightmapTHandles(geEngine *Engine, geWorld *World
 //=====================================================================================
 //	geEngine_AttachAllWorlds
 //=====================================================================================
-geBoolean geEngine_AttachAllWorlds(geEngine *Engine)
+geBoolean geEngine_AttachAllWorlds( geEngine *Engine )
 {
-	int32		i;
-	DRV_Driver			*RDriver;
+	int32       i;
+	DRV_Driver *RDriver;
 
-	assert(Engine);
+	assert( Engine );
 
 	RDriver = Engine->DriverInfo.RDriver;
 
-	for (i=0; i< Engine->NumWorlds; i++)
+	for ( i = 0; i < Engine->NumWorlds; i++ )
 	{
-		if (!geWorld_AttachAll(Engine->Worlds[i], RDriver, Engine->BitmapGamma ))
+		if ( !geWorld_AttachAll( Engine->Worlds[ i ], RDriver, Engine->BitmapGamma ) )
 		{
-			geErrorLog_AddString(-1, "geEngine_AttachAllWorlds:  geWorld_AttachAll failed.", NULL);
+			geErrorLog_AddString( -1, "geEngine_AttachAllWorlds:  geWorld_AttachAll failed.", NULL );
 			return GE_FALSE;
 		}
 
-		if (!geEngine_CreateWorldLightmapTHandles(Engine, Engine->Worlds[i]))
+		if ( !geEngine_CreateWorldLightmapTHandles( Engine, Engine->Worlds[ i ] ) )
 		{
-			geErrorLog_AddString(-1, "geEngine_AttachAllWorlds:  geEngine_CreateWorldLightmapTHandles failed.", NULL);
+			geErrorLog_AddString( -1, "geEngine_AttachAllWorlds:  geEngine_CreateWorldLightmapTHandles failed.", NULL );
 			return GE_FALSE;
 		}
-
 	}
 
 	return GE_TRUE;
@@ -1011,30 +1009,30 @@ geBoolean geEngine_AttachAllWorlds(geEngine *Engine)
 //=====================================================================================
 //	geEngine_AttachAll
 //=====================================================================================
-geBoolean geEngine_AttachAll(geEngine *Engine)
+geBoolean geEngine_AttachAll( geEngine *Engine )
 {
-	DRV_Driver			*RDriver;
+	DRV_Driver *RDriver;
 
 	assert( Engine );
 
 	RDriver = Engine->DriverInfo.RDriver;
 	assert( RDriver );
 
-    // If current driver is not active, then split
-	if (!Engine->DriverInfo.Active)
-        return GE_TRUE;
+	// If current driver is not active, then split
+	if ( !Engine->DriverInfo.Active )
+		return GE_TRUE;
 
 	// Attach all the bitmaps for the engine
-	if (!BitmapList_AttachAll(Engine->AttachedBitmaps, RDriver, Engine->BitmapGamma))
+	if ( !BitmapList_AttachAll( Engine->AttachedBitmaps, RDriver, Engine->BitmapGamma ) )
 	{
-		geErrorLog_AddString(-1, "geEngine_AttachAll:  BitmapList_AttachAll for Engine failed...", NULL);
+		geErrorLog_AddString( -1, "geEngine_AttachAll:  BitmapList_AttachAll for Engine failed...", NULL );
 		return GE_FALSE;
 	}
 
 	// Attach all the bitmaps for the world
-	if (!geEngine_AttachAllWorlds(Engine))
+	if ( !geEngine_AttachAllWorlds( Engine ) )
 	{
-		geErrorLog_AddString(-1, "geEngine_AttachAll:  geEngine_AttachAllWorlds failed.", NULL);
+		geErrorLog_AddString( -1, "geEngine_AttachAll:  geEngine_AttachAllWorlds failed.", NULL );
 		return GE_FALSE;
 	}
 
@@ -1044,21 +1042,21 @@ geBoolean geEngine_AttachAll(geEngine *Engine)
 //=====================================================================================
 //	geEngine_DetachAll
 //=====================================================================================
-geBoolean geEngine_DetachAll(geEngine *Engine)
+geBoolean geEngine_DetachAll( geEngine *Engine )
 {
-	assert(Engine);
+	assert( Engine );
 
 	// Shutdown all the geBitmaps
-	if (!BitmapList_DetachAll(Engine->AttachedBitmaps))
+	if ( !BitmapList_DetachAll( Engine->AttachedBitmaps ) )
 	{
-		geErrorLog_AddString(-1, "geEngine_DetachAll:  BitmapList_DetachAll failed for engine.", NULL);
+		geErrorLog_AddString( -1, "geEngine_DetachAll:  BitmapList_DetachAll failed for engine.", NULL );
 		return GE_FALSE;
 	}
 
 	// Detach all the bitmaps that belong to all the currently connected worlds
-	if (!geEngine_DetachAllWorlds(Engine))
+	if ( !geEngine_DetachAllWorlds( Engine ) )
 	{
-		geErrorLog_AddString(-1, "geEngine_DetachAll:  geEngine_DetachAllWorlds failed for engine.", NULL);
+		geErrorLog_AddString( -1, "geEngine_DetachAll:  geEngine_DetachAllWorlds failed for engine.", NULL );
 		return GE_FALSE;
 	}
 
@@ -1068,26 +1066,26 @@ geBoolean geEngine_DetachAll(geEngine *Engine)
 //=====================================================================================
 //	geEngine_ResetDriver
 //=====================================================================================
-geBoolean geEngine_ResetDriver(geEngine *Engine)
+geBoolean geEngine_ResetDriver( geEngine *Engine )
 {
-	assert(Engine != NULL);
-	assert(Engine->DriverInfo.RDriver);
+	assert( Engine != NULL );
+	assert( Engine->DriverInfo.RDriver );
 
 	// To be safe, detach all things from the current driver
-	if (!geEngine_DetachAll(Engine))
+	if ( !geEngine_DetachAll( Engine ) )
 	{
-		geErrorLog_AddString(-1, "geEngine_ResetDriver:  geEngine_DetachAll failed.", NULL);
+		geErrorLog_AddString( -1, "geEngine_ResetDriver:  geEngine_DetachAll failed.", NULL );
 		return GE_FALSE;
 	}
 
 	// Reset the driver
-	if (!Engine->DriverInfo.RDriver->Reset())
+	if ( !Engine->DriverInfo.RDriver->Reset() )
 	{
-		geErrorLog_AddString(-1, "geEngine_ResetDriver:  Engine->DriverInfo.RDriver->Reset() failed.", NULL);
+		geErrorLog_AddString( -1, "geEngine_ResetDriver:  Engine->DriverInfo.RDriver->Reset() failed.", NULL );
 		return GE_FALSE;
 	}
 
-	geEngine_UpdateFogEnable(Engine);
+	geEngine_UpdateFogEnable( Engine );
 
 	return GE_TRUE;
 }
@@ -1095,45 +1093,45 @@ geBoolean geEngine_ResetDriver(geEngine *Engine)
 //===================================================================================
 //	geEngine_InitFonts
 //===================================================================================
-geBoolean geEngine_InitFonts(geEngine *Engine)
+geBoolean geEngine_InitFonts( geEngine *Engine )
 {
-	Sys_FontInfo	*Fi;
+	Sys_FontInfo *Fi;
 
-	assert(Engine);
+	assert( Engine );
 
 	Fi = &Engine->FontInfo;
 
-	assert(Fi->FontBitmap == NULL);
+	assert( Fi->FontBitmap == NULL );
 
 	// Load the bitmap
 	{
-		geVFile *				MemFile;
-		geVFile_MemoryContext	Context;
+		geVFile              *MemFile;
+		geVFile_MemoryContext Context;
 
 		{
 			extern unsigned char font_bmp[];
-			extern int font_bmp_length;
+			extern int           font_bmp_length;
 
-			Context.Data = font_bmp;
+			Context.Data       = font_bmp;
 			Context.DataLength = font_bmp_length;
 
-			MemFile = geVFile_OpenNewSystem(NULL, GE_VFILE_TYPE_MEMORY, NULL, &Context, GE_VFILE_OPEN_READONLY);
+			MemFile = geVFile_OpenNewSystem( NULL, GE_VFILE_TYPE_MEMORY, NULL, &Context, GE_VFILE_OPEN_READONLY );
 		}
 
-		if	(!MemFile)
+		if ( !MemFile )
 		{
-			geErrorLog_AddString(-1,"InitFonts : geVFile_OpenNewSystem Memory fontbmp failed.", NULL);
+			geErrorLog_AddString( -1, "InitFonts : geVFile_OpenNewSystem Memory fontbmp failed.", NULL );
 			return GE_FALSE;
 		}
 
-		if ( ! (Fi->FontBitmap = geBitmap_CreateFromFile(MemFile)) )
+		if ( !( Fi->FontBitmap = geBitmap_CreateFromFile( MemFile ) ) )
 		{
-			geErrorLog_AddString(-1,"InitFonts : geBitmap_CreateFromFile failed.", NULL);
+			geErrorLog_AddString( -1, "InitFonts : geBitmap_CreateFromFile failed.", NULL );
 			goto fail;
 		}
 
-		#if 0
-		#pragma message("Engine : fonts will have alpha once Decals do : CB");
+#if 0
+#	pragma message( "Engine : fonts will have alpha once Decals do : CB" );
 		// <> CB : give fonts alpha so they look purty
 		//			pointless right now cuz we don't get enum'ed a _2D_ type with alpha
 		{
@@ -1155,30 +1153,30 @@ geBoolean geEngine_InitFonts(geEngine *Engine)
 				geBitmap_Destroy(&FontAlpha);
 			}
 		}
-		#endif
+#endif
 
-		if (!geBitmap_SetColorKey(Fi->FontBitmap, GE_TRUE, 0, GE_FALSE))
+		if ( !geBitmap_SetColorKey( Fi->FontBitmap, GE_TRUE, 0, GE_FALSE ) )
 		{
-			geErrorLog_AddString(-1,"InitFonts : geBitmap_SetColorKey failed.", NULL);
+			geErrorLog_AddString( -1, "InitFonts : geBitmap_SetColorKey failed.", NULL );
 			goto fail;
 		}
 
-		if ( ! geEngine_AddBitmap(Engine,Fi->FontBitmap) )
+		if ( !geEngine_AddBitmap( Engine, Fi->FontBitmap ) )
 		{
-			geErrorLog_AddString(-1,"InitFonts : geEngine_AddBitmap failed.", NULL);
+			geErrorLog_AddString( -1, "InitFonts : geEngine_AddBitmap failed.", NULL );
 			goto fail;
 		}
 
 		goto success;
 
-		fail:
+	fail:
 
-		geVFile_Close(MemFile);
+		geVFile_Close( MemFile );
 		return GE_FALSE;
 
-		success:
-		
-		geVFile_Close(MemFile);
+	success:
+
+		geVFile_Close( MemFile );
 	}
 
 	//
@@ -1187,16 +1185,16 @@ geBoolean geEngine_InitFonts(geEngine *Engine)
 	{
 		int PosX, PosY, Width, i;
 
-		PosX = 0;
-		PosY = 0;
-		Width = 128*8;
+		PosX  = 0;
+		PosY  = 0;
+		Width = 128 * 8;
 
-		for (i=0; i< 128; i++)
+		for ( i = 0; i < 128; i++ )
 		{
-			Fi->FontLUT1[i] = (PosX<<16) | PosY;
-			PosX+=8;
+			Fi->FontLUT1[ i ] = ( PosX << 16 ) | PosY;
+			PosX += 8;
 
-			if (PosX >= Width)
+			if ( PosX >= Width )
 			{
 				PosY += 14;
 				PosX = 0;
@@ -1210,23 +1208,23 @@ geBoolean geEngine_InitFonts(geEngine *Engine)
 //===================================================================================
 //	geEngine_ShutdownFonts
 //===================================================================================
-geBoolean geEngine_ShutdownFonts(geEngine *Engine)
+geBoolean geEngine_ShutdownFonts( geEngine *Engine )
 {
-	Sys_FontInfo	*Fi;
+	Sys_FontInfo *Fi;
 
-	assert(Engine);
+	assert( Engine );
 
 	Fi = &Engine->FontInfo;
 
-	if (Fi->FontBitmap)
+	if ( Fi->FontBitmap )
 	{
-		if (!geEngine_RemoveBitmap(Engine, Fi->FontBitmap))
+		if ( !geEngine_RemoveBitmap( Engine, Fi->FontBitmap ) )
 		{
-			geErrorLog_AddString(-1, "geEngine_ShutdownFonts:  geEngine_RemoveBitmap failed.", NULL);
+			geErrorLog_AddString( -1, "geEngine_ShutdownFonts:  geEngine_RemoveBitmap failed.", NULL );
 			return GE_FALSE;
 		}
 
-		geBitmap_Destroy(&Fi->FontBitmap);
+		geBitmap_Destroy( &Fi->FontBitmap );
 	}
 
 	return GE_TRUE;
@@ -1236,132 +1234,125 @@ geBoolean geEngine_ShutdownFonts(geEngine *Engine)
 //	geEngine_SetAllWorldChangedFlag
 //	Forces all worlds to be uploaded to the card again
 //=====================================================================================
-void geEngine_SetAllWorldChangedFlag(geEngine *Engine, geBoolean Flag)
+void geEngine_SetAllWorldChangedFlag( geEngine *Engine, geBoolean Flag )
 {
-	int32		i;
+	int32 i;
 
-	for (i=0; i< Engine->NumWorlds; i++)
-		Engine->Worlds[i]->Changed = Flag;
+	for ( i = 0; i < Engine->NumWorlds; i++ )
+		Engine->Worlds[ i ]->Changed = Flag;
 }
 
 
 //=====================================================================================
 //	geEngine_LoadLibrary
 //=====================================================================================
-HINSTANCE geEngine_LoadLibrary( const char * lpLibFileName, const char *DriverDirectory)
+geSystemLibrary geEngine_LoadLibrary( const char *lpLibFileName, const char *DriverDirectory )
 {
-	char	Buff[PATH_MAX];
-	char	*StrEnd;
-	HINSTANCE	Library;
+	char Buff[ PATH_MAX ];
+	strcpy( Buff, DriverDirectory );
 
-	//-------------------------
-	strcpy(Buff, DriverDirectory);
-	StrEnd = Buff + strlen(Buff) - 1;
+	char *StrEnd = Buff + strlen( Buff ) - 1;
 	if ( *StrEnd != '\\' && *StrEnd != '/' && *StrEnd != ':' )
 	{
-		strcat(Buff,"\\");
+		strcat( Buff, "\\" );
 	}
-	strcat(Buff, lpLibFileName);
-#if defined( _WIN32 )
-	Library = LoadLibrary(Buff);
-#else
-	Library = dlopen(Buff, RTLD_LAZY );
-#endif
+	strcat( Buff, lpLibFileName );
+	geSystemLibrary Library = geSystem_LoadLibrary( Buff );
 	if ( Library )
 		return Library;
 
-#pragma message("Engine : LoadLibrary : need geConfig_GetDriverDir")
+#pragma message( "Engine : LoadLibrary : need geConfig_GetDriverDir" )
 #ifdef LOADLIBRARY_HARDCODES
-	#pragma message("Engine : using LoadLibrary HardCodes : curdir, q:\\genesis, c:\\genesis")
+#	pragma message( "Engine : using LoadLibrary HardCodes : curdir, q:\\genesis, c:\\genesis" )
 
 	//-------------------------
 
-	getcwd(Buff,_MAX_PATH);
-	StrEnd = Buff + strlen(Buff) - 1;
+	getcwd( Buff, _MAX_PATH );
+	StrEnd = Buff + strlen( Buff ) - 1;
 	if ( *StrEnd != '\\' && *StrEnd != '/' && *StrEnd != ':' )
 	{
-		strcat(Buff,"\\");
+		strcat( Buff, "\\" );
 	}
-	strcat(Buff, lpLibFileName);
-	Library = LoadLibrary(Buff);
+	strcat( Buff, lpLibFileName );
+	Library = LoadLibrary( Buff );
 	if ( Library )
 		return Library;
 
 	//-------------------------
 
-	strcpy(Buff, "q:\\genesis");
-	StrEnd = Buff + strlen(Buff) - 1;
+	strcpy( Buff, "q:\\genesis" );
+	StrEnd = Buff + strlen( Buff ) - 1;
 	if ( *StrEnd != '\\' && *StrEnd != '/' && *StrEnd != ':' )
 	{
-		strcat(Buff,"\\");
+		strcat( Buff, "\\" );
 	}
-	strcat(Buff, lpLibFileName);
-	Library = LoadLibrary(Buff);
+	strcat( Buff, lpLibFileName );
+	Library = LoadLibrary( Buff );
 	if ( Library )
 		return Library;
 
 	//-------------------------
 
-	strcpy(Buff, "c:\\genesis");
-	StrEnd = Buff + strlen(Buff) - 1;
+	strcpy( Buff, "c:\\genesis" );
+	StrEnd = Buff + strlen( Buff ) - 1;
 	if ( *StrEnd != '\\' && *StrEnd != '/' && *StrEnd != ':' )
 	{
-		strcat(Buff,"\\");
+		strcat( Buff, "\\" );
 	}
-	strcat(Buff, lpLibFileName);
-	Library = LoadLibrary(Buff);
+	strcat( Buff, lpLibFileName );
+	Library = LoadLibrary( Buff );
 	if ( Library )
 		return Library;
 #endif
 
-return NULL;
+	return NULL;
 }
- 
- 
-extern GInfo GlobalInfo;		// AHH!!!  Get rid of this!!!
+
+
+extern GInfo GlobalInfo;// AHH!!!  Get rid of this!!!
 
 //=====================================================================================
 //	EngineInitDriver
 //=====================================================================================
 
-static geBoolean Engine_InitDriver(	geEngine *Engine, 
-								geDriver *Driver,
-								geDriver_Mode *DriverMode)
+static geBoolean Engine_InitDriver( geEngine      *Engine,
+                                    geDriver      *Driver,
+                                    geDriver_Mode *DriverMode )
 {
-	Sys_DriverInfo		*DrvInfo;
-	DRV_Hook			*Hook;
-	DRV_DriverHook		DLLDriverHook;
-	DRV_Driver			*RDriver;
+	Sys_DriverInfo *DrvInfo;
+	DRV_Hook       *Hook;
+	DRV_DriverHook  DLLDriverHook;
+	DRV_Driver     *RDriver;
 
-	assert(Engine != NULL);
-	assert(Driver != NULL);
-	assert(DriverMode != NULL);
+	assert( Engine != NULL );
+	assert( Driver != NULL );
+	assert( DriverMode != NULL );
 
 	DrvInfo = &Engine->DriverInfo;
 
 	//#pragma message("Engine : DriverMode is changing, do Bitmap re-attaches")
 	// _Shutdown calls _Reset which detaches all
 
-	if (! geEngine_ShutdownDriver(Engine))
+	if ( !geEngine_ShutdownDriver( Engine ) )
 	{
-		geErrorLog_AddString(-1, "Engine_InitDriver:  geEngine_ShutdownDriver failed.", NULL);
+		geErrorLog_AddString( -1, "Engine_InitDriver:  geEngine_ShutdownDriver failed.", NULL );
 		return GE_FALSE;
 	}
 
-	if (DrvInfo->Active)
+	if ( DrvInfo->Active )
 	{
-		geErrorLog_Add(GE_ERR_DRIVER_ALLREADY_INITIALIZED, NULL);
+		geErrorLog_Add( GE_ERR_DRIVER_ALLREADY_INITIALIZED, NULL );
 		return GE_FALSE;
 	}
-	
+
 	DrvInfo->CurDriver = Driver;
-	DrvInfo->CurMode = DriverMode;
+	DrvInfo->CurMode   = DriverMode;
 
-	DrvInfo->DriverHandle = geEngine_LoadLibrary(Driver->FileName, Engine->DriverDirectory);
+	DrvInfo->DriverHandle = geEngine_LoadLibrary( Driver->FileName, Engine->DriverDirectory );
 
-	if (!DrvInfo->DriverHandle)
+	if ( !DrvInfo->DriverHandle )
 	{
-		geErrorLog_Add(GE_ERR_DRIVER_NOT_FOUND, NULL);
+		geErrorLog_Add( GE_ERR_DRIVER_NOT_FOUND, NULL );
 		return GE_FALSE;
 	}
 
@@ -1376,56 +1367,56 @@ static geBoolean Engine_InitDriver(	geEngine *Engine,
 
 #endif
 
-	if (!Hook)
+	if ( !Hook )
 	{
-		geErrorLog_Add(GE_ERR_INVALID_DRIVER, NULL);
+		geErrorLog_Add( GE_ERR_INVALID_DRIVER, NULL );
 		return GE_FALSE;
 	}
 
-	if (!Hook(&DrvInfo->RDriver))
+	if ( !Hook( &DrvInfo->RDriver ) )
 	{
 		DrvInfo->RDriver = NULL;
-		geErrorLog_Add(GE_ERR_INVALID_DRIVER, NULL);
+		geErrorLog_Add( GE_ERR_INVALID_DRIVER, NULL );
 		return GE_FALSE;
 	}
 
 	// Get a handy pointer to the driver
 	RDriver = DrvInfo->RDriver;
 
-	if (RDriver->VersionMajor != DRV_VERSION_MAJOR || RDriver->VersionMinor != DRV_VERSION_MINOR)
+	if ( RDriver->VersionMajor != DRV_VERSION_MAJOR || RDriver->VersionMinor != DRV_VERSION_MINOR )
 	{
-		geErrorLog_Add(GE_ERR_INVALID_DRIVER, NULL);
+		geErrorLog_Add( GE_ERR_INVALID_DRIVER, NULL );
 		return GE_FALSE;
 	}
 
 	// We MUST set this! So driver can setup lightmap data when needed...
 	RDriver->SetupLightmap = Light_SetupLightmap;
-	RDriver->GlobalInfo = &GlobalInfo;
+	RDriver->GlobalInfo    = &GlobalInfo;
 
-	strcpy(DLLDriverHook.AppName, Engine->AppName);
+	strcpy( DLLDriverHook.AppName, Engine->AppName );
 
 	//
 	//	Setup what driver they want
 	//
 
 	DLLDriverHook.Driver = Driver->Id;
-	strcpy(DLLDriverHook.DriverName, Driver->Name);
-	DLLDriverHook.Mode = DriverMode->Id;
-	DLLDriverHook.Width = DriverMode->Width;
+	strcpy( DLLDriverHook.DriverName, Driver->Name );
+	DLLDriverHook.Mode   = DriverMode->Id;
+	DLLDriverHook.Width  = DriverMode->Width;
 	DLLDriverHook.Height = DriverMode->Height;
-	DLLDriverHook.hWnd = Engine->hWnd;
-	strcpy(DLLDriverHook.ModeName, DriverMode->Name);
-	
-	if (!RDriver->Init(&DLLDriverHook))
+	DLLDriverHook.hWnd   = Engine->hWnd;
+	strcpy( DLLDriverHook.ModeName, DriverMode->Name );
+
+	if ( !RDriver->Init( &DLLDriverHook ) )
 	{
-		geErrorLog_Add(GE_ERR_DRIVER_INIT_FAILED, NULL);
-		geErrorLog_AddString(-1, RDriver->LastErrorStr , NULL);
+		geErrorLog_Add( GE_ERR_DRIVER_INIT_FAILED, NULL );
+		geErrorLog_AddString( -1, RDriver->LastErrorStr, NULL );
 		return GE_FALSE;
 	}
 
 	DrvInfo->Active = GE_TRUE;
 
-	Engine_SetupPixelFormats(Engine); // <> temp hack
+	Engine_SetupPixelFormats( Engine );// <> temp hack
 
 	Engine->Changed = GE_TRUE;
 
@@ -1435,92 +1426,92 @@ static geBoolean Engine_InitDriver(	geEngine *Engine,
 //=====================================================================================
 //	geEngine_Prep
 //=====================================================================================
-static	geBoolean geEngine_Prep(geEngine *Engine)
+static geBoolean geEngine_Prep( geEngine *Engine )
 {
-	geBoolean		WorldChanged;
-	int32			i;
+	geBoolean WorldChanged;
+	int32     i;
 
-	assert(Engine);
+	assert( Engine );
 
 	// See if any of the attached worlds has changed...
 	WorldChanged = GE_FALSE;
 
-	for (i=0; i< Engine->NumWorlds; i++)
+	for ( i = 0; i < Engine->NumWorlds; i++ )
 	{
-		if (Engine->Worlds[i]->Changed)
+		if ( Engine->Worlds[ i ]->Changed )
 			WorldChanged = GE_TRUE;
 	}
 
 	// Check to see if the world has changed
-	if (!WorldChanged && !Engine->Changed)		
-		return GE_TRUE;		// Nothing to do if any of the worlds (and engine) has not changed
+	if ( !WorldChanged && !Engine->Changed )
+		return GE_TRUE;// Nothing to do if any of the worlds (and engine) has not changed
 
 	// Throw everything off the card...
-	if (!geEngine_ResetDriver(Engine))
+	if ( !geEngine_ResetDriver( Engine ) )
 	{
-		geErrorLog_AddString(-1,"geEngine_Prep : geEngine_ResetDriver", NULL);
+		geErrorLog_AddString( -1, "geEngine_Prep : geEngine_ResetDriver", NULL );
 		return GE_FALSE;
 	}
-	
+
 	// Attach all the current bitmaps to the current driver
-	if (!geEngine_AttachAll(Engine))
+	if ( !geEngine_AttachAll( Engine ) )
 	{
-		geErrorLog_AddString(-1,"geEngine_Prep : geEngine_AttachAll failed", NULL);
+		geErrorLog_AddString( -1, "geEngine_Prep : geEngine_AttachAll failed", NULL );
 		return GE_FALSE;
 	}
-	
+
 	// Reset all the changed flags
-	geEngine_SetAllWorldChangedFlag(Engine, GE_FALSE);
+	geEngine_SetAllWorldChangedFlag( Engine, GE_FALSE );
 	Engine->Changed = GE_FALSE;
-	
+
 	return GE_TRUE;
 }
 
 //=====================================================================================
 //	geEngine_RenderWorld
 //=====================================================================================
-GENESISAPI geBoolean geEngine_RenderWorld(geEngine *Engine, geWorld *World, geCamera *Camera, geFloat Time)
+GENESISAPI geBoolean geEngine_RenderWorld( geEngine *Engine, geWorld *World, geCamera *Camera, geFloat Time )
 {
-	Sys_DriverInfo	*DInfo;
-	int32			Width, Height;
- 
-	assert(Engine != NULL);
-	assert(World != NULL);
-	assert(Camera != NULL);
+	Sys_DriverInfo *DInfo;
+	int32           Width, Height;
 
-	assert(geEngine_HasWorld(Engine, World) == GE_TRUE);	// You have to add the world to the engine before rendering!
+	assert( Engine != NULL );
+	assert( World != NULL );
+	assert( Camera != NULL );
 
-	assert(Engine->Changed == GE_FALSE);
-	assert(World->Changed == GE_FALSE);
+	assert( geEngine_HasWorld( Engine, World ) == GE_TRUE );// You have to add the world to the engine before rendering!
 
-	if (!World || !Camera)
+	assert( Engine->Changed == GE_FALSE );
+	assert( World->Changed == GE_FALSE );
+
+	if ( !World || !Camera )
 	{
-		geErrorLog_Add(GE_ERR_INVALID_PARMS, NULL);
+		geErrorLog_Add( GE_ERR_INVALID_PARMS, NULL );
 		return GE_FALSE;
 	}
 
 	DInfo = &Engine->DriverInfo;
 
 	// This must not be NULL, or there is not a true current driver mode set
-	assert(DInfo->CurMode);
+	assert( DInfo->CurMode );
 
-	Width = DInfo->CurMode->Width;
+	Width  = DInfo->CurMode->Width;
 	Height = DInfo->CurMode->Height;
 
-	if (Width != -1 && Height != -1)		// If not in window mode...
+	if ( Width != -1 && Height != -1 )// If not in window mode...
 	{
-		geFloat		CameraWidth,CameraHeight;
+		geFloat CameraWidth, CameraHeight;
 
-		geCamera_GetWidthHeight(Camera,&CameraWidth,&CameraHeight);
+		geCamera_GetWidthHeight( Camera, &CameraWidth, &CameraHeight );
 
-		if (CameraWidth > Width || CameraHeight > Height)
+		if ( CameraWidth > Width || CameraHeight > Height )
 		{
-			geErrorLog_Add(GE_ERR_INVALID_CAMERA, NULL);
+			geErrorLog_Add( GE_ERR_INVALID_CAMERA, NULL );
 			return GE_FALSE;
 		}
 	}
-	
-	if (!World_WorldRenderQ(Engine, World, Camera))
+
+	if ( !World_WorldRenderQ( Engine, World, Camera ) )
 		return GE_FALSE;
 
 	return GE_TRUE;
@@ -1529,170 +1520,168 @@ GENESISAPI geBoolean geEngine_RenderWorld(geEngine *Engine, geWorld *World, geCa
 //===================================================================================
 //	geEngine_BeginFrame
 //===================================================================================
-GENESISAPI geBoolean geEngine_BeginFrame(geEngine *Engine, geCamera *Camera, geBoolean ClearScreen)
+GENESISAPI geBoolean geEngine_BeginFrame( geEngine *Engine, geCamera *Camera, geBoolean ClearScreen )
 {
-	RECT	DrvRect, *pDrvRect;
-	geRect	gDrvRect;
+	geWinRect   DrvRect, *pDrvRect;
+	geRect gDrvRect;
 
-	assert(Engine != NULL);
-	
-	assert(Engine->FrameState == FrameState_None);
+	assert( Engine != NULL );
+
+	assert( Engine->FrameState == FrameState_None );
 
 	Engine->FrameState = FrameState_Begin;
-	
+
 	// Make sure the driver is avtive
-	if (!Engine->DriverInfo.Active)
+	if ( !Engine->DriverInfo.Active )
 	{
-		geErrorLog_Add(GE_ERR_DRIVER_NOT_INITIALIZED, NULL);
+		geErrorLog_Add( GE_ERR_DRIVER_NOT_INITIALIZED, NULL );
 		return GE_FALSE;
 	}
-	
-	assert(Engine->DriverInfo.RDriver != NULL);
+
+	assert( Engine->DriverInfo.RDriver != NULL );
 
 	// Make sure we have everything finalized with this world so the engine can render it
-	if (!geEngine_Prep(Engine))
+	if ( !geEngine_Prep( Engine ) )
 		return FALSE;
 
 	// Do some timing stuff
-	QueryPerformanceCounter(&Engine->CurrentTic);
+	QueryPerformanceCounter( &Engine->CurrentTic );
 
 	// Clear some debug info
-	memset(&Engine->DebugInfo, 0, sizeof(Engine->DebugInfo));
+	memset( &Engine->DebugInfo, 0, sizeof( Engine->DebugInfo ) );
 
-	if(Camera)
+	if ( Camera )
 	{
-		geCamera_GetClippingRect(Camera, &gDrvRect);
-	
-		DrvRect.left	=gDrvRect.Left;
-		DrvRect.top		=gDrvRect.Top;
-		DrvRect.right	=gDrvRect.Right;
-		DrvRect.bottom	=gDrvRect.Bottom;
+		geCamera_GetClippingRect( Camera, &gDrvRect );
+
+		DrvRect.left   = gDrvRect.Left;
+		DrvRect.top    = gDrvRect.Top;
+		DrvRect.right  = gDrvRect.Right;
+		DrvRect.bottom = gDrvRect.Bottom;
 
 		pDrvRect = &DrvRect;
 	}
 	else
 		pDrvRect = NULL;
 
-	if (!Engine->DriverInfo.RDriver->BeginScene( ClearScreen , TRUE, pDrvRect))
+	if ( !Engine->DriverInfo.RDriver->BeginScene( ClearScreen, TRUE, pDrvRect ) )
 	{
-		geErrorLog_Add(GE_ERR_DRIVER_BEGIN_SCENE_FAILED, NULL);
+		geErrorLog_Add( GE_ERR_DRIVER_BEGIN_SCENE_FAILED, NULL );
 		return GE_FALSE;
 	}
 
 	return GE_TRUE;
 }
 
-extern int32	NumExactCast;
-extern int32	NumBBoxCast;
-extern int32	NumGetContents;
+extern int32 NumExactCast;
+extern int32 NumBBoxCast;
+extern int32 NumGetContents;
 
 //===================================================================================
 //	geEngine_EndFrame
 //===================================================================================
-GENESISAPI geBoolean geEngine_EndFrame(geEngine *Engine)
+GENESISAPI geBoolean geEngine_EndFrame( geEngine *Engine )
 {
 	LARGE_INTEGER NowTic, DeltaTic;
-	float Fps;
+	float         Fps;
 	//DRV_Debug			*Debug;
 
-	assert(Engine != NULL);
-	
-	assert(Engine->FrameState == FrameState_Begin);
+	assert( Engine != NULL );
+
+	assert( Engine->FrameState == FrameState_Begin );
 
 	Engine->FrameState = FrameState_None;
 
-	if (!Engine->DriverInfo.Active)
+	if ( !Engine->DriverInfo.Active )
 	{
-		geErrorLog_Add(GE_ERR_DRIVER_NOT_INITIALIZED, NULL);
+		geErrorLog_Add( GE_ERR_DRIVER_NOT_INITIALIZED, NULL );
 		return GE_FALSE;
 	}
-	
-	assert(Engine->DriverInfo.RDriver != NULL);
+
+	assert( Engine->DriverInfo.RDriver != NULL );
 
 	//Debug = (DRV_Debug*)Engine->DriverInfo.RDriver->LoadMiscTexture;
 	//geEngine_Printf(Engine, 2, 20, "LMap Cycles = %i", Debug->LMapCount[0][0]);
 
-	Engine_DrawFontBuffer(Engine);
+	Engine_DrawFontBuffer( Engine );
 
-	if (!Engine->DriverInfo.RDriver->EndScene())
+	if ( !Engine->DriverInfo.RDriver->EndScene() )
 	{
-		geErrorLog_Add(GE_ERR_DRIVER_END_SCENE_FAILED, NULL);
+		geErrorLog_Add( GE_ERR_DRIVER_END_SCENE_FAILED, NULL );
 		return GE_FALSE;
 	}
 
-	QueryPerformanceCounter(&NowTic);
+	QueryPerformanceCounter( &NowTic );
 	//CurrentFrequency = ((float)PR_EntireFrame.ElapsedCycles/200.0f)
 
-	SubLarge(&Engine->CurrentTic, &NowTic, &DeltaTic);
+	SubLarge( &Engine->CurrentTic, &NowTic, &DeltaTic );
 
-	if (DeltaTic.LowPart > 0)
-		Fps =  (float)Engine->CPUInfo.Freq / (float)DeltaTic.LowPart;
+	if ( DeltaTic.LowPart > 0 )
+		Fps = ( float ) Engine->CPUInfo.Freq / ( float ) DeltaTic.LowPart;
 	else
 		Fps = 100.0f;
 
-	if (Engine->DisplayFrameRateCounter == GE_TRUE)			// Dieplay debug info
+	if ( Engine->DisplayFrameRateCounter == GE_TRUE )// Dieplay debug info
 	{
-		#define				MAX_FPS_ARRAY		20
+#define MAX_FPS_ARRAY 20
 
-		float				AverageFps;
-		DRV_CacheInfo		*pCacheInfo;
-		static float		FpsArray[MAX_FPS_ARRAY];
-		static int32		NumFps = 0, i;
+		float          AverageFps;
+		DRV_CacheInfo *pCacheInfo;
+		static float   FpsArray[ MAX_FPS_ARRAY ];
+		static int32   NumFps = 0, i;
 
 		// Changed Average Fps to go accross last n frames, JP...
-		FpsArray[(NumFps++) % MAX_FPS_ARRAY] = Fps;
-		
-		for (AverageFps = 0.0f, i=0; i<MAX_FPS_ARRAY; i++)
-			AverageFps += FpsArray[i];
+		FpsArray[ ( NumFps++ ) % MAX_FPS_ARRAY ] = Fps;
 
-		AverageFps *= (1.0f/(float)MAX_FPS_ARRAY);
+		for ( AverageFps = 0.0f, i = 0; i < MAX_FPS_ARRAY; i++ )
+			AverageFps += FpsArray[ i ];
+
+		AverageFps *= ( 1.0f / ( float ) MAX_FPS_ARRAY );
 
 		// Grab some driver debug info
 		Engine->DebugInfo.RenderedPolys = Engine->DriverInfo.RDriver->NumRenderedPolys;
 
-		geEngine_Printf(Engine, 2,2+15*0, "Fps    : %2.2f / %2.2f", Fps, AverageFps);
-		geEngine_Printf(Engine, 2,2+15*1, "Polys  : %4i/%4i/%4i", Engine->DebugInfo.TraversedPolys, Engine->DebugInfo.SentPolys, Engine->DebugInfo.RenderedPolys);
+		geEngine_Printf( Engine, 2, 2 + 15 * 0, "Fps    : %2.2f / %2.2f", Fps, AverageFps );
+		geEngine_Printf( Engine, 2, 2 + 15 * 1, "Polys  : %4i/%4i/%4i", Engine->DebugInfo.TraversedPolys, Engine->DebugInfo.SentPolys, Engine->DebugInfo.RenderedPolys );
 
-		geEngine_Printf(Engine, 2,2+15*2, "Mirrors: %3i", Engine->DebugInfo.NumMirrors);
+		geEngine_Printf( Engine, 2, 2 + 15 * 2, "Mirrors: %3i", Engine->DebugInfo.NumMirrors );
 
 		pCacheInfo = Engine->DriverInfo.RDriver->CacheInfo;
 
-		if (pCacheInfo)
+		if ( pCacheInfo )
 		{
-			geEngine_Printf(Engine, 2, 2+15*3, "Cache:  %4i/%4i/%4i/%4i/%4i", 
-											pCacheInfo->CacheFull,
-											pCacheInfo->CacheRemoved,
-											pCacheInfo->CacheFlushes,
-											pCacheInfo->TexMisses,
-											pCacheInfo->LMapMisses);
-																			
+			geEngine_Printf( Engine, 2, 2 + 15 * 3, "Cache:  %4i/%4i/%4i/%4i/%4i",
+			                 pCacheInfo->CacheFull,
+			                 pCacheInfo->CacheRemoved,
+			                 pCacheInfo->CacheFlushes,
+			                 pCacheInfo->TexMisses,
+			                 pCacheInfo->LMapMisses );
 		}
 
-		geEngine_Printf(Engine, 2,2+15*4, "Actors : %3i, Models: %3i", Engine->DebugInfo.NumActors, Engine->DebugInfo.NumModels);
-		geEngine_Printf(Engine, 2,2+15*5, "DLights: %3i", Engine->DebugInfo.NumDLights);
-		geEngine_Printf(Engine, 2,2+15*6, "Fog    : %3i", Engine->DebugInfo.NumFog);
-		geEngine_Printf(Engine, 2,2+15*7, "LMap1  : %3i, LMap2  : %3i", Engine->DebugInfo.LMap1, Engine->DebugInfo.LMap2);
+		geEngine_Printf( Engine, 2, 2 + 15 * 4, "Actors : %3i, Models: %3i", Engine->DebugInfo.NumActors, Engine->DebugInfo.NumModels );
+		geEngine_Printf( Engine, 2, 2 + 15 * 5, "DLights: %3i", Engine->DebugInfo.NumDLights );
+		geEngine_Printf( Engine, 2, 2 + 15 * 6, "Fog    : %3i", Engine->DebugInfo.NumFog );
+		geEngine_Printf( Engine, 2, 2 + 15 * 7, "LMap1  : %3i, LMap2  : %3i", Engine->DebugInfo.LMap1, Engine->DebugInfo.LMap2 );
 
 		// For now, just display debug info for the first world...
-		if (Engine->NumWorlds)
+		if ( Engine->NumWorlds )
 		{
-			geWorld_DebugInfo	*Info;
-			
-			Info = &Engine->Worlds[0]->DebugInfo;
-			geEngine_Printf(Engine, 2, 2+15*8, "Nodes: %3i/%3i, Leafs: %3i/%3i, Userp: %3i/%3i", Info->NumNodesTraversed1, Info->NumNodesTraversed2, Info->NumLeafsHit1, Info->NumLeafsHit2, Info->NumLeafsWithUserPolys, Info->NumUserPolys);
-			geEngine_Printf(Engine, 2, 2+15*9, "Cast: %3i/%3i, GetC: %3i: %i",  NumExactCast, NumBBoxCast, NumGetContents);
+			geWorld_DebugInfo *Info;
 
-			memset(Info, 0, sizeof(*Info));
+			Info = &Engine->Worlds[ 0 ]->DebugInfo;
+			geEngine_Printf( Engine, 2, 2 + 15 * 8, "Nodes: %3i/%3i, Leafs: %3i/%3i, Userp: %3i/%3i", Info->NumNodesTraversed1, Info->NumNodesTraversed2, Info->NumLeafsHit1, Info->NumLeafsHit2, Info->NumLeafsWithUserPolys, Info->NumUserPolys );
+			geEngine_Printf( Engine, 2, 2 + 15 * 9, "Cast: %3i/%3i, GetC: %3i: %i", NumExactCast, NumBBoxCast, NumGetContents );
 
-			NumExactCast = 0;
-			NumBBoxCast = 0;
+			memset( Info, 0, sizeof( *Info ) );
+
+			NumExactCast   = 0;
+			NumBBoxCast    = 0;
 			NumGetContents = 0;
-
 		}
 	}
 
 	// Do an engine frame
-	Engine_Tick(Engine);
+	Engine_Tick( Engine );
 
 	return GE_TRUE;
 }
@@ -1700,25 +1689,25 @@ GENESISAPI geBoolean geEngine_EndFrame(geEngine *Engine)
 //===================================================================================
 //	Engine_Tick
 //===================================================================================
-static void Engine_Tick(geEngine *Engine)
+static void Engine_Tick( geEngine *Engine )
 {
-	int32		i;
+	int32 i;
 
-	for (i=0; i< 20; i++)
+	for ( i = 0; i < 20; i++ )
 	{
-		if (Engine->WaveDir[i] == 1)
-			Engine->WaveTable[i] += 14;
+		if ( Engine->WaveDir[ i ] == 1 )
+			Engine->WaveTable[ i ] += 14;
 		else
-			Engine->WaveTable[i] -= 14;
-		if (Engine->WaveTable[i] < 50)
+			Engine->WaveTable[ i ] -= 14;
+		if ( Engine->WaveTable[ i ] < 50 )
 		{
-			Engine->WaveTable[i] += 14;
-			Engine->WaveDir[i] = 1;
+			Engine->WaveTable[ i ] += 14;
+			Engine->WaveDir[ i ] = 1;
 		}
-		if (Engine->WaveTable[i] > 255)
+		if ( Engine->WaveTable[ i ] > 255 )
 		{
-			Engine->WaveTable[i] -= 14;
-			Engine->WaveDir[i] = 0;
+			Engine->WaveTable[ i ] -= 14;
+			Engine->WaveDir[ i ] = 0;
 		}
 	}
 }
@@ -1726,30 +1715,30 @@ static void Engine_Tick(geEngine *Engine)
 //===================================================================================
 //	Engine_DrawFontBuffer
 //===================================================================================
-static void Engine_DrawFontBuffer(geEngine *Engine)
+static void Engine_DrawFontBuffer( geEngine *Engine )
 {
-	geRect			Rect;
-	int32			i, x, y, w, StrLength;
-	Sys_FontInfo	*Fi;
-	char			*Str;
-	int32			FontWidth,FontHeight;
-	
+	geRect        Rect;
+	int32         i, x, y, w, StrLength;
+	Sys_FontInfo *Fi;
+	char         *Str;
+	int32         FontWidth, FontHeight;
+
 	Fi = &Engine->FontInfo;
 
-	if ( Fi->NumStrings == 0) 
+	if ( Fi->NumStrings == 0 )
 		return;
 
-	FontWidth	= 8;
-	FontHeight	= 15;
-		
-	for (i=0; i< Fi->NumStrings; i++)
-	{
-		x = Fi->ClientStrings[i].x;
-		y = Fi->ClientStrings[i].y;
-		Str = Fi->ClientStrings[i].String;
-		StrLength = strlen(Str);
+	FontWidth  = 8;
+	FontHeight = 15;
 
-		for (w=0; w< StrLength; w++)
+	for ( i = 0; i < Fi->NumStrings; i++ )
+	{
+		x         = Fi->ClientStrings[ i ].x;
+		y         = Fi->ClientStrings[ i ].y;
+		Str       = Fi->ClientStrings[ i ].String;
+		StrLength = strlen( Str );
+
+		for ( w = 0; w < StrLength; w++ )
 		{
 			/*
 			Rect.left = (Fi->FontLUT1[*Str]>>16)+1;
@@ -1757,15 +1746,15 @@ static void Engine_DrawFontBuffer(geEngine *Engine)
 			Rect.top = (Fi->FontLUT1[*Str]&0xffff)+1;
 			Rect.bottom = Rect.top+16;
 			*/
-			Rect.Left = (Fi->FontLUT1[*Str]>>16);
-			Rect.Right = Rect.Left + FontWidth - 1;
-			Rect.Top = (Fi->FontLUT1[*Str]&0xffff);
+			Rect.Left   = ( Fi->FontLUT1[ *Str ] >> 16 );
+			Rect.Right  = Rect.Left + FontWidth - 1;
+			Rect.Top    = ( Fi->FontLUT1[ *Str ] & 0xffff );
 			Rect.Bottom = Rect.Top + FontHeight - 1;
 
-			if ( ! geEngine_DrawBitmap(Engine, Fi->FontBitmap, &Rect, x, y) )
+			if ( !geEngine_DrawBitmap( Engine, Fi->FontBitmap, &Rect, x, y ) )
 			{
-				geEngine_Printf(Engine, 10, 50, "Could not draw font...\n");
-				geErrorLog_AddString(-1,"DrawFontBuffer : Could not draw font...\n", NULL);
+				geEngine_Printf( Engine, 10, 50, "Could not draw font...\n" );
+				geErrorLog_AddString( -1, "DrawFontBuffer : Could not draw font...\n", NULL );
 			}
 			//x+= 16;
 			x += FontWidth;
@@ -1776,7 +1765,7 @@ static void Engine_DrawFontBuffer(geEngine *Engine)
 	Fi->NumStrings = 0;
 }
 
-static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta)
+static void SubLarge( LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *delta )
 {
 #if 0
 	_asm {
@@ -1794,7 +1783,7 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 		mov dword ptr [ebx+4],edx
 	}
 #else
-    delta->QuadPart = end->QuadPart - start->QuadPart;
+	delta->QuadPart = end->QuadPart - start->QuadPart;
 #endif
 }
 
@@ -1802,22 +1791,22 @@ static void SubLarge(LARGE_INTEGER *start, LARGE_INTEGER *end, LARGE_INTEGER *de
 //===================================================================================
 // geEngine_Puts
 //===================================================================================
-geBoolean geEngine_Puts(geEngine *Engine, int32 x, int32 y, const char *String)
+geBoolean geEngine_Puts( geEngine *Engine, int32 x, int32 y, const char *String )
 {
-	Sys_FontInfo	*Fi;
+	Sys_FontInfo *Fi;
 
 	Fi = &Engine->FontInfo;
 
-	if (strlen(String) > MAX_CLIENT_STRING_LEN)
-		return GE_FALSE;
-					 
-	if (Fi->NumStrings >= MAX_CLIENT_STRINGS)
+	if ( strlen( String ) > MAX_CLIENT_STRING_LEN )
 		return GE_FALSE;
 
-	strcpy(Fi->ClientStrings[Fi->NumStrings].String, String);
+	if ( Fi->NumStrings >= MAX_CLIENT_STRINGS )
+		return GE_FALSE;
 
-	Fi->ClientStrings[Fi->NumStrings].x = x;	
-	Fi->ClientStrings[Fi->NumStrings].y = y;
+	strcpy( Fi->ClientStrings[ Fi->NumStrings ].String, String );
+
+	Fi->ClientStrings[ Fi->NumStrings ].x = x;
+	Fi->ClientStrings[ Fi->NumStrings ].y = y;
 
 	Fi->NumStrings++;
 
@@ -1827,71 +1816,70 @@ geBoolean geEngine_Puts(geEngine *Engine, int32 x, int32 y, const char *String)
 //========================================================================================
 //	geEngine_Printf
 //========================================================================================
-GENESISAPI geBoolean geEngine_Printf(geEngine *Engine, int32 x, int32 y, const char *String, ...)
+GENESISAPI geBoolean geEngine_Printf( geEngine *Engine, int32 x, int32 y, const char *String, ... )
 {
-	va_list			ArgPtr;
-    char			TempStr[1024];
+	va_list ArgPtr;
+	char    TempStr[ 1024 ];
 
-	va_start(ArgPtr, String);
-    vsprintf(TempStr, String, ArgPtr);
-	va_end(ArgPtr);
+	va_start( ArgPtr, String );
+	vsprintf( TempStr, String, ArgPtr );
+	va_end( ArgPtr );
 
-	return geEngine_Puts(Engine, x, y, TempStr);
+	return geEngine_Puts( Engine, x, y, TempStr );
 }
 
 
-
 //========================================================================================
 //========================================================================================
-static BOOL Hack_EnumCallBack(const geRDriver_PixelFormat *Format, void *Context)
+static BOOL Hack_EnumCallBack( const geRDriver_PixelFormat *Format, void *Context )
 {
-geRDriver_PixelFormat ** pPixelArrayPtr;
+	geRDriver_PixelFormat **pPixelArrayPtr;
 	pPixelArrayPtr = Context;
 #if 0
 	*(*pPixelArrayPtr)++ = *Format;
 #else
 	**pPixelArrayPtr = *Format;
-	(*pPixelArrayPtr) += 1;
+	( *pPixelArrayPtr ) += 1;
 #endif
-return 1;
+	return 1;
 }
 
-static geRDriver_PixelFormat * Hack_FindPixelFormat(geRDriver_PixelFormat * PixelFormats,int ArrayLen,uint32 Flags,geBoolean NeedsAlpha)
+static geRDriver_PixelFormat *Hack_FindPixelFormat( geRDriver_PixelFormat *PixelFormats, int ArrayLen, uint32 Flags, geBoolean NeedsAlpha )
 {
-int cnt;
-geRDriver_PixelFormat * pf;
+	int                    cnt;
+	geRDriver_PixelFormat *pf;
 
-	for(cnt=ArrayLen,pf = PixelFormats;cnt--;pf++)
+	for ( cnt = ArrayLen, pf = PixelFormats; cnt--; pf++ )
 	{
-		if ( ! NeedsAlpha || ( NeedsAlpha && (gePixelFormat_HasAlpha(pf->PixelFormat) || pf->Flags & RDRIVER_PF_HAS_ALPHA) ) )
+		if ( !NeedsAlpha || ( NeedsAlpha && ( gePixelFormat_HasAlpha( pf->PixelFormat ) || pf->Flags & RDRIVER_PF_HAS_ALPHA ) ) )
 		{
-			if( pf->Flags == Flags )
+			if ( pf->Flags == Flags )
 			{
 				return pf;
 			}
 		}
 	}
-	for(cnt=ArrayLen,pf = PixelFormats;cnt--;pf++)
+	for ( cnt = ArrayLen, pf = PixelFormats; cnt--; pf++ )
 	{
-		if ( ! NeedsAlpha || ( NeedsAlpha && (gePixelFormat_HasAlpha(pf->PixelFormat) || pf->Flags & RDRIVER_PF_HAS_ALPHA) ) )
+		if ( !NeedsAlpha || ( NeedsAlpha && ( gePixelFormat_HasAlpha( pf->PixelFormat ) || pf->Flags & RDRIVER_PF_HAS_ALPHA ) ) )
 		{
-			if( pf->Flags & Flags )
+			if ( pf->Flags & Flags )
 			{
 				return pf;
 			}
 		}
 	}
 
-	for(cnt=ArrayLen,pf = PixelFormats;cnt--;pf++)
+	for ( cnt = ArrayLen, pf = PixelFormats; cnt--; pf++ )
 	{
-		if( pf->Flags == Flags )
+		if ( pf->Flags == Flags )
 		{
 			return pf;
 		}
 	}
-	for(cnt=ArrayLen,pf = PixelFormats;cnt--;pf++)
+	for ( cnt = ArrayLen, pf = PixelFormats; cnt--; pf++ )
 	{
-		if( pf->Flags & Flags )
+		if ( pf->Flags & Flags )
 		{
 			return pf;
 		}
@@ -1900,36 +1888,36 @@ geRDriver_PixelFormat * pf;
 	return NULL;
 }
 
-geBoolean Engine_SetupPixelFormats(geEngine *Engine)
+geBoolean Engine_SetupPixelFormats( geEngine *Engine )
 {
-	geRDriver_PixelFormat PixelFormatsArray[100],*PixelArrayPtr;
-	int PixelFormatsLen;
+	geRDriver_PixelFormat PixelFormatsArray[ 100 ], *PixelArrayPtr;
+	int                   PixelFormatsLen;
 
 	PixelArrayPtr = PixelFormatsArray;
 
-	Engine->DriverInfo.RDriver->EnumPixelFormats((geBoolean (*)(geRDriver_PixelFormat *, void *)) Hack_EnumCallBack, &PixelArrayPtr);
+	Engine->DriverInfo.RDriver->EnumPixelFormats( ( geBoolean( * )( geRDriver_PixelFormat *, void * ) ) Hack_EnumCallBack, &PixelArrayPtr );
 
-	PixelFormatsLen = ((uint32)PixelArrayPtr - (uint32)PixelFormatsArray)/sizeof(geRDriver_PixelFormat);
-	assert(PixelFormatsLen > 0);
+	PixelFormatsLen = ( ( uint32 ) PixelArrayPtr - ( uint32 ) PixelFormatsArray ) / sizeof( geRDriver_PixelFormat );
+	assert( PixelFormatsLen > 0 );
 
-	#define SetupPF( type, flag, alpha )	\
-		if ( PixelArrayPtr = Hack_FindPixelFormat(PixelFormatsArray,PixelFormatsLen,flag,alpha) )	\
-		{													\
-			Engine->PixelFormats[type] = *PixelArrayPtr;	\
-			Engine->HasPixelFormat[type] = GE_TRUE;			\
-		}													\
-		else												\
-		{													\
-			Engine->HasPixelFormat[type] = GE_FALSE;		\
-		}
-		
-	SetupPF( ENGINE_PF_WORLD,		RDRIVER_PF_COMBINE_LIGHTMAP,0);
-	SetupPF( ENGINE_PF_LIGHTMAP,	RDRIVER_PF_LIGHTMAP,0);
-	SetupPF( ENGINE_PF_USER,		RDRIVER_PF_3D,0);
-	SetupPF( ENGINE_PF_USER_ALPHA,	RDRIVER_PF_3D,1);
-	SetupPF( ENGINE_PF_DECAL,		RDRIVER_PF_2D,0);
-	SetupPF( ENGINE_PF_PALETTE,		RDRIVER_PF_PALETTE,0);
-	SetupPF( ENGINE_PF_ALPHA_CHANNEL,RDRIVER_PF_ALPHA,0);
+#define SetupPF( type, flag, alpha )                                                               \
+	if ( PixelArrayPtr = Hack_FindPixelFormat( PixelFormatsArray, PixelFormatsLen, flag, alpha ) ) \
+	{                                                                                              \
+		Engine->PixelFormats[ type ]   = *PixelArrayPtr;                                           \
+		Engine->HasPixelFormat[ type ] = GE_TRUE;                                                  \
+	}                                                                                              \
+	else                                                                                           \
+	{                                                                                              \
+		Engine->HasPixelFormat[ type ] = GE_FALSE;                                                 \
+	}
+
+	SetupPF( ENGINE_PF_WORLD, RDRIVER_PF_COMBINE_LIGHTMAP, 0 );
+	SetupPF( ENGINE_PF_LIGHTMAP, RDRIVER_PF_LIGHTMAP, 0 );
+	SetupPF( ENGINE_PF_USER, RDRIVER_PF_3D, 0 );
+	SetupPF( ENGINE_PF_USER_ALPHA, RDRIVER_PF_3D, 1 );
+	SetupPF( ENGINE_PF_DECAL, RDRIVER_PF_2D, 0 );
+	SetupPF( ENGINE_PF_PALETTE, RDRIVER_PF_PALETTE, 0 );
+	SetupPF( ENGINE_PF_ALPHA_CHANNEL, RDRIVER_PF_ALPHA, 0 );
 
 	return GE_TRUE;
 }
@@ -1938,60 +1926,60 @@ geBoolean Engine_SetupPixelFormats(geEngine *Engine)
 //	Engine_CreateTHandle
 //=====================================================================================
 
-geRDriver_THandle * Engine_CreateTHandle(geEngine *Engine,int Width,int Height,int Mips, int EngineTexType)
+geRDriver_THandle *Engine_CreateTHandle( geEngine *Engine, int Width, int Height, int Mips, int EngineTexType )
 {
-geRDriver_THandle * THandle;
+	geRDriver_THandle *THandle;
 
-	if ( ! Engine->HasPixelFormat[EngineTexType] )
+	if ( !Engine->HasPixelFormat[ EngineTexType ] )
 	{
 		//{} assert( Engine->HasPixelFormat[EngineTexType] );
 		return NULL;
 	}
 
-	THandle = Engine->DriverInfo.RDriver->THandle_Create(Width,Height,Mips,&(Engine->PixelFormats[EngineTexType]));
+	THandle = Engine->DriverInfo.RDriver->THandle_Create( Width, Height, Mips, &( Engine->PixelFormats[ EngineTexType ] ) );
 
-	if (! THandle )
+	if ( !THandle )
 		return NULL;
 
-	if ( gePixelFormat_HasPalette(Engine->PixelFormats[EngineTexType].PixelFormat) )
+	if ( gePixelFormat_HasPalette( Engine->PixelFormats[ EngineTexType ].PixelFormat ) )
 	{
-		geRDriver_THandle * PalHandle;
-		PalHandle = Engine->DriverInfo.RDriver->THandle_Create(256,1,1,&(Engine->PixelFormats[ENGINE_PF_PALETTE]));
-		if ( ! PalHandle )
+		geRDriver_THandle *PalHandle;
+		PalHandle = Engine->DriverInfo.RDriver->THandle_Create( 256, 1, 1, &( Engine->PixelFormats[ ENGINE_PF_PALETTE ] ) );
+		if ( !PalHandle )
 		{
-			Engine->DriverInfo.RDriver->THandle_Destroy(THandle);
+			Engine->DriverInfo.RDriver->THandle_Destroy( THandle );
 			return NULL;
 		}
-		Engine->DriverInfo.RDriver->THandle_SetPalette(THandle,PalHandle);
+		Engine->DriverInfo.RDriver->THandle_SetPalette( THandle, PalHandle );
 
-		#ifdef _DEBUG
+#ifdef _DEBUG
 		{
-		geRDriver_THandleInfo Info;
-		(Engine->DriverInfo.RDriver)->THandle_GetInfo(PalHandle,0,&Info);
-		assert(Info.Width == 256);
-		assert(Info.Height == 1);
+			geRDriver_THandleInfo Info;
+			( Engine->DriverInfo.RDriver )->THandle_GetInfo( PalHandle, 0, &Info );
+			assert( Info.Width == 256 );
+			assert( Info.Height == 1 );
 		}
-		#endif
+#endif
 	}
 
-	if ( (Engine->PixelFormats[EngineTexType].Flags) & RDRIVER_PF_HAS_ALPHA )
+	if ( ( Engine->PixelFormats[ EngineTexType ].Flags ) & RDRIVER_PF_HAS_ALPHA )
 	{
-		geRDriver_THandle * AlphaHandle;
-		assert( Engine->PixelFormats[ENGINE_PF_ALPHA_CHANNEL].Flags & RDRIVER_PF_ALPHA );
-		assert( ! (Engine->PixelFormats[ENGINE_PF_ALPHA_CHANNEL].Flags & RDRIVER_PF_HAS_ALPHA) );
-		AlphaHandle = Engine_CreateTHandle(Engine,Width,Height,Mips,ENGINE_PF_ALPHA_CHANNEL);
-		if ( ! AlphaHandle )
+		geRDriver_THandle *AlphaHandle;
+		assert( Engine->PixelFormats[ ENGINE_PF_ALPHA_CHANNEL ].Flags & RDRIVER_PF_ALPHA );
+		assert( !( Engine->PixelFormats[ ENGINE_PF_ALPHA_CHANNEL ].Flags & RDRIVER_PF_HAS_ALPHA ) );
+		AlphaHandle = Engine_CreateTHandle( Engine, Width, Height, Mips, ENGINE_PF_ALPHA_CHANNEL );
+		if ( !AlphaHandle )
 		{
-			Engine->DriverInfo.RDriver->THandle_Destroy(THandle);
+			Engine->DriverInfo.RDriver->THandle_Destroy( THandle );
 			return NULL;
 		}
-		Engine->DriverInfo.RDriver->THandle_SetAlpha(THandle,AlphaHandle);
+		Engine->DriverInfo.RDriver->THandle_SetAlpha( THandle, AlphaHandle );
 	}
 
-return THandle;
+	return THandle;
 }
 
-void Engine_DestroyTHandle(geEngine *Engine,geRDriver_THandle * THandle)
+void Engine_DestroyTHandle( geEngine *Engine, geRDriver_THandle *THandle )
 {
-	Engine->DriverInfo.RDriver->THandle_Destroy(THandle);
+	Engine->DriverInfo.RDriver->THandle_Destroy( THandle );
 }

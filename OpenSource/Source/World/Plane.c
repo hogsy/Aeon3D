@@ -21,18 +21,10 @@
 /****************************************************************************************/
 #include <assert.h>
 
-#if defined( _WIN32 )
-#include <Windows.h>
-#endif
-
-#include <math.h>
-
 #include "BASETYPE.H"
 #include "System.h"
 #include "WORLD.H"
 #include "GBSPFILE.H"
-#include "VEC3D.H"
-#include "XFORM3D.H"
 #include "PLANE.H"
 
 //=====================================================================================

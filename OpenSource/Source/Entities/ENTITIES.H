@@ -24,10 +24,6 @@
 
 #include <assert.h>
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#endif
-
 #include "BASETYPE.H"
 #include "Errorlog.h"
 #include "VEC3D.H"

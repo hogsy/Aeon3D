@@ -21,21 +21,14 @@
 /****************************************************************************************/
 #include <assert.h>
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#endif
-
 #include <math.h>
 
 #include "BASETYPE.H"
 #include "System.h"
 #include "WORLD.H"
-#include "RAM.H"
 #include "SURFACE.H"
 #include "WBitmap.h"	
-#include "VEC3D.H"
 #include "VIS.H"
-
 #include "LIGHT.H"
 
 //================================================================================

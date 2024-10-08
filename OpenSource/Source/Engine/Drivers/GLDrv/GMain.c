@@ -19,8 +19,9 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+
 #include <Windows.h>
-#include <StdIO.h>
+#include <stdio.h>
 
 #include "GlideDrv.h"
 #include "GMain.h"
@@ -30,7 +31,7 @@ int WriteBMP( unsigned short *ScreenBuffer, const char *Name );
 
 DRV_Window ClientWindow;
 
-static RECT OldWindow;
+static geWinRect OldWindow;
 
 GMain_BoardInfo g_BoardInfo;// Global board info for current hardware
 

@@ -47,7 +47,7 @@ BOOL DRIVERCC DrvInit(DRV_DriverHook *Hook)
 	RECT	WRect;
 
 	// Start up
-	if (!D3DMain_InitD3D(Hook->hWnd, Hook->DriverName+5, Hook->Width, Hook->Height))
+	if (!D3DMain_InitD3D((HWND)Hook->hWnd, Hook->DriverName+5, Hook->Width, Hook->Height))
 	{
 		//SetLastDrvError(DRV_ERROR_INIT_ERROR, "D3D_DrvInit: Could not init driver.\n");
 		return FALSE;
@@ -56,7 +56,7 @@ BOOL DRIVERCC DrvInit(DRV_DriverHook *Hook)
 	// If they are asking for a window mode, use there hWnd for the size
 	if (Hook->Width ==-1 && Hook->Height == -1)
 	{
-		GetClientRect(Hook->hWnd, &WRect);
+		GetClientRect((HWND)Hook->hWnd, &WRect);
 		
 		Hook->Width = (WRect.right - WRect.left);
 		Hook->Height = (WRect.bottom - WRect.top);
@@ -159,7 +159,7 @@ BOOL DRIVERCC EnumModes2(int32 Driver, char *DriverName, DRV_ENUM_MODES_CB *Cb, 
 
 DRV_Driver D3DDRV = 
 {
-    "D3D driver. v"DRV_VMAJS"."DRV_VMINS". Copyright 1999, WildTangent Inc.; All Rights Reserved.",
+    "D3D driver. v" DRV_VMAJS "." DRV_VMINS ". Copyright 1999, WildTangent Inc.; All Rights Reserved.",
 	DRV_VERSION_MAJOR,
 	DRV_VERSION_MINOR,
 

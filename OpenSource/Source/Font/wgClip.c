@@ -19,13 +19,6 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#if defined( _WIN32 )
-#	define WIN32_LEAN_AND_MEAN
-#	pragma warning( disable : 4201 4214 4115 )
-#	include <windows.h>
-#	include <windowsx.h>
-#	pragma warning( default : 4201 4214 4115 )
-#endif
 
 #include <assert.h>
 
@@ -113,4 +106,3 @@ GENESISAPI geBoolean GENESISCC CalculateClipping(
 
 	return GE_TRUE;
 }
-

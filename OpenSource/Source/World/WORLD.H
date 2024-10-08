@@ -25,13 +25,13 @@
 #include "Errorlog.h"
 #include "PTRTYPES.H"
 #include "GENESIS.H"
-#include "GBSPFILE.H"
 #include "motion.h"
 #include "SURFACE.H"
 #include "Fog.h"
 #include "WBitmap.h"
 #include "USER.H"
 #include "LIGHT.H"
+#include "GBSPFILE.H"
 
 #include "BitmapList.h"
 

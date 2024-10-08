@@ -33,7 +33,7 @@
 
 extern int32 RenderMode;
 
-BOOL DRIVERCC BeginScene(BOOL Clear, BOOL ClearZ, RECT *WorldRect);
+BOOL DRIVERCC BeginScene(BOOL Clear, BOOL ClearZ, geWinRect *WorldRect);
 BOOL DRIVERCC EndScene(void);
 BOOL DRIVERCC BeginWorld(void);
 BOOL DRIVERCC EndWorld(void);

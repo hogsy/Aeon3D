@@ -19,16 +19,13 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+
 #include <Windows.h>
-#include <stdio.h>
+#include <cstdio>
 
 #include "D3DDrv.h"
-#include "DCommon.h"
 #include "Render.h"
-#include "Scene.h"
-#include "GSpan.h"
 #include "D3D_Fx.h"
-#include "D3DCache.h"
 #include "D3D_Err.h"
 #include "THandle.h"
 
@@ -234,7 +231,7 @@ geBoolean DRIVERCC RenderMiscTexturePoly(DRV_TLVertex *Pnts, int32 NumPoints, ge
 	return TRUE;
 }
 
-geBoolean DRIVERCC DrawDecal(geRDriver_THandle *THandle, RECT *SRect, int32 x, int32 y)
+geBoolean DRIVERCC DrawDecal(geRDriver_THandle *THandle, geWinRect *SRect, int32 x, int32 y)
 {
 	RECT	SRect2, *pSRect;
 	int32	Width, Height;
@@ -255,7 +252,7 @@ geBoolean DRIVERCC DrawDecal(geRDriver_THandle *THandle, RECT *SRect, int32 x, i
 	}
 	else
 	{
-		pSRect = SRect;
+		pSRect = (RECT*)SRect;
 		Width = (pSRect->right - pSRect->left)+1;
 		Height = (pSRect->bottom - pSRect->top)+1;
 	}

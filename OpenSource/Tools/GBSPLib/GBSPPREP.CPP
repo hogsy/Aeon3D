@@ -94,7 +94,7 @@ geBoolean ConvertGBSPToFile(const char *FileName)
 	GBSPHeader.Version = GBSP_VERSION;
 
 	// Record the time the bsp was saved...
-	GetSystemTime(&GBSPHeader.BSPTime);
+	GetSystemTime((SYSTEMTIME*)&GBSPHeader.BSPTime);
 
 	Chunk.Type = GBSP_CHUNK_HEADER;
 	Chunk.Size = sizeof(GBSP_Header);
@@ -104,7 +104,7 @@ geBoolean ConvertGBSPToFile(const char *FileName)
 	// HACK!  Just point these to the GBSP versions, but reset them below...
 	NumGFXLeafSides = NumLeafSides;
 	GFXLeafSides = (GFX_LeafSide*)LeafSides;
-	
+
 	//GHook.Printf("Saving GFX Model Data\n");
 	if (!SaveGFXModelData(f))
 	{
@@ -138,7 +138,7 @@ geBoolean ConvertGBSPToFile(const char *FileName)
 		return GE_FALSE;
 	if (!SaveGFXMotionData(f))
 		return GE_FALSE;
-	
+
 	Chunk.Type = GBSP_CHUNK_END;
 	Chunk.Elements = 0;
 	Chunk.Size = 0;
@@ -147,7 +147,7 @@ geBoolean ConvertGBSPToFile(const char *FileName)
 	geVFile_Close(f);
 
 	GHook.Printf(" --- Save GBSP File --- \n");
- 	
+
 	GHook.Printf("Num Models           : %5i, %6i\n", NumBSPModels, NumBSPModels*sizeof(GFX_Model));
 	GHook.Printf("Num Nodes            : %5i, %6i\n", NumGFXNodes, NumGFXNodes*sizeof(GFX_Node));
 	GHook.Printf("Num Solid Leafs      : %5i, %6i\n", NumSolidLeafs, NumSolidLeafs*sizeof(GFX_Leaf));
@@ -169,7 +169,7 @@ geBoolean ConvertGBSPToFile(const char *FileName)
 	geRam_Free(GFXVertIndexList);
 	GFXVertIndexList = NULL;
 	NumGFXVertIndexList = 0;
-	
+
 	//geRam_Free(GFXVerts);
 	GFXVerts = NULL;
 
@@ -218,9 +218,9 @@ geBoolean SaveGFXModelData(geVFile *f)
 			GHook.Error("SaveGFXModelData:  There was an error writing the model.\n");
 			return GE_FALSE;
 		}
-	}	
-	
-	return GE_TRUE;	
+	}
+
+	return GE_TRUE;
 }
 
 geBoolean SaveGFXNodes_r(GBSP_Node *Node, geVFile *f)
@@ -229,7 +229,7 @@ geBoolean SaveGFXNodes_r(GBSP_Node *Node, geVFile *f)
 
 	if (Node->PlaneNum == PLANENUM_LEAF)
 		return GE_TRUE;
-	
+
 	GNode.Children[0] = Node->ChildrenID[0];
 	GNode.Children[1] = Node->ChildrenID[1];
 	GNode.NumFaces = Node->NumFaces;
@@ -263,7 +263,7 @@ geBoolean SaveGFXNodes(geVFile *f)
 	Chunk.Elements = NumGFXNodes;
 
 	WriteChunk(&Chunk, NULL, f);
-	
+
 	for (i=0; i< NumBSPModels; i++)
 	{
 		if (!SaveGFXNodes_r(BSPModels[i].RootNode[0], f))
@@ -284,12 +284,12 @@ geBoolean SaveGFXPortals_r(GBSP_Node *Node, geVFile *f)
 	if (Node->PlaneNum == PLANENUM_LEAF)
 	{
 		if (Node->Contents & BSP_CONTENTS_SOLID2)
-			return GE_TRUE;	
+			return GE_TRUE;
 
 		for (Portal = Node->Portals; Portal; Portal = Portal->Next[Side])
 		{
 			Side = (Portal->Nodes[1] == Node);
-			
+
 			if (!(Portal->Nodes[0]->Contents & BSP_CONTENTS_SOLID2) &&
 				!(Portal->Nodes[1]->Contents & BSP_CONTENTS_SOLID2))
 			{
@@ -312,7 +312,7 @@ geBoolean SaveGFXPortals_r(GBSP_Node *Node, geVFile *f)
 		}
 		return GE_TRUE;
 	}
-	
+
 	if (!SaveGFXPortals_r(Node->Children[0], f))
 		return GE_FALSE;
 
@@ -332,7 +332,7 @@ geBoolean SaveGFXPortals(geVFile *f)
 	Chunk.Elements = NumGFXPortals;
 
 	WriteChunk(&Chunk, NULL, f);
-	
+
 	for (i=0; i< NumBSPModels; i++)
 	{
 		if (!SaveGFXPortals_r(BSPModels[i].RootNode[0], f))
@@ -348,7 +348,7 @@ geBoolean SaveGFXBNodes_r(GBSP_Node *Node, geVFile *f)
 
 	if (Node->PlaneNum == PLANENUM_LEAF)
 		return GE_TRUE;
-	
+
 	GBNode.Children[0] = Node->ChildrenID[0];
 	GBNode.Children[1] = Node->ChildrenID[1];
 	GBNode.PlaneNum = Node->PlaneNum;
@@ -378,7 +378,7 @@ geBoolean SaveGFXBNodes(geVFile *f)
 	Chunk.Elements = NumGFXBNodes;
 
 	WriteChunk(&Chunk, NULL, f);
-	
+
 	for (i=0; i< NumBSPModels; i++)
 		if (!SaveGFXBNodes_r(BSPModels[i].RootNode[1], f))
 			return GE_FALSE;
@@ -424,7 +424,7 @@ geBoolean SaveGFXLeafs_r(GBSP_Node *Node, geVFile *f)
 		{
 			if (!Node->LeafFaces[i]->Visible)
 				continue;
-			
+
 			// Don't output mark face if it was skipped in the face output stage
 			// (or it will reference an invalid face...)
 			if (Node->LeafFaces[i]->NumIndexVerts <= 0)
@@ -569,7 +569,7 @@ geBoolean SaveGFXFaces_r(GBSP_Node *Node, geVFile *f)
 
 	if (Node->PlaneNum == PLANENUM_LEAF)
 		return GE_TRUE;
-	
+
 	for (Face = Node->Faces; Face; Face = Face->Next)
 	{
 		if (!Face->Visible)
@@ -624,7 +624,7 @@ geBoolean SaveGFXFaces(geVFile *f)
 	Chunk.Elements = NumGFXFaces;
 
 	WriteChunk(&Chunk, NULL, f);
-	
+
 	for (i=0; i< NumBSPModels; i++)
 		if (!SaveGFXFaces_r(BSPModels[i].RootNode[0], f))
 			return GE_FALSE;
@@ -754,7 +754,7 @@ void PrepGFXNode(GBSP_Node *Node)
 		Face->OutputNum = NumGFXFaces;
 
 		Verts = Face->Poly->Verts;
-		
+
 		for (i=0; i< Face->NumIndexVerts; i++)
 		{
 			GFXVertIndexList[NumGFXVertIndexList] = Face->IndexVerts[i];
@@ -818,7 +818,7 @@ int32 PrepGFXNodes_r(int32 Original, GBSP_Node *Node)
 
 		return -(NumGFXLeafs);
 	}
-		
+
 	CurrentNode = NumGFXNodes;
 
 	PrepGFXNode(Node);
@@ -832,7 +832,7 @@ int32 PrepGFXNodes_r(int32 Original, GBSP_Node *Node)
 }
 
 //typedef	unsigned char	RawPalette[256*3];
-				
+
 geBoolean SaveGFXTextures(geVFile *f)
 {
 	GBSP_Chunk	Chunk;
@@ -853,7 +853,7 @@ geBoolean SaveGFXTextures(geVFile *f)
 		return GE_FALSE;
 
 	Offset = 0;
-	
+
 	geVFile_Tell(f, &Pos1);
 
 	Chunk.Type = GBSP_CHUNK_TEXDATA;
@@ -867,7 +867,7 @@ geBoolean SaveGFXTextures(geVFile *f)
 	for (i=0; i< NumTextures; i++)
 	{
 		//GHook.Printf("Texture : %i, %s\n", i, Textures[i].Name);
-		
+
 		if (!GetTexture(Textures[i].Name, Data, &Size, &Width, &Height, f))
 			return GE_FALSE;
 
@@ -892,7 +892,7 @@ geBoolean SaveGFXTextures(geVFile *f)
 
 	// Now save textures
 	NumGFXTextures = NumTextures;
-	
+
 	Chunk.Type = GBSP_CHUNK_TEXTURES;
 	Chunk.Size = sizeof(GFX_Texture);
 	Chunk.Elements = NumGFXTextures;
@@ -930,7 +930,7 @@ geBoolean SaveGFXTextures(geVFile *f)
 	for (i=0; i< NumTextures; i++)
 	{
 		//GHook.Printf("Texture : %i, %s\n", i, Textures[i].Name);
-		
+
 		if (!GetTexturePalette(Textures[i].Name, Palette))
 			return GE_FALSE;
 
@@ -963,7 +963,7 @@ geBoolean SaveGFXEntData(geVFile *f)
 
 	if (!MemFile)
 		return GE_FALSE;
-	
+
 	// Fill this file with the entitydata
 	if (!SaveEntityData(MemFile))
 	{
@@ -978,7 +978,7 @@ geBoolean SaveGFXEntData(geVFile *f)
 		geVFile_Close(MemFile);
 		return GE_FALSE;
 	}
-	
+
 	// Write the chunk out
 	Chunk.Type = GBSP_CHUNK_ENTDATA;
 	Chunk.Size = sizeof(uint8);
@@ -1024,7 +1024,7 @@ void FinalizeNodeMinMax(GBSP_Node *RootNode);
 geBoolean PrepGBSPModel(GBSP_Model *Model, geBoolean SaveVis)
 {
 	// Save vis file for vising model 0
-	if (SaveVis)		
+	if (SaveVis)
 	{
 		// Create vis portals
 		if (!CreatePortals(Model->RootNode[0], Model, GE_TRUE))
@@ -1032,16 +1032,16 @@ geBoolean PrepGBSPModel(GBSP_Model *Model, geBoolean SaveVis)
 			GHook.Printf("PrepGBSPModel:  Could not create VIS portals.\n");
 			return GE_FALSE;
 		}
-		
+
 		// Mark clusters
 		Model->FirstCluster = NumLeafClusters;
-			
+
 		if (!CreateLeafClusters(Model->RootNode[0]))
 		{
 			GHook.Error("Could not create leaf clusters.\n");
 			return GE_FALSE;
 		}
-			
+
 		Model->NumClusters = NumLeafClusters - Model->FirstCluster;
 
 		if (!SavePortalFile(Model, VisFile))
@@ -1053,7 +1053,7 @@ geBoolean PrepGBSPModel(GBSP_Model *Model, geBoolean SaveVis)
 			GHook.Printf("PrepGBSPModel:  Could not free portals.\n");
 			return GE_FALSE;
 		}
-		
+
 	}
 	else	// Models > 0 are assumed simple and no vising performed, clusters are not needed either...
 	{
@@ -1067,7 +1067,7 @@ geBoolean PrepGBSPModel(GBSP_Model *Model, geBoolean SaveVis)
 		GHook.Printf("PrepGBSPModel:  Could not create REAL portals.\n");
 		return GE_FALSE;
 	}
-	
+
 	// Create the leaf collision hulls for bevel bbox collisions
 	if (!CreateLeafSides(Model->RootNode[0]))
 	{
@@ -1086,13 +1086,13 @@ geBoolean PrepGBSPModel(GBSP_Model *Model, geBoolean SaveVis)
 	//====
 	Model->FirstFace = NumGFXFaces;
 	Model->FirstLeaf = NumGFXLeafs;
-		
+
 	// Prep the nodes, so we can save them out later to disk
 	Model->RootNodeID[0] = PrepGFXNodes_r(Model->RootNodeID[0], Model->RootNode[0]);
 
 	Model->NumFaces = NumGFXFaces - Model->FirstFace;
 	Model->NumLeafs = NumGFXLeafs - Model->FirstLeaf;
-	
+
 	return GE_TRUE;
 }
 

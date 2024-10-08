@@ -23,18 +23,14 @@
 
 #if defined( _WIN32 )
 //#define INITGUID
-#	include <Windows.H>
 #	include <objbase.h>
 #	include <InitGuid.h>
 #endif
 
 #include "CSNetMgr.h"
 #include "NETPLAY.H"
-
-#include "BASETYPE.H"
 #include "RAM.H"
 #include "Errorlog.h"
-
 
 #define PACKET_HEADER_SIZE				1
 

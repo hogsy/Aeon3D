@@ -79,18 +79,6 @@ typedef struct tagRECT
     LONG    bottom;
 } RECT;
 
-typedef struct _SYSTEMTIME
-{
-	WORD wYear;
-	WORD wMonth;
-	WORD wDayOfWeek;
-	WORD wDay;
-	WORD wHour;
-	WORD wMinute;
-	WORD wSecond;
-	WORD wMilliseconds;
-} SYSTEMTIME;
-
 typedef union _LARGE_INTEGER {
 	struct {
 		DWORD LowPart;
@@ -205,27 +193,27 @@ typedef struct
 
 typedef struct
 {
-	HWND		hWnd;
-	
-	U8			*Buffer;
+	void *hWnd;
 
-	S32			Width;
-	S32			Height;
+	U8 *Buffer;
 
-	S32			PixelPitch;
-	S32			BytesPerPixel;
+	S32 Width;
+	S32 Height;
 
-	S32			R_shift;
-	S32			G_shift;
-	S32			B_shift;
+	S32 PixelPitch;
+	S32 BytesPerPixel;
 
-	U32			R_mask;
-	U32			G_mask;
-	U32			B_mask;
+	S32 R_shift;
+	S32 G_shift;
+	S32 B_shift;
 
-	S32			R_width;
-	S32			G_width;
-	S32			B_width;
+	U32 R_mask;
+	U32 G_mask;
+	U32 B_mask;
+
+	S32 R_width;
+	S32 G_width;
+	S32 B_width;
 } DRV_Window;
 
 typedef struct 
@@ -311,7 +299,7 @@ typedef struct
 	char				ModeName[512];
 	S32					Width;
 	S32					Height;
-	HWND				hWnd;
+	void*				hWnd;
 } DRV_DriverHook;
 
 typedef struct
@@ -398,7 +386,7 @@ typedef geRDriver_THandle *DRIVERCC GET_ALPHA(geRDriver_THandle *THandle);
 typedef geBoolean DRIVERCC THANDLE_GET_INFO(geRDriver_THandle *THandle, int32 MipLevel, geRDriver_THandleInfo *Info);
 
 // Scene management functions
-typedef geBoolean DRIVERCC BEGIN_SCENE(geBoolean Clear, geBoolean ClearZ, RECT *WorldRect);
+typedef geBoolean DRIVERCC BEGIN_SCENE(geBoolean Clear, geBoolean ClearZ, geWinRect *WorldRect);
 typedef geBoolean DRIVERCC END_SCENE(void);
 typedef geBoolean DRIVERCC BEGIN_WORLD(void);
 typedef geBoolean DRIVERCC END_WORLD(void);
@@ -412,7 +400,7 @@ typedef geBoolean DRIVERCC RENDER_G_POLY(DRV_TLVertex *Pnts, S32 NumPoints, U32 
 typedef geBoolean DRIVERCC RENDER_W_POLY(DRV_TLVertex *Pnts, S32 NumPoints, geRDriver_THandle *THandle, DRV_TexInfo *TexInfo, DRV_LInfo *LInfo, U32 Flags);
 typedef geBoolean DRIVERCC RENDER_MT_POLY(DRV_TLVertex *Pnts, S32 NumPoints, geRDriver_THandle *THandle, U32 Flags);
 
-typedef geBoolean DRIVERCC DRAW_DECAL(geRDriver_THandle *THandle, RECT *SRect, int32 x, int32 y);
+typedef geBoolean DRIVERCC DRAW_DECAL(geRDriver_THandle *THandle, geWinRect *SRect, int32 x, int32 y);
 
 typedef geBoolean DRIVERCC SCREEN_SHOT(const char *Name);
 

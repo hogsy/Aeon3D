@@ -24,16 +24,15 @@
 #define	WIN32_LEAN_AND_MEAN
 #pragma warning(disable : 4201 4214 4115)
 #include <windows.h>
-#include <windowsx.h>
 #pragma warning(default : 4201 4214 4115)
 #endif
+
+#include <assert.h>
+#include <string.h>
 
 #include "ExtBox.h"
 #include "RAM.H"
 #include "wgClip.H"
-
-#include <assert.h>
-#include <string.h>
 
 #include "font.H"
 
@@ -98,7 +97,7 @@ typedef struct geFont
 
 
 GENESISAPI geBoolean GENESISCC geFont_DrawUsingDIB(geFont *font, const char *textString, 
-                                                   RECT box, geBitmap *targetBitmap,
+                                                    geWinRect box, geBitmap *targetBitmap,
                                                    const GE_RGBA *Color, uint32 flags);
 
 //*******************************************************************************
@@ -516,7 +515,7 @@ GENESISAPI geBoolean GENESISCC geFont_DrawText(geFont *font, const char *textStr
    geBoolean longEnough, endOfText;
 
    GE_Rect artRect;
-   RECT box;
+   geWinRect box;
    int32 resultX, resultY;
 
    geFontBitmap *lastBitmap;
@@ -798,7 +797,7 @@ GENESISAPI geBoolean GENESISCC geFont_DrawTextToBitmap(geFont *font, const char 
    geBoolean longEnough, endOfText;
 
    GE_Rect artRect;
-   RECT box;
+   geWinRect box;
    int32 resultX, resultY;
 
    geFontBitmap *lastBitmap;
@@ -1000,7 +999,7 @@ GENESISAPI geBoolean GENESISCC geFont_TestDraw(geFont *font, int16 x, int16 y, i
 
 //*******************************************************************************
 GENESISAPI geBoolean GENESISCC geFont_DrawUsingDIB(geFont *font, const char *textString, 
-                                                   RECT box, geBitmap *targetBitmap,
+                                                    geWinRect box, geBitmap *targetBitmap,
                                                    const GE_RGBA *Color, uint32 flags)
 {
 

@@ -19,24 +19,18 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
+
 #include <assert.h>
-
-#if defined( _WIN32 )
-#include <Windows.h>
-#endif
-
 #include <math.h>
 
 #include "BASETYPE.H"
 #include "RAM.H"
 #include "System.h"
-#include "VEC3D.H"
 #include "LIGHT.H"
 #include "SURFACE.H"
 #include "GBSPFILE.H"
 #include "PLANE.H"
 #include "WORLD.H"
-
 #include "TRACE.H"
 
 #define LIGHT_FRACT		8

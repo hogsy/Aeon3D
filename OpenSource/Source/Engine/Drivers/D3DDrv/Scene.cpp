@@ -20,13 +20,9 @@
 /*                                                                                      */
 /****************************************************************************************/
 #include <Windows.h>
-#include <stdio.h>
 
 #include "D3DDrv.h"
-#include "DCommon.h"
 #include "Scene.h"
-#include "Render.h"
-#include "GSpan.h"
 #include "D3DCache.h"
 #include "D3D_Fx.h"
 #include "D3D_Main.h"
@@ -41,7 +37,7 @@ int32 RenderMode;
 
 uint32 CurrentLRU;
 
-BOOL DRIVERCC BeginScene(BOOL Clear, BOOL ClearZ, RECT *WorldRect)
+BOOL DRIVERCC BeginScene(BOOL Clear, BOOL ClearZ, geWinRect *WorldRect)
 {
 	HRESULT	Result;
 

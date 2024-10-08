@@ -58,8 +58,8 @@ geBoolean DRIVERCC Render_WorldPoly(DRV_TLVertex *Pnts, int32 NumPoints, geRDriv
 geBoolean DRIVERCC Render_MiscTexturePoly(DRV_TLVertex *Pnts, int32 NumPoints, geRDriver_THandle *THandle, uint32 Flags);
 void SetupTexture(geRDriver_THandle *THandle);
 //GCache_Slot *SetupLMapTexture(geRDriver_THandle *THandle, DRV_LInfo *LInfo, geBoolean Dynamic, int32 LMapNum);
-geBoolean DRIVERCC Render_DrawDecal(geRDriver_THandle *THandle, RECT *SRect, int32 x, int32 y);
-geBoolean DRIVERCC BeginScene(geBoolean Clear, geBoolean ClearZ, RECT *WorldRect);
+geBoolean DRIVERCC Render_DrawDecal(geRDriver_THandle *THandle, geWinRect *SRect, int32 x, int32 y);
+geBoolean DRIVERCC BeginScene(geBoolean Clear, geBoolean ClearZ, geWinRect *WorldRect);
 geBoolean DRIVERCC EndScene(void);
 geBoolean DRIVERCC BeginWorld(void);
 geBoolean DRIVERCC EndWorld(void);

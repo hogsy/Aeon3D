@@ -21,22 +21,11 @@
 /****************************************************************************************/
 #include <assert.h>
 
-#if defined(_WIN32 )
-#	include <Windows.h>
-#endif
-
 #include "USER.H"
 #include "WORLD.H"
-#include "RAM.H"
-#include "Errorlog.h"
-#include "System.h"
 #include "SURFACE.H"
-#include "GENESIS.H"
-#include "Camera.h"
 #include "FRUSTUM.H"
 #include "PLANE.H"
-
-#include "Dcommon.h"
 
 #include "bitmap._h"
 

@@ -29,6 +29,7 @@
 
 	
 */
+
 #include <assert.h>
 #include <string.h>  //strnicmp		memmove()
 #include <math.h>	 // fabs()
@@ -37,13 +38,9 @@
 #include "WORLD.H"	// to expose _Render apis in actor.h
 
 #include "actor.h"
-#include "RAM.H"
 #include "puppet.h"
 #include "body.h"
 #include "motion.h"
-#include "Errorlog.h"
-#include "strblock.h"
-
 
 /* to do:
 		need to utilize extbox module rather than hard coding vector corners of boxes

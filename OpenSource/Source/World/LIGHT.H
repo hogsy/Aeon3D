@@ -23,7 +23,6 @@
 #define GE_LIGHT_H
 
 #include <assert.h>
-//#include <Windows.h>
 
 #include "GENESIS.H"
 #include "BASETYPE.H"

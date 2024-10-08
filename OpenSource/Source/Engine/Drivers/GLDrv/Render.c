@@ -842,7 +842,7 @@ void SetupTexture( geRDriver_THandle *THandle )
 //==================================================================================
 //	Render_DrawDecal
 //==================================================================================
-geBoolean DRIVERCC Render_DrawDecal( geRDriver_THandle *THandle, RECT *SRect, int32 x, int32 y )
+geBoolean DRIVERCC Render_DrawDecal( geRDriver_THandle *THandle, geWinRect *SRect, int32 x, int32 y )
 {
 	if ( x >= ClientWindow.Width || y >= ClientWindow.Height )
 	{
@@ -883,7 +883,7 @@ geBoolean DRIVERCC Render_DrawDecal( geRDriver_THandle *THandle, RECT *SRect, in
 //=====================================================================================
 //	Scene managment functions
 //=====================================================================================
-geBoolean DRIVERCC BeginScene( geBoolean Clear, geBoolean ClearZ, RECT *WorldRect )
+geBoolean DRIVERCC BeginScene( geBoolean Clear, geBoolean ClearZ, geWinRect *WorldRect )
 {
 	memset( &CacheInfo, 0, sizeof( DRV_CacheInfo ) );
 

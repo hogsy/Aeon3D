@@ -23,9 +23,6 @@
 #define GE_PLANE_H
 
 #include <assert.h>
-#if defined( _WIN32 )
-#	include <Windows.h>
-#endif
 
 #include "GBSPFILE.H"
 

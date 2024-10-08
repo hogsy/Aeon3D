@@ -22,10 +22,10 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "GBSPFILE.H"
 #include "VEC3D.H"
 #include "RAM.H"
 #include "System.h"
+#include "GBSPFILE.H"
 
 #include "Errorlog.h"
 #include "vfile.h"

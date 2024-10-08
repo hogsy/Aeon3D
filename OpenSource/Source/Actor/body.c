@@ -19,10 +19,10 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#include <assert.h>						//assert()
-#include <string.h>						//strlen(), strcpy()
-#include <math.h> 						//fabs()
-#include <stdio.h>						//sscanf
+
+#include <assert.h>//assert()
+#include <math.h>  //fabs()
+#include <stdio.h> //sscanf
 
 #include "body.h"
 #include "body._h"

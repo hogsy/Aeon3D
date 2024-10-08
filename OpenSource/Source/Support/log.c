@@ -19,39 +19,33 @@
 /*  Copyright (C) 1999 WildTangent, Inc. All Rights Reserved           */
 /*                                                                                      */
 /****************************************************************************************/
-#if defined( _WIN32 )
-#	include <windows.h>
-#endif
+
 #include <stdio.h>
 #include <stdarg.h>
 
-void Log_Out(const char * string)
+void Log_Out( const char *string )
 {
-#if !defined( NDEBUG ) && defined( _WIN32 )
-	OutputDebugString( string );
-#endif
-	printf("%s",string);
+	printf( "%s", string );
 }
 
-
-void Log_Puts(const char * string)
+void Log_Puts( const char *string )
 {
-	Log_Out(string);
-	Log_Out("\n");
+	Log_Out( string );
+	Log_Out( "\n" );
 }
 
-void Log_Printf(const char * String, ...)
+void Log_Printf( const char *String, ... )
 {
-	va_list			ArgPtr;
-    char			TempStr[1024];
+	va_list ArgPtr;
+	char    TempStr[ 1024 ];
 
-	va_start(ArgPtr, String);
-    vsprintf(TempStr, String, ArgPtr);
-	va_end(ArgPtr);
+	va_start( ArgPtr, String );
+	vsprintf( TempStr, String, ArgPtr );
+	va_end( ArgPtr );
 
-	Log_Out(TempStr);
+	Log_Out( TempStr );
 }
 
 #ifdef _LOG
-#pragma message("LOG on")
+#	pragma message( "LOG on" )
 #endif

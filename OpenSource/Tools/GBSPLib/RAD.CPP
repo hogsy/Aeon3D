@@ -1696,7 +1696,7 @@ void CalcPatchReflectivity(int32 Face, RAD_Patch *Patch)
 typedef struct
 {
 	int32		Version;
-	SYSTEMTIME	BSPTime;
+	GBSP_Time	BSPTime;
 	int32		NumPatches;
 } Rec_Header;
 
