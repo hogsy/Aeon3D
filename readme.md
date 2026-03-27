@@ -1,3 +1,5 @@
+[Project has been migrated to Codeberg!](https://codeberg.org/hogsy/Aeon3D)
+
 # Aeon3D
 
 This is a fork of Genesis3D 1.1 that's updated to compile on current platforms w/ current compilers. I threw this together because I couldn't find a fork of the engine that wasn't trying to do a bunch of extra things I wasn't particularly interested in, nor one that just _worked_.
